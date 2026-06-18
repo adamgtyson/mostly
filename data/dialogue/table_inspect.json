@@ -1,0 +1,30 @@
+{
+  "id": "table_inspect",
+  "lines": [
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Cup's on its side."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Cat's sitting in it. Not sorry."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "That's the order form."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Delivery address. Gone."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "HMF."
+    }
+  ]
+}

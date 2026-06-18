@@ -1,0 +1,20 @@
+{
+  "id": "crate_inspect",
+  "lines": [
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Thirty-two spheres. Sealed."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Six days of very careful, very irritating work."
+    },
+    {
+      "speaker": "Patch",
+      "portrait": "patch_default",
+      "text": "Need to find out where these go."
+    }
+  ]
+}

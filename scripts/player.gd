@@ -13,6 +13,11 @@ func _ready() -> void:
 	animated_sprite.play("idle_down")
 
 func _physics_process(_delta: float) -> void:
+	if DialogueManager.dialogue_active:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	# Gather WASD + arrow input on both axes
 	var dir := Vector2(
 		Input.get_axis("ui_left", "ui_right"),
@@ -34,7 +39,12 @@ func _input(event: InputEvent) -> void:
 	# Interact key: Z or Enter, no repeat
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.physical_keycode == KEY_Z or event.physical_keycode == KEY_ENTER:
+			if DialogueManager.dialogue_active:
+				return
 			_try_interact()
+			# Consume the event so dialogue_box._unhandled_input doesn't also fire
+			if DialogueManager.dialogue_active:
+				get_viewport().set_input_as_handled()
 
 # ── Animation ────────────────────────────────────────────────────────────────
 

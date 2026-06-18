@@ -1,0 +1,49 @@
+[gd_scene format=4 uid="uid://dbxs1y3r9t2m8"]
+
+[ext_resource type="Script" path="res://scripts/dialogue_box.gd" id="1_dialoguebox"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.08, 0.08, 0.12, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.55, 0.65, 1.0)
+
+[node name="DialogueLayer" type="CanvasLayer"]
+
+[node name="DialogueBox" type="Panel" parent="DialogueLayer"]
+anchor_right = 1.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+script = ExtResource("1_dialoguebox")
+visible = false
+
+[node name="Portrait" type="TextureRect" parent="DialogueLayer/DialogueBox"]
+offset_left = 4.0
+offset_top = 14.0
+offset_right = 36.0
+offset_bottom = 46.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpeakerName" type="Label" parent="DialogueLayer/DialogueBox"]
+offset_left = 42.0
+offset_top = 4.0
+offset_right = 200.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 8
+
+[node name="DialogueText" type="RichTextLabel" parent="DialogueLayer/DialogueBox"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 42.0
+offset_top = 18.0
+offset_right = -4.0
+offset_bottom = -4.0
+bbcode_enabled = true
+fit_content = false
+scroll_active = false
+theme_override_font_sizes/normal_font_size = 8

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://daj3arfua5hol" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" uid="uid://cpxwcm41bw0a" path="res://scripts/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/cat_sprite.gd" id="5_catsprite"]
 [ext_resource type="Texture2D" uid="uid://cjl6cf4tascgs" path="res://assets/tilesets/cozy_furnishings_sampler.png" id="3_furnishings"]
 [ext_resource type="TileSet" uid="uid://tbqpi3nw11r5" path="res://assets/tilesets/workshop_tileset.tres" id="4_tileset"]
 
@@ -45,6 +46,9 @@ region = Rect2(80, 0, 16, 32)
 size = Vector2(12, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cat"]
 size = Vector2(14, 14)
 
 [node name="Workshop" type="Node2D" unique_id=396215203]
@@ -92,6 +96,7 @@ shape = SubResource("RectangleShape2D_wall_e")
 position = Vector2(48, 64)
 script = ExtResource("2_interactable")
 label = "Workbench"
+dialogue_id = "workbench_inspect"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Workbench" unique_id=562458860]
 shape = SubResource("RectangleShape2D_bench")
@@ -109,6 +114,7 @@ texture = SubResource("AtlasTexture_bench")
 position = Vector2(160, 96)
 script = ExtResource("2_interactable")
 label = "Table"
+dialogue_id = "table_inspect"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Table" unique_id=804937388]
 shape = SubResource("RectangleShape2D_table")
@@ -126,6 +132,7 @@ texture = SubResource("AtlasTexture_table")
 position = Vector2(256, 160)
 script = ExtResource("2_interactable")
 label = "Crate"
+dialogue_id = "crate_inspect"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Crate" unique_id=868743603]
 shape = SubResource("RectangleShape2D_crate")
@@ -138,6 +145,23 @@ shape = SubResource("RectangleShape2D_crate")
 [node name="Sprite2D" type="Sprite2D" parent="Interactables/Crate" unique_id=1334553816]
 position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_crate")
+
+[node name="Cat" type="Area2D" parent="Interactables" unique_id=912345678]
+position = Vector2(180, 96)
+script = ExtResource("2_interactable")
+label = "Cat"
+dialogue_id = "cat_interact"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Cat" unique_id=912345679]
+shape = SubResource("RectangleShape2D_cat")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Interactables/Cat" unique_id=912345680]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Cat/StaticBody2D" unique_id=912345681]
+shape = SubResource("RectangleShape2D_cat")
+
+[node name="CatSprite" type="Sprite2D" parent="Interactables/Cat" unique_id=912345682]
+script = ExtResource("5_catsprite")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=710011502]
 position = Vector2(160, 160)
