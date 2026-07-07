@@ -17,6 +17,8 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 Boot="*res://scripts/boot.gd"
 DialogueManager="*res://scripts/dialogue_manager.gd"
+CutsceneManager="*res://scripts/cutscene_manager.gd"
+CutsceneSkip="*res://scripts/cutscene_skip.gd"
 
 [display]
 

@@ -1,0 +1,7 @@
+{
+  "id": "opening_workbench",
+  "lines": [
+    { "speaker": "Patch", "portrait": "patch_default", "text": "There." },
+    { "speaker": "Patch", "portrait": "patch_default", "text": "Six days. Done." }
+  ]
+}

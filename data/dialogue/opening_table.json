@@ -1,0 +1,8 @@
+{
+  "id": "opening_table",
+  "lines": [
+    { "speaker": "Patch", "portrait": "patch_default", "text": "hmf." },
+    { "speaker": "Patch", "portrait": "patch_default", "text": "Damn cat." },
+    { "speaker": "Patch", "portrait": "patch_default", "text": "HMF." }
+  ]
+}

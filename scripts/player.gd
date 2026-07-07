@@ -13,7 +13,7 @@ func _ready() -> void:
 	animated_sprite.play("idle_down")
 
 func _physics_process(_delta: float) -> void:
-	if DialogueManager.dialogue_active:
+	if DialogueManager.dialogue_active or CutsceneManager.cutscene_active:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -39,7 +39,7 @@ func _input(event: InputEvent) -> void:
 	# Interact key: Z or Enter, no repeat
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.physical_keycode == KEY_Z or event.physical_keycode == KEY_ENTER:
-			if DialogueManager.dialogue_active:
+			if DialogueManager.dialogue_active or CutsceneManager.cutscene_active:
 				return
 			_try_interact()
 			# Consume the event so dialogue_box._unhandled_input doesn't also fire

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://daj3arfua5hol" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" uid="uid://cpxwcm41bw0a" path="res://scripts/interactable.gd" id="2_interactable"]
 [ext_resource type="Script" path="res://scripts/cat_sprite.gd" id="5_catsprite"]
+[ext_resource type="Script" path="res://scripts/opening_cutscene.gd" id="6_opening"]
 [ext_resource type="Texture2D" uid="uid://cjl6cf4tascgs" path="res://assets/tilesets/cozy_furnishings_sampler.png" id="3_furnishings"]
 [ext_resource type="TileSet" uid="uid://tbqpi3nw11r5" path="res://assets/tilesets/workshop_tileset.tres" id="4_tileset"]
 
@@ -164,7 +165,7 @@ shape = SubResource("RectangleShape2D_cat")
 script = ExtResource("5_catsprite")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=710011502]
-position = Vector2(160, 160)
+position = Vector2(48, 64)
 script = ExtResource("1_player")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1445767440]
@@ -185,3 +186,6 @@ limit_left = 0
 limit_top = 0
 limit_right = 320
 limit_bottom = 240
+
+[node name="OpeningCutscene" type="Node2D" parent="." unique_id=987654321]
+script = ExtResource("6_opening")

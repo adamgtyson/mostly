@@ -60,3 +60,12 @@ func advance() -> void:
 		_lines.clear()
 		_current_index = 0
 		dialogue_ended.emit()
+
+# Added for cutscene skip: immediately end any active dialogue without advancing line-by-line.
+func force_end() -> void:
+	if not dialogue_active:
+		return
+	dialogue_active = false
+	_lines.clear()
+	_current_index = 0
+	dialogue_ended.emit()
