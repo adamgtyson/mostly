@@ -1,0 +1,165 @@
+# MOSTLY — Game Design Document
+
+## Document 2: Protagonist & Narrative
+
+-----
+
+## The Protagonist
+
+**Name:** Patch
+**Profession:** Blacksmith
+**Gender:** Player’s choice at new game setup
+**Home:** One of nine starting villages in The Hold (player’s choice — see Document 5)
+
+### Character Voice
+
+Patch is competent, unglamorous, and annoyed. They did not ask for this. They are not a hero by disposition or destiny. They fix things because things are broken and they happen to be standing there, and fixing broken things is what they do.
+
+The defining character note: when Patch eventually pieces together their own role in the catastrophe, the reaction is not dramatic guilt or crushing responsibility. It is:
+
+> *“Oh for the love of — I made that part.”*
+
+And then they get back to work.
+
+Patch does not dwell. Patch does not catastrophize. The fate of the world is almost incidental to the more immediate problem of everything being broken and needing to be fixed.
+
+**The thesis statement of the entire game, in Patch’s voice:**
+
+> *“Fuck this. I’ll fix it myself.”*
+
+### Why a Blacksmith
+
+- Establishes competence without grandeur. Not legendary, not chosen. Just good at their job and quietly proud of it.
+- Provides natural narrative reason to leave town (a delivery).
+- Creates ironic relationship to The Forge (the machine causing the catastrophe shares a name with Patch’s primary tool).
+- Crafting and repair feel like a character extension: Patch fixes things the same way they fix a cracked axle — with irritation and craftsmanship.
+- Hollow spheres (the commissioned items) are a legitimate test of advanced smithing skill, explaining why the order came to Patch specifically.
+
+-----
+
+## The Inciting Incident
+
+Patch receives a commission: make a set of hollow spheres. Technically demanding work — explaining why the order came from outside the village. The spheres are innocuous individually. Patch grumbles about the finickiness of the work but completes it.
+
+The order came from a **casual acquaintance** — a friend of a friend from a village on the outskirts of The Hold’s civilized lands. Patch accepted without scrutiny. This is normal. This is how commissions work.
+
+The delivery of the spheres is the opening of Act One.
+
+-----
+
+## The Plot
+
+### The Chain
+
+The catastrophe was caused by a chain of ordinary people making reasonable decisions. Nobody had the full picture. Nobody is the villain.
+
+- Patch made the spheres
+- The acquaintance passed along an order from someone further out
+- That person passed it along from someone else
+- At the end of the chain: **The Forge** — an ancient machine maintaining a barrier between the known world and the paranormal fringe
+
+### The Forge
+
+The Forge is an ancient floating gyroscope that defies the laws of physics. It maintains a barrier — **The Hold** — keeping paranormal phenomena from overtaking the known world. It runs on **Spooky Fluid** housed in precision-crafted hollow spheres.
+
+The Forge was running low on power. The brief, blink-and-you’ll-miss-it paranormal flickers in Act One are the barrier weakening.
+
+Someone commissioned new spheres (Patch’s order) and new Spooky Fluid to refuel it. The spheres were perfect. **The Spooky Fluid batch was wrong.** The refueled Forge didn’t just fail to improve — it catastrophically destabilized. The barrier didn’t hold. The unraveling begins.
+
+### The Spooky Fluid
+
+Canonical name: **Spooky Fluid**. This is what Patch calls it. This is what it is called in the game. No further dignification is warranted or appropriate.
+
+### Patch’s Reaction to The Forge
+
+The Forge defies the laws of physics. It floats. It shouldn’t work. It works anyway.
+
+Patch has spent their entire life working with materials that obey rules. Their entire identity is built on the premise that things work the way they work for reasons. The Forge will bother Patch for the entire game and possibly forever. They will ask questions. They will receive no satisfying answers.
+
+Additionally: **The Forge shares a name with Patch’s forge.** Every time someone refers to The Forge with reverence or gravitas, Patch’s response is some variation of:
+
+> *“I have one of those. Mine works.”*
+
+This is the recurring joke for the second half of the game. It never gets old. Patch is never wrong.
+
+### The Person Who Botched the Spooky Fluid
+
+The most important supporting character. Not a villain. Just someone who tried, got it wrong, and is now either hiding, panicking, or desperately trying to fix it themselves.
+
+When Patch finds them, the interaction is deeply unsatisfying in the best way. There is no one to punch. Just another person who made a reasonable mistake with catastrophic consequences.
+
+### The Monks
+
+The Forge is maintained by **The Order of the Most Sacred Mystery**, based at **Glorp Abbey** in the region of **The Turning**. The monks are perpetually drunk on their own beer or high on their own cultivation. They are the most important people in the world. They are absolutely blasted at all times.
+
+This is not dereliction. This is coping. Patch will understand this immediately while being exasperated by it.
+
+The monks’ theology is accidentally the most epistemically rigorous position in the world. See Document 6 for full monastic detail.
+
+-----
+
+## Act One Structure
+
+### Opening
+
+Cutscene or Star Wars-style crawl introduces The Hold, the known world, and Patch’s village. Focuses in on Patch: brief history, how they came to be the village blacksmith (reluctant but obviously skilled).
+
+Patch is just finishing the last sphere from the commission order. They read a note: **the order must arrive in five days.**
+
+Player takes control.
+
+### Opening Sequence (Player-Controlled)
+
+1. **The Workshop** — Player can explore the workshop and a small portion of the village (gated). Opportunities to gear up with very limited resources. Crafting equipment and supplies available (some randomized).
+1. **The Logistics Problem** — Player picks up some spheres and quickly realizes they cannot carry all of them at once. No guidance. No quest marker. Just a problem.
+1. **The Cart Decision** — Player can build a cart or wagon at the cost of time and possibly resources. This is a soft introduction to the crafting philosophy: encounter a problem, solve it with available materials. Nobody tells you to do this.
+1. **The Village** — After the workshop, player can access the rest of the village.
+1. **The Gate** — A guard familiar with Patch asks where they’re going and when to expect them back. The guard asks Patch to run an errand in another part of The Hold — introducing lateral exploration before the main delivery pulls the player forward.
+1. **Departure** — Once through the gate, Act One proper begins.
+
+### The Weirdness
+
+After departure, at random intervals — starting with very long intervals, gradually shortening — paranormal elements appear:
+
+- Spooky sprites in the corner of the screen for a split second
+- Glitchy landscape elements
+- NPCs behaving very strangely
+- Environmental wrongness
+
+These are deniable at first. The player isn’t sure they saw something. By the end of Act One the weirdness is undeniable.
+
+**Second playthrough note:** The weirdness in Act One reads as atmosphere on first play. On replay it’s clearly the early signs of the same unraveling that consumes Act Two. Dramatic irony that rewards replaying and community discussion.
+
+### The Delivery Route
+
+Patch follows the commission chain backward, link by link. Each person is just as confused as Patch. Nobody is the villain. Everyone is implicated. The route leads eventually toward The Turning and The Forge.
+
+### Act One / Act Two Transition
+
+The moment the world starts coming apart cannot feel like a difficulty spike or a paywall. It must feel like **the world opening up** — or more precisely, **the world coming apart**, and Patch being the kind of person who responds to that by rolling up their sleeves.
+
+The quality of this transition moment is the single most important design decision in the game.
+
+**Locked, August 2026: reaching The Forge ends Act One. It is not the ending of the game.** The main story is at least 2–3 acts; Act One's climax — Patch arriving at The Forge and confronting their own role in the catastrophe — is the hinge into Act Two, not into the endgame module layer. What Act Two (and possibly Act Three) is actually about is undesigned. See Document 6.
+
+-----
+
+## Narrative Themes
+
+- Competence without destiny
+- Collective responsibility without individual villainy
+- The world was always incomplete; someone has to notice
+- Fixing things because they’re broken, not because you were chosen
+- The gap between what institutions claim to manage and what they actually understand
+
+-----
+
+## Future Narrative Decisions
+
+- Full name and characterization of the person who botched the Spooky Fluid
+- The nature of what is at the true center of The Hold (the wilderness / the circle)
+- The original builder of The Forge and their philosophy (implied by the name — someone believed the world was something you maintained with craft and labor)
+- The full delivery chain: who ordered from whom, how many links
+- Whether the circle visibility mechanic (tied to starting village) connects to a revelation about the center
+- Additional playable characters (future state; no development yet)
+- Multiple endings based on how much of the truth Patch uncovers in a given run
