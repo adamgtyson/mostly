@@ -43,7 +43,7 @@ Patch made **hollow spheres** for a commission. The spheres power **The Forge** 
 
 ## The Monks
 
-Based at **Glorp Abbey** (named for the sound of properly balanced Spooky Fluid). Tended by **The Order of the Most Sacred Mystery**. Perpetually impaired. Accidentally correct about everything. Motto: *“Probably.”* Every other regional order is unknowingly describing Forge maintenance requirements through their theology.
+Based at **The Abbey of the Hopefully Infinite Thrum** (named for the sound of properly balanced Spooky Fluid). Tended by **The Order of the Most Sacred Mystery**. Perpetually impaired. Accidentally correct about everything. Motto: *“Probably.”* Every other regional order is unknowingly describing Forge maintenance requirements through their theology.
 
 -----
 
@@ -73,7 +73,7 @@ Village location on map reflects its pros/cons via surrounding mobs, puzzles, an
 |The power source          |Spooky Fluid                                                        |
 |The protagonist           |Patch                                                               |
 |The capital               |Margin                                                              |
-|Primary monk settlement   |Glorp Abbey                                                         |
+|Primary monk settlement   |The Abbey of the Hopefully Infinite Thrum                          |
 |Primary monastic order    |The Order of the Most Sacred Mystery                                |
 |The monks’ motto          |Probably.                                                           |
 |Monastic naming convention|The [Badass Noun]                                                   |
@@ -95,7 +95,7 @@ Village location on map reflects its pros/cons via surrounding mobs, puzzles, an
 
 1. Write the back-of-box copy (2-3 sentences)
 1. Write the opening scene in prose
-1. Define the delivery chain and characterize the Spooky Fluid botcher
+1. Characterize Brack, the Spooky Fluid botcher, beyond the now-locked delivery chain (see Document 2)
 1. Define folklore vs. reality for each of the six regions
 1. Confirm engine (Godot 4?)
 1. Sketch the map

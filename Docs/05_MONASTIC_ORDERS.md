@@ -18,14 +18,16 @@ Patch will figure this out before they do. Patch will not be gentle about tellin
 
 *Monastic order of The Turning — the region containing The Forge*
 
-**Settlement:** Glorp Abbey
-*Named for the sacred sound made by properly balanced Spooky Fluid.*
+**Settlement:** The Abbey of the Hopefully Infinite Thrum
+*Named for the sacred sound made by properly balanced Spooky Fluid — "the Thrum."*
 
 The monks are perpetually drunk on their own beer and/or high on their own cultivation. They are the most important people in the world. They are absolutely blasted at all times. This is not dereliction. This is coping. They are devoted. They just also happen to be very impaired.
 
 The sober one: every monastery has one. Probably young, probably anxious, probably the only person who fully understands what happened and has been trying to tell the others for weeks. Has been waiting for someone to actually show up and ask.
 
-**What The Grinding accidentally describes about The Forge:** The grinding sound is a maintenance warning. The monks named their settlement after it because they heard it first and thought it was holy. It is not holy. It is a maintenance alert. Nobody filed the paperwork.
+**Two sounds, never connected (locked):** The order's own name, The Grinding, comes from a different sound entirely — the noise The Forge makes when Spooky Fluid runs low (see Document 4). The Thrum (contented, properly balanced) and the Grinding (a maintenance warning) are two physically distinct sounds. The monks venerate one and dread the other without ever consciously connecting them to the same machine. A notable, deliberate irony — not a throwaway detail.
+
+**What The Grinding accidentally describes about The Forge:** The grinding sound is a maintenance warning. It is not holy. It is a maintenance alert. Nobody filed the paperwork.
 
 -----
 
@@ -82,6 +84,12 @@ Definitely opens something. Finding out can wait.
 
 **The Fifth Appendix**
 An ancient manuscript references a Fifth Appendix. No copy has ever been found. The annual search is mostly an excuse for a picnic.
+
+### Named Monks
+
+**Brother Edwin** — the order's perpetually-behind archivist; the punchline of the Litany of Unfinished Questions (see above).
+
+**Brother Aldous** — the order's memory for precedent. Introduced to Patch via the summons letter (Document 2). Always suspects, never confirms, that the Fifth Appendix holds the answer to whatever crisis is at hand.
 
 ### Holy Festivals
 
@@ -202,7 +210,7 @@ All six orders are unknowing monks of The Forge:
 - Full settlement lists for The Grinding / The Order of the Most Sacred Mystery
 - Whether Patch ever explicitly tells any order what their theology actually means
 - Whether any order figures it out on their own
-- The identity and characterization of the sober monk at Glorp Abbey
+- The identity and characterization of the sober monk at The Abbey of the Hopefully Infinite Thrum
 - What the Unlabeled Key actually opens (may remain permanently unresolved)
 - What is in the Empty Box (almost certainly should remain permanently unresolved)
 - The Fifth Appendix (the picnic is canonical; the content is not necessary)

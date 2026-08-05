@@ -100,7 +100,7 @@ Each border city has fixed name and identity. Its specific character (neighborho
 
 ## THE TURNING
 
-*The region containing The Forge and Glorp Abbey.*
+*The region containing The Forge and The Abbey of the Hopefully Infinite Thrum.*
 
 **What everyone knows:** There is “something important” here. Nobody asks too many questions.
 
@@ -315,7 +315,7 @@ Stub regions are filled primarily by studio-authored endgame modules. Optional p
 - Stub regions beyond named regions
 - Nine starting villages within The Hold
 - The Forge in The Turning
-- Glorp Abbey / The Grinding near The Forge
+- The Abbey of the Hopefully Infinite Thrum / The Grinding near The Forge
 - Margin slightly northeast of center
 - True center wilderness
 

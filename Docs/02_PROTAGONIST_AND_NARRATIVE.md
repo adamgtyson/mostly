@@ -53,10 +53,17 @@ The delivery of the spheres is the opening of Act One.
 
 The catastrophe was caused by a chain of ordinary people making reasonable decisions. Nobody had the full picture. Nobody is the villain.
 
-- Patch made the spheres
-- The acquaintance passed along an order from someone further out
-- That person passed it along from someone else
-- At the end of the chain: **The Forge** — an ancient machine maintaining a barrier between the known world and the paranormal fringe
+**Locked, August 2026 — the full delivery chain:**
+
+- **Patch** — made the spheres
+- **Brindle** (trader) — carried the order onward
+- **Wren** (cartographer) — source of in-game maps; the bird-flipbook mechanic
+- **Hobb** (innkeeper) — source of the rumor mechanic
+- **Sedge** (a monk, who later leaves the order)
+- **The Abbey of the Hopefully Infinite Thrum** — where the chain arrives
+- **Brack** — botched the Spooky Fluid
+
+At the end of the chain: **The Forge** — an ancient machine maintaining a barrier between the known world and the paranormal fringe.
 
 ### The Forge
 
@@ -90,7 +97,7 @@ When Patch finds them, the interaction is deeply unsatisfying in the best way. T
 
 ### The Monks
 
-The Forge is maintained by **The Order of the Most Sacred Mystery**, based at **Glorp Abbey** in the region of **The Turning**. The monks are perpetually drunk on their own beer or high on their own cultivation. They are the most important people in the world. They are absolutely blasted at all times.
+The Forge is maintained by **The Order of the Most Sacred Mystery**, based at **The Abbey of the Hopefully Infinite Thrum** in the region of **The Turning**. The monks are perpetually drunk on their own beer or high on their own cultivation. They are the most important people in the world. They are absolutely blasted at all times.
 
 This is not dereliction. This is coping. Patch will understand this immediately while being exasperated by it.
 
@@ -141,6 +148,48 @@ The moment the world starts coming apart cannot feel like a difficulty spike or 
 The quality of this transition moment is the single most important design decision in the game.
 
 **Locked, August 2026: reaching The Forge ends Act One. It is not the ending of the game.** The main story is at least 2–3 acts; Act One's climax — Patch arriving at The Forge and confronting their own role in the catastrophe — is the hinge into Act Two, not into the endgame module layer. What Act Two (and possibly Act Three) is actually about is undesigned. See Document 6.
+
+#### The Bridge (Locked, August 2026)
+
+Five beats connect Act One's climax to Act Two:
+
+1. Patch delivers the spheres to The Abbey of the Hopefully Infinite Thrum.
+2. Patch does unprompted odd jobs and repairs around the abbey — this is the diegetic repair tutorial.
+3. Patch goes home.
+4. The Forge destabilizes after Patch has already left — Brack's bad batch is loaded post-departure. **Locked design rule: no witness overlap.** Patch is never present when the Forge actually fails.
+5. The monks summon Patch back specifically because he's a known fixer, not because they suspect he made the spheres. **Locked design rule: Patch's "I made that part" realization stays private, on-site** — the monks never learn Patch's role. They hand him The List.
+
+#### The Summons Letter (Locked, verbatim)
+
+> To Patch, blacksmith,
+>
+> You may recall visiting us recently. We recall it fondly. The gate no longer makes the sound.
+>
+> Some things have come up.
+>
+> We are advised not to describe them in writing — partly for reasons of protocol, and partly because we are no longer confident the descriptions would stay accurate in transit.
+>
+> We have consulted our records for precedent. There is no precedent. Brother Aldous believes there may be one in the Fifth Appendix. See previous correspondence regarding the Fifth Appendix.
+>
+> We are not certain you can help. We are certain of very little. But you fixed the gate without being asked, which remains the most decisive thing anyone has done here in living memory.
+>
+> Please come. Bring tools.
+>
+> — The Order of the Most Sacred Mystery
+>
+> P.S. It is probably not urgent.
+> P.P.S. It is urgent.
+
+#### The List (Locked framing)
+
+A bound stack of complaints forwarded from the Office of Unlikely Events in Margin, sorted by no discernible system — the bureaucracy has been faithfully filing symptoms of the unraveling for weeks without recognizing them as connected, accidentally producing the quest log. Structural spine of Act Two. Endgame modules append entries to it, giving every module a uniform diegetic entry point.
+
+**Sample entries (tone reference only — not exhaustive; the full 15–20 entries are still to be written, see Document 6):**
+
+- "The bridge at Wet Corner is sometimes not there."
+- "Third Bell has begun ringing a fourth time. There are three bells."
+- "Complainant states her well is deeper than it used to be. Depth measured. Complaint upheld."
+- "The straight road has developed a bend. The Department of Straight Roads denies this, in writing, from an office they can no longer reach directly."
 
 -----
 
