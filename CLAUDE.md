@@ -6,7 +6,7 @@ Full design documentation in /Docs/. Read 00_QUICK_REFERENCE.md at the start of 
 Do not invent names, places, or mechanics not found in the docs. Ask first.
 
 ## Current Build State
-Session 3 complete. Godot 4.6.2 project at C:\Projects\Mostly. Window opens at 1280×720 (4× the 320×180 viewport) via Boot autoload.
+Session 3 complete. Godot 4.6.2 project at C:\Projects\Mostly. Window opens at 1280×720 (4× the 320×180 viewport) via Boot autoload. Project is under git version control, pushed to https://github.com/adamgtyson/mostly.git (main branch).
 
 - `scenes/workshop.tscn` — 20×15 tile room (320×240 px); StaticBody2D walls; 2-tile door opening on south wall; Camera2D clamped to room bounds (0,0)–(320,240). Player starts at (48,64). OpeningCutscene node triggers cutscene on load.
 - `scripts/player.gd` — CharacterBody2D (Patch); WASD + arrow 4-direction movement at 80 px/s; movement and interaction locked while dialogue OR cutscene is active; Z or Enter triggers interaction. Sprite row order: Down=0, Up=1, Right=2, Left=3.
