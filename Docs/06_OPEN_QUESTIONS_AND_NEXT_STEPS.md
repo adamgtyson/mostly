@@ -78,10 +78,10 @@ Each outer region has a reason it hasn’t been fully explored (folklore) and a 
 Write the opening sequence in prose — no engine, no code. Patch trying to leave the village while people stop them at the door. This will define the game’s voice more precisely than any further concept work.
 
 **9. The guard at the gate**
-Who is this person? What’s their relationship with Patch? What errand do they ask Patch to run? This is the first NPC with a speaking role and sets the tone for all NPC interactions.
+Who is this person? What’s their relationship with Patch? What errand do they ask Patch to run? This is the first NPC with a speaking role and sets the tone for all NPC interactions. *(Resolved 2026-07-07: Latch. See handoff CANON §7.)*
 
 **10. The casual acquaintance**
-The friend of a friend from the outskirts village who placed the sphere order. Name, personality, current state when Patch finds them (confused, frightened, gone?). Their village needs a name.
+The friend of a friend from the outskirts village who placed the sphere order. Name, personality, current state when Patch finds them (confused, frightened, gone?). Their village needs a name. *(Resolved: Brindle. Village: Near Enough.)*
 
 ### Lower Priority (Can Wait)
 

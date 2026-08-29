@@ -30,7 +30,7 @@ The monks are perpetually drunk on their own beer and/or high on their own culti
 
 The sober one: every monastery has one. Probably young, probably anxious, probably the only person who fully understands what happened and has been trying to tell the others for weeks. Has been waiting for someone to actually show up and ask.
 
-**Two sounds, never connected (locked):** The order's own name, The Grinding, comes from a different sound entirely — the noise The Forge makes when Spooky Fluid runs low (see Document 4). The Thrum (contented, properly balanced) and the Grinding (a maintenance warning) are two physically distinct sounds. The monks venerate one and dread the other without ever consciously connecting them to the same machine. A notable, deliberate irony — not a throwaway detail.
+**Two sounds, never connected (PROVISIONAL — assistant proposal, unconfirmed):** The order's own name, The Grinding, comes from a different sound entirely — the noise The Forge makes when Spooky Fluid runs low (see Document 4). The Thrum (contented, properly balanced) and the Grinding (a maintenance warning) are two physically distinct sounds. The monks venerate one and dread the other without ever consciously connecting them to the same machine. A notable, deliberate irony — not a throwaway detail.
 
 **What The Grinding accidentally describes about The Forge:** The grinding sound is a maintenance warning. It is not holy. It is a maintenance alert. Nobody filed the paperwork.
 
@@ -215,7 +215,7 @@ All six orders are unknowing monks of The Forge:
 - Full settlement lists for The Grinding / The Order of the Most Sacred Mystery
 - Whether Patch ever explicitly tells any order what their theology actually means
 - Whether any order figures it out on their own
-- The identity and characterization of the sober monk at The Abbey of the Hopefully Infinite Thrum
+- The identity and characterization of the sober monk at The Abbey of the Hopefully Infinite Thrum *(Resolved 2026-07-07: Fletch (female Patch) / Brace (male Patch, provisional).)*
 - What the Unlabeled Key actually opens (may remain permanently unresolved)
 - What is in the Empty Box (almost certainly should remain permanently unresolved)
 - The Fifth Appendix (the picnic is canonical; the content is not necessary)

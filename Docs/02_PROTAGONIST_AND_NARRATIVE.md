@@ -46,7 +46,7 @@ Patch does not dwell. Patch does not catastrophize. The fate of the world is alm
 
 Patch receives a commission: make a set of hollow spheres. Technically demanding work — explaining why the order came from outside the village. The spheres are innocuous individually. Patch grumbles about the finickiness of the work but completes it.
 
-The order came from a **casual acquaintance** — a friend of a friend from a village on the outskirts of The Hold’s civilized lands. Patch accepted without scrutiny. This is normal. This is how commissions work.
+The order came from a **casual acquaintance** — a friend of a friend from a village on the outskirts of The Hold’s civilized lands. Patch accepted without scrutiny. This is normal. This is how commissions work. *(Resolved 2026-07-07: the acquaintance is Brindle, trader, of Near Enough.)*
 
 The delivery of the spheres is the opening of Act One.
 
@@ -116,15 +116,15 @@ The monks’ theology is accidentally the most epistemically rigorous position i
 
 Cutscene or Star Wars-style crawl introduces The Hold, the known world, and Patch’s village. Focuses in on Patch: brief history, how they came to be the village blacksmith (reluctant but obviously skilled).
 
-Patch is just finishing the last sphere from the commission order. They read a note: **the order must arrive in five days.**
+Patch is just finishing the last sphere from the commission order. They read a note: **the order must arrive in five days.** *(Superseded 2026-07-07 by Adam's opening prose — eight days on the order form, nine days worked; see Docs/handoff/MOSTLY_STORY_STATE.md §3.)*
 
 Player takes control.
 
 ### Opening Sequence (Player-Controlled)
 
 1. **The Workshop** — Player can explore the workshop and a small portion of the village (gated). Opportunities to gear up with very limited resources. Crafting equipment and supplies available (some randomized).
-1. **The Logistics Problem** — Player picks up some spheres and quickly realizes they cannot carry all of them at once. No guidance. No quest marker. Just a problem.
-1. **The Cart Decision** — Player can build a cart or wagon at the cost of time and possibly resources. This is a soft introduction to the crafting philosophy: encounter a problem, solve it with available materials. Nobody tells you to do this.
+1. **The Logistics Problem** — Player picks up some spheres and quickly realizes they cannot carry all of them at once. No guidance. No quest marker. Just a problem. *(REJECTED 2026-08-28 — cart build cut; Patch owns a horse and wagon.)*
+1. **The Cart Decision** — Player can build a cart or wagon at the cost of time and possibly resources. This is a soft introduction to the crafting philosophy: encounter a problem, solve it with available materials. Nobody tells you to do this. *(REJECTED 2026-08-28 — cart build cut; Patch owns a horse and wagon.)*
 1. **The Village** — After the workshop, player can access the rest of the village.
 1. **The Gate** — A guard familiar with Patch asks where they’re going and when to expect them back. The guard asks Patch to run an errand in another part of The Hold — introducing lateral exploration before the main delivery pulls the player forward.
 1. **Departure** — Once through the gate, Act One proper begins.
@@ -187,7 +187,7 @@ Five beats connect Act One's climax to Act Two:
 
 #### The List (Locked framing)
 
-A bound stack of complaints forwarded from the Office of Unlikely Events in Margin, sorted by no discernible system — the bureaucracy has been faithfully filing symptoms of the unraveling for weeks without recognizing them as connected, accidentally producing the quest log. Structural spine of Act Two. Endgame modules append entries to it, giving every module a uniform diegetic entry point.
+A bound stack of complaints forwarded from the Office of Unlikely Events in Margin, sorted by no discernible system — the bureaucracy has been faithfully filing symptoms of the unraveling for weeks without recognizing them as connected, accidentally producing the quest log. Structural spine of Act Two. (PROVISIONAL, unconfirmed: endgame modules may append entries to it.)
 
 **Sample entries (tone reference only — not exhaustive; the full 15–20 entries are still to be written, see Document 6):**
 
