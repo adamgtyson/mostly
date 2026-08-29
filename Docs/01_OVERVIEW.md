@@ -1,5 +1,10 @@
 # MOSTLY — Game Design Document
 
+> **Supersession notice (2026-08-28):** Where this document conflicts with
+> `Docs/handoff/MOSTLY_CANON.md` or `Docs/handoff/MOSTLY_DECISION_LEDGER.md`, the
+> handoff documents win. Status tags in this file are not authoritative; consult the
+> ledger. See `Docs/handoff/MIGRATION_WARNINGS.md` for known errors in this file.
+
 ## Document 1: Overview & Core Concept
 
 -----
