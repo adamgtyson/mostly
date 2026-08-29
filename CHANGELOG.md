@@ -1,5 +1,6 @@
 ## Changelog
 
+- 2026-08-28: Docs-sync — installed Docs/handoff/ (9 files) as the authoritative layer over Docs/00–06 via supersession notices, then corrected stale canon in Docs/00–06 per the enumerated 2026-08-28 rulings (status-tag downgrades, delivery-window and cart-build revisions, resolved names, cross-reference renumbering, decisions-table row). Docs-only, no engine/scene changes.
 - 2026-08-05: Narrative lock-in — Abbey renamed to The Abbey of the Hopefully Infinite Thrum (repo-wide), full delivery chain and five-beat Act One→Two bridge with verbatim summons letter locked in Docs/02, Brother Aldous and the Grinding/Thrum two-sounds irony added to Docs/05, Docs/06 decisions table and open questions updated. Docs-only, no engine/scene changes.
 - 2026-08-05: Repo infra — project put under git version control, .gitignore added (Godot 4+ baseline plus TexturePacks/testimages exclusion), pushed to https://github.com/adamgtyson/mostly.git (main branch) for Claude Project sync.
 - 2026-07-07: Session 3 — Opening cutscene (30-beat sequence: workbench→table→door→center), CutsceneManager autoload (data-driven beat sequencer: wait/move/animation/dialogue/end), CutsceneSkip autoload (seen_cutscenes.json persistence, [ Z ] Skip label), 7 new dialogue files, force_end() on DialogueManager, player movement/interaction locked during cutscene.
