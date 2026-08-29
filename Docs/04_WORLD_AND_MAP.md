@@ -137,7 +137,7 @@ Steady, Round Mill, Lower Rotation, Third Bell, Spindle, Good Bearing
 #### Monastic Order: The Grinding
 
 *Named for the sound The Forge makes when Spooky Fluid runs low.*
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 
@@ -168,7 +168,7 @@ Exactly, Stone Eight, Proper Line, Marker, Three Chains, Half Acre
 
 **The Brotherhood of Proper Margins**
 *“Precision is kindness.”*
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 
@@ -198,7 +198,7 @@ Farside, Enough, Arm’s Length, Across, Space Between, Not Quite
 #### Monastic Order
 
 **The Monastery of Respectful Separation**
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 
@@ -228,7 +228,7 @@ Softwood, Hush, Low Branch, Whisper End, Muffled, Moss
 #### Monastic Order
 
 **The Silent Custodians of Ambient Noise**
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 
@@ -258,7 +258,7 @@ Mill Again, Upstream, Wet Corner, Little Lock, Spill, Bucketford
 #### Monastic Order
 
 **The Abbey of Continuous Drainage**
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 
@@ -290,7 +290,7 @@ Stack, Evenhill, Counterstone, Lean, Slight Rise, Rock Enough
 #### Monastic Order
 
 **The Order of Counterweights**
-Full detail in Document 6.
+Full detail in Document 5.
 
 -----
 

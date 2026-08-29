@@ -42,6 +42,7 @@ These are locked. Changing them has downstream consequences across multiple syst
 |Summons/culpability rule  |Monks summon Patch as a known fixer, not a suspect; Patch's "I made that part" realization stays private, on-site — no witness overlap|
 |Fluid sequencing          |Brack's bad batch is loaded into The Forge only after Patch has already left — locked to prevent any witness overlap|
 |The List                  |Complaints forwarded from the Office of Unlikely Events in Margin, filed without recognizing they're connected; structural spine of Act Two; framing + 4 sample entries locked, full 15–20 entries still outstanding|
+|Handoff ledger             |Docs/handoff/MOSTLY_DECISION_LEDGER.md is the authority on status as of 2026-08-28|
 
 **On the mod system discard (July 2026):** The original design made in-game modding the mandatory Act Two+ progression mechanic — the world broke procedurally after Act One and the player repaired it via a declarative mod editor. This is permanently discarded. The base game, including Act Two and beyond, is now a complete, fully completable story with no modding required at any point. Replayability instead comes from (1) anchor-and-fill procedural generation of map content per run, and (2) studio-authored endgame modules that add optional post-story content in the stub regions. See Document 3 for full detail. Optional post-launch community modding remains a possible future layer with zero base-game dependency on it happening.
 

@@ -14,7 +14,7 @@
 **Name:** Patch
 **Profession:** Blacksmith
 **Gender:** Player’s choice at new game setup
-**Home:** One of nine starting villages in The Hold (player’s choice — see Document 5)
+**Home:** One of nine starting villages in The Hold (player’s choice — see Document 3)
 
 ### Character Voice
 
@@ -106,7 +106,7 @@ The Forge is maintained by **The Order of the Most Sacred Mystery**, based at **
 
 This is not dereliction. This is coping. Patch will understand this immediately while being exasperated by it.
 
-The monks’ theology is accidentally the most epistemically rigorous position in the world. See Document 6 for full monastic detail.
+The monks’ theology is accidentally the most epistemically rigorous position in the world. See Document 5 for full monastic detail.
 
 -----
 

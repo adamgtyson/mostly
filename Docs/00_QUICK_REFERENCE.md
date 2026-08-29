@@ -98,9 +98,9 @@ Village location on map reflects its pros/cons via surrounding mobs, puzzles, an
 
 ## Immediate Next Steps
 
-1. Write the back-of-box copy (2-3 sentences)
-1. Write the opening scene in prose
+1. Write the back-of-box copy (2-3 sentences) *(done — see handoff CANON §1 / STORY_STATE §3)*
+1. Write the opening scene in prose *(done — see handoff CANON §1 / STORY_STATE §3)*
 1. Characterize Brack, the Spooky Fluid botcher, beyond the now-locked delivery chain (see Document 2)
 1. Define folklore vs. reality for each of the six regions
-1. Confirm engine (Godot 4?)
+1. Engine confirmed: Godot 4.6.2
 1. Sketch the map
