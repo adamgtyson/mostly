@@ -5,6 +5,11 @@
 > handoff documents win. Status tags in this file are not authoritative; consult the
 > ledger. See `Docs/handoff/MIGRATION_WARNINGS.md` for known errors in this file.
 
+## Authoritative Documents
+
+- Docs/handoff/ — canon, story state, decision ledger, open questions, build plan; wins over Docs/00–06.
+- Docs/ENGINEERING_CONSTRAINTS.md — locked engineering decisions (2026-08-29); Claude Code designs within these, never chooses them.
+
 *Single-page canonical summary. For full detail see numbered documents.*
 
 -----

@@ -228,3 +228,15 @@
 | U2-9 | Multi-phase build; one workshop prompt per phase; dedicated engineering-constraints session first | LOCKED | user ruling | BUILD_PLAN §6, §8. |
 | U2-10 | Act One writing list and weirdness-system spec are required pre-build deliverables | TODO | user ruling | BUILD_PLAN §4, §5. |
 | U2-11 | Brack ceremony restage and chain character composite logged as pre-build TODOs | TODO | user ruling | BUILD_PLAN §3. |
+
+## K. Engineering constraints (Adam, 2026-08-29)
+
+| # | Item | Status | Authority | Notes |
+|---|---|---|---|---|
+| K0 | Engineering-constraints session held; Docs/ENGINEERING_CONSTRAINTS.md is the authoritative engineering layer | LOCKED | user ruling | BUILD_PLAN §6/§8 phase 0 complete. |
+| EC-1 … EC-13 | Engineering constraints §1–§13 above | LOCKED | user-confirmed (assistant proposed; Adam chose with all stated qualifiers) | 2026-08-29 |
+| EC-1a | Mobs: tongue-in-cheek — animated objects, weird pets, cryptids; each carries a real side-effect modifier; combinations drive diversity | LOCKED | user-authored | Roster is writing-track. |
+| EC-2a | Border guards count crossing attempts per region and in total; get pissy; know other crossings' counts, hand-waved | LOCKED | user-authored | Dialogue is writing-track. |
+| EC-4a | Optional realistic-weight mode at New Game; unlocks extra content as enticement | LOCKED | user-authored | Extra content is writing-track. |
+| EC-6a | Rare, escalating exit misroute; no explanation; Patch's frustration sound | LOCKED | user-authored | Guarded: unlocked + visited areas only. |
+| EC-12a | Mana Seed EULA verification before any AI use | OPEN (pre-launch gate) | user-authored `[A15]` | Cannot be closed by a session; closed by reading the license. |

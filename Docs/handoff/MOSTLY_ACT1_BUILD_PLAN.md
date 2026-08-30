@@ -158,7 +158,7 @@ Cheap signal first, expensive check last, per Prompt Workshop rules.
 
 ## 8. Phasing (one workshop prompt each)
 
-0. **Engineering constraints session** (§6) → `Docs/ENGINEERING_CONSTRAINTS.md`.
+0. **Engineering constraints session** (§6) → `Docs/ENGINEERING_CONSTRAINTS.md`. **DONE 2026-08-29.**
 1. **Docs-only sync** (prompt already drafted).
 2. **Foundations:** flags, save, inventory/items, dialogue schema v2 + migration of existing JSON, cutscene-beats-as-data, weirdness autoload skeleton, test harness. No content.
 3. **Patch's village + Last Post:** exterior, Latch, Bell, gear reward, village selection screen with nine villages (data-driven variations), region lock in place.
@@ -173,7 +173,7 @@ Writing (§4) is a parallel track and gates phases 3–7; Fable does not author 
 ## 9. Next actions, in order
 
 1. Run the docs-only prompt; push; Sync now.
-2. Hold the engineering-constraints session (§6).
+2. Hold the engineering-constraints session (§6). **DONE.**
 3. Resolve pre-build TODOs 1–7 (§3) in design sessions; write the weirdness spec (§5).
 4. Start the writing list (§4), Latch and Brindle first — they set the voice for everything after.
 5. Workshop the Foundations prompt (phase 2).
