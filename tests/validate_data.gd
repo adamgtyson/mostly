@@ -11,6 +11,12 @@ const DATA_DIR := "res://data"
 const REGIONS_DIR := "res://regions"
 const SCHEMA_DIR := "res://data/schema"
 const CONFIG_PATH := "res://data/config.json"
+const FLAGS_PATH := "res://data/flags.json"
+
+const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]
+const VALID_FLAG_TIERS: Array[String] = ["critical", "normal"]
+## Mirrors GameState.V1_SCOPES (§2); the validator runs without instantiating it.
+const V1_SCOPES: Array[String] = ["act1", "region", "village", "weird", "sys", "recipe", "quest"]
 
 var _total_errors: int = 0
 
@@ -30,6 +36,7 @@ func _run() -> void:
 	_check("gdscript parse", _check_gdscript_parse)
 	_check("scenes load", _check_scenes_load)
 	_check("config", _check_config)
+	_check("flag registry", _check_flag_registry)
 
 # ── category plumbing ────────────────────────────────────────────────────────
 
@@ -109,6 +116,72 @@ func _check_config() -> Dictionary:
 			errors.append("_placeholders names '%s', which is not a key in config.json" % entry)
 	var flagged: int = (placeholders as Array).size()
 	return {"errors": errors, "detail": "%d placeholder(s) flagged, all resolve" % flagged}
+
+## data/flags.json is the mandatory registry (§2): every declaration needs a
+## type, a tier, and a description, and every key must be a legal flag name.
+## The "every reference is declared" half of the rule arrives with the data types
+## that can reference a flag (dialogue v2 and cutscene beats).
+func _check_flag_registry() -> Dictionary:
+	var errors := PackedStringArray()
+	var parsed: Dictionary = _read_json(FLAGS_PATH)
+	if not parsed["ok"]:
+		return {"errors": PackedStringArray([parsed["error"]]), "detail": ""}
+	var root_data: Variant = parsed["data"]
+	if not (root_data is Dictionary) or not (root_data as Dictionary).has("flags"):
+		return {"errors": PackedStringArray(["flags.json has no 'flags' object"]), "detail": ""}
+	var flags: Variant = (root_data as Dictionary)["flags"]
+	if not (flags is Dictionary):
+		return {"errors": PackedStringArray(["flags.json 'flags' is not an object"]), "detail": ""}
+
+	var declared: Dictionary = flags
+	var critical: int = 0
+	for key: Variant in declared:
+		var key_str: String = str(key)
+		errors.append_array(_flag_key_errors(key_str))
+		var decl: Variant = declared[key]
+		if not (decl is Dictionary):
+			errors.append("%s: declaration is not an object" % key_str)
+			continue
+		var d: Dictionary = decl
+		var type_value: String = str(d.get("type", ""))
+		if not VALID_FLAG_TYPES.has(type_value):
+			errors.append("%s: type '%s' is not one of %s" % [key_str, type_value, ", ".join(VALID_FLAG_TYPES)])
+		var tier: String = str(d.get("tier", ""))
+		if not VALID_FLAG_TIERS.has(tier):
+			errors.append("%s: tier '%s' is not one of %s" % [key_str, tier, ", ".join(VALID_FLAG_TIERS)])
+		if tier == "critical":
+			critical += 1
+		if str(d.get("description", "")).strip_edges().is_empty():
+			errors.append("%s: description is empty" % key_str)
+	var detail := "%d declared (%d critical)" % [declared.size(), critical]
+	return {"errors": errors, "detail": detail}
+
+## <scope>.<subject>.<predicate>, snake_case. The design names some two-segment
+## totals directly (region.total_crossing_attempts, weird.misroutes), so two
+## segments is the floor rather than three.
+func _flag_key_errors(key: String) -> PackedStringArray:
+	var errors := PackedStringArray()
+	var parts: PackedStringArray = key.split(".")
+	if parts.size() < 2:
+		errors.append("%s: needs at least <scope>.<name>" % key)
+		return errors
+	if not V1_SCOPES.has(parts[0]):
+		errors.append("%s: scope '%s' is not one of %s" % [key, parts[0], ", ".join(V1_SCOPES)])
+	for part: String in parts:
+		if part.is_empty():
+			errors.append("%s: empty segment" % key)
+		elif not _is_snake_case(part):
+			errors.append("%s: segment '%s' is not snake_case" % [key, part])
+	return errors
+
+func _is_snake_case(s: String) -> bool:
+	for i: int in s.length():
+		var c: String = s[i]
+		var is_lower: bool = c >= "a" and c <= "z"
+		var is_digit: bool = c >= "0" and c <= "9"
+		if not (is_lower or is_digit or c == "_"):
+			return false
+	return true
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 

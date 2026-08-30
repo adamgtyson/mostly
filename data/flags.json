@@ -1,0 +1,30 @@
+{
+  "_comment": "Flag registry (ENGINEERING_CONSTRAINTS.md §2). Every key GameState touches must be declared here; the validator fails the build on an undeclared reference. tier 'critical' means the Act One walkthrough asserts on it, and only anchor areas may set it (§7). Foundations seeds only the keys the engine layer itself needs; story flags arrive with their content.",
+  "flags": {
+    "sys.realistic_weight": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "Per-run choice made at New Game: super-realistic carry limits, which unlock extra content as enticement (EC-4a)."
+    },
+    "region.hold.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Hold is reachable. Region locks are exactly region.<id>.unlocked and nothing else represents them."
+    },
+    "region.hold.crossing_attempts": {
+      "type": "int",
+      "tier": "normal",
+      "description": "Times Patch has tried to cross into The Hold. Guard dialogue conditions on this (EC-2a)."
+    },
+    "region.total_crossing_attempts": {
+      "type": "int",
+      "tier": "normal",
+      "description": "Sum of crossing_attempts across all regions. Guards know this despite the world lacking the technology (EC-2a)."
+    },
+    "weird.misroutes": {
+      "type": "int",
+      "tier": "normal",
+      "description": "Times an exit has delivered Patch to the wrong destination. The only persisted trace of a misroute (EC-6a)."
+    }
+  }
+}

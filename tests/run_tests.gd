@@ -24,6 +24,11 @@ func _initialize() -> void:
 	quit(1 if failed > 0 else 0)
 
 func _run_all() -> int:
+	# Autoloads are children of root by the time _initialize() runs, but their
+	# _ready() has not fired yet — so anything they load in _ready (the flag
+	# registry, the dialogue box) is absent until one frame has passed.
+	await process_frame
+
 	var files: PackedStringArray = _discover()
 	if files.is_empty():
 		print("run_tests: no tests/test_*.gd found")
