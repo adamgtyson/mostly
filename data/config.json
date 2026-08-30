@@ -1,0 +1,27 @@
+{
+  "_comment": "Tunables for Mostly (ENGINEERING_CONSTRAINTS.md §13). Nothing here may be duplicated as a literal in a script. Keys named in _placeholders are open design values carrying a provisional default; they must be reviewed before v1.",
+  "_placeholders": [
+    "inventory.realistic_weight_max",
+    "weirdness.misroute_base_chance",
+    "weirdness.flicker_interval_min_s",
+    "weirdness.flicker_interval_max_s"
+  ],
+  "combat": {
+    "auto_battle_available": true
+  },
+  "save": {
+    "slots": 3
+  },
+  "inventory": {
+    "max_bag_slots": 0,
+    "realistic_weight_max": 40.0
+  },
+  "weirdness": {
+    "misroute_base_chance": 0.0,
+    "flicker_interval_min_s": 20.0,
+    "flicker_interval_max_s": 90.0
+  },
+  "scene": {
+    "fade_duration_s": 0.25
+  }
+}
