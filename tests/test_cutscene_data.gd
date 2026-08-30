@@ -69,7 +69,7 @@ func test_the_old_script_is_gone(t: TestContext) -> void:
 		"opening_cutscene.gd is deleted, replaced by data plus CutsceneTrigger (§8)")
 
 func test_workshop_uses_the_generic_trigger(t: TestContext) -> void:
-	var text: String = FileAccess.get_file_as_string("res://scenes/workshop.tscn")
+	var text: String = FileAccess.get_file_as_string("res://regions/hold/areas/workshop.tscn")
 	t.assert_true(text.contains("cutscene_trigger.gd"), "the scene points at CutsceneTrigger")
 	t.assert_true(text.contains("cutscene_id = \"opening\""), "the trigger names the opening cutscene")
 	t.assert_false(text.contains("opening_cutscene.gd"), "no reference to the deleted script remains")

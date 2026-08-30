@@ -1,0 +1,59 @@
+{
+  "_comment": "Region package manifest schema (ENGINEERING_CONSTRAINTS.md §7). Handcrafted regions expose the generator's output shape now so it can drive the same scenes later [U2-4]. Empty fill_slots and edges are valid: v1 fills every slot by hand.",
+  "title": "region",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "display_name", "biome_tags", "weirdness", "locked_message", "entry_points", "anchors", "fill_slots", "edges"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "display_name": { "type": "string", "minLength": 1 },
+    "motto": { "type": "string" },
+    "biome_tags": { "type": "array", "items": { "type": "string" } },
+    "weirdness": { "type": "number", "minimum": 0 },
+    "locked_message": { "type": "string" },
+    "entry_points": { "type": "array", "items": { "type": "string" } },
+    "anchors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "area", "biome_tags", "required_exits"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "area": { "type": "string", "minLength": 1 },
+          "biome_tags": { "type": "array", "items": { "type": "string" } },
+          "required_exits": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "fill_slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "biome_pool", "length_hint", "default_area", "spawn_pool"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "biome_pool": { "type": "array", "items": { "type": "string" } },
+          "length_hint": { "type": "integer", "minimum": 0 },
+          "default_area": { "type": "string" },
+          "spawn_pool": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "via_slot": { "type": "string" }
+        }
+      }
+    },
+    "forges": { "type": "array" }
+  }
+}

@@ -22,6 +22,9 @@
     "flicker_interval_max_s": 90.0
   },
   "scene": {
-    "fade_duration_s": 0.25
+    "fade_duration_s": 0.25,
+    "starting_region": "hold",
+    "starting_area": "workshop",
+    "starting_spawn": "default"
   }
 }

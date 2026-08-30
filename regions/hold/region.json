@@ -1,0 +1,19 @@
+{
+  "_comment": "The Hold — region package manifest (ENGINEERING_CONSTRAINTS.md §7). Foundations ships the shape with the one area that exists; the remaining Act One anchors (Last Post, Near Enough, Wren's post, Hobb's village) arrive with their content in phases 3-4. fill_slots and edges are empty because v1 fills every slot by hand.",
+  "id": "hold",
+  "display_name": "The Hold",
+  "biome_tags": [],
+  "weirdness": 1.0,
+  "locked_message": "",
+  "entry_points": ["workshop"],
+  "anchors": [
+    {
+      "id": "workshop",
+      "area": "workshop",
+      "biome_tags": [],
+      "required_exits": []
+    }
+  ],
+  "fill_slots": [],
+  "edges": []
+}

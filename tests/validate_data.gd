@@ -19,6 +19,7 @@ const CUTSCENES_DIR := "res://data/cutscenes"
 const DIALOGUE_DIR := "res://data/dialogue"
 const CHARACTERS_PATH := "res://data/characters.json"
 const I18N_KEYS_PATH := "res://data/i18n/keys.json"
+const REGION_SCHEMA := "res://data/schema/region.schema.json"
 
 ## content directory -> schema. One line per JSON content type (§13).
 const SCHEMA_MAP: Dictionary = {
@@ -62,6 +63,8 @@ func _run() -> void:
 	_check("dialogue graph", _check_dialogue_graph)
 	_check("character ids", _check_character_ids)
 	_check("dialogue refs", _check_dialogue_references)
+	_check("regions", _check_regions)
+	_check("anchor tier rule", _check_anchor_tier_rule)
 	_check("i18n keys", _check_i18n_keys)
 
 # ── category plumbing ────────────────────────────────────────────────────────
@@ -371,6 +374,128 @@ func _check_dialogue_references() -> Dictionary:
 		if not FileAccess.file_exists("%s/%s.json" % [DIALOGUE_DIR, id]):
 			errors.append("%s: references dialogue '%s', which has no file" % [referenced[id], id])
 	return {"errors": errors, "detail": "%d reference(s) resolve" % referenced.size()}
+
+## Every regions/<id>/region.json validates against the §7 shape, its anchors
+## point at scenes that exist, and its edges join things it declares.
+func _check_regions() -> Dictionary:
+	var errors := PackedStringArray()
+	var schema_parsed: Dictionary = _read_json(REGION_SCHEMA)
+	if not schema_parsed["ok"] or not (schema_parsed["data"] is Dictionary):
+		return {"errors": PackedStringArray(["%s unreadable" % REGION_SCHEMA]), "detail": ""}
+	var schema: Dictionary = schema_parsed["data"]
+
+	var regions: PackedStringArray = _region_ids()
+	var anchors_total: int = 0
+	for region: String in regions:
+		var path: String = "%s/%s/region.json" % [REGIONS_DIR, region]
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"]:
+			errors.append(parsed["error"])
+			continue
+		for problem: String in JsonSchema.validate(parsed["data"], schema, "%s/region.json" % region):
+			errors.append(problem)
+		if not (parsed["data"] is Dictionary):
+			continue
+		var document: Dictionary = parsed["data"]
+
+		if str(document.get("id", "")) != region:
+			errors.append("%s: id '%s' does not match its folder" % [path, str(document.get("id", ""))])
+
+		var known_slots: Dictionary = {}
+		var anchor_areas: Dictionary = {}
+		for anchor: Variant in document.get("anchors", []):
+			var a: Dictionary = anchor
+			var anchor_id: String = str(a.get("id", ""))
+			var area: String = str(a.get("area", ""))
+			known_slots[anchor_id] = true
+			anchor_areas[area] = true
+			anchors_total += 1
+			var scene_path: String = "%s/%s/areas/%s.tscn" % [REGIONS_DIR, region, area]
+			if not FileAccess.file_exists(scene_path):
+				errors.append("%s: anchor '%s' names area '%s', which has no scene at %s"
+					% [path, anchor_id, area, scene_path])
+		for slot: Variant in document.get("fill_slots", []):
+			known_slots[str((slot as Dictionary).get("id", ""))] = true
+
+		for entry: Variant in document.get("entry_points", []):
+			var entry_id: String = str(entry)
+			if not anchor_areas.has(entry_id) and not known_slots.has(entry_id):
+				errors.append("%s: entry_point '%s' is neither an anchor nor a fill slot" % [path, entry_id])
+
+		for edge: Variant in document.get("edges", []):
+			var e: Dictionary = edge
+			for end: String in ["from", "to"]:
+				var node_id: String = str(e.get(end, ""))
+				if not known_slots.has(node_id):
+					errors.append("%s: edge %s '%s' is not a declared anchor or fill slot" % [path, end, node_id])
+	return {"errors": errors, "detail": "%d region(s), %d anchor(s)" % [regions.size(), anchors_total]}
+
+## §7: only anchor areas may set critical-tier flags. An area scene can set a
+## flag through the cutscenes and dialogue it references, so those are followed.
+func _check_anchor_tier_rule() -> Dictionary:
+	var errors := PackedStringArray()
+	var declared: Dictionary = _declared_flags()
+	var checked: int = 0
+
+	for region: String in _region_ids():
+		var document: Dictionary = _read_json("%s/%s/region.json" % [REGIONS_DIR, region]).get("data", {})
+		if not (document is Dictionary):
+			continue
+		var anchor_areas: Dictionary = {}
+		for anchor: Variant in (document as Dictionary).get("anchors", []):
+			anchor_areas[str((anchor as Dictionary).get("area", ""))] = true
+
+		for scene_path: String in _walk("%s/%s/areas" % [REGIONS_DIR, region], ".tscn"):
+			checked += 1
+			var area_name: String = scene_path.get_file().get_basename()
+			if anchor_areas.has(area_name):
+				continue
+			for flag: String in _critical_flags_reachable_from(scene_path, declared):
+				errors.append("%s: fill area '%s' sets critical-tier flag '%s'; only anchors may (§7)"
+					% [scene_path, area_name, flag])
+	return {"errors": errors, "detail": "%d area scene(s) checked" % checked}
+
+## Critical flags an area scene can set, via the cutscenes and dialogue it names.
+func _critical_flags_reachable_from(scene_path: String, declared: Dictionary) -> PackedStringArray:
+	var found := PackedStringArray()
+	var sources: PackedStringArray = PackedStringArray()
+
+	for cutscene_id: String in _extract_quoted(scene_path, "cutscene_id"):
+		sources.append("%s/%s.json" % [CUTSCENES_DIR, cutscene_id])
+	for dialogue_id: String in _extract_quoted(scene_path, "dialogue_id"):
+		sources.append("%s/%s.json" % [DIALOGUE_DIR, dialogue_id])
+
+	for source: String in sources:
+		var parsed: Dictionary = _read_json(source)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		var document: Dictionary = parsed["data"]
+		for beat: Variant in document.get("beats", []):
+			if beat is Dictionary and str((beat as Dictionary).get("type", "")) == "set_flag":
+				_note_critical(str((beat as Dictionary).get("flag", "")), declared, found)
+		var nodes: Variant = document.get("nodes", {})
+		if nodes is Dictionary:
+			for node_id: Variant in (nodes as Dictionary):
+				for set_entry: Variant in ((nodes as Dictionary)[node_id] as Dictionary).get("set", []):
+					_note_critical(str((set_entry as Dictionary).get("flag", "")), declared, found)
+	return found
+
+func _note_critical(flag: String, declared: Dictionary, found: PackedStringArray) -> void:
+	if flag.is_empty() or found.has(flag):
+		return
+	if str((declared.get(flag, {}) as Dictionary).get("tier", "normal")) == "critical":
+		found.append(flag)
+
+func _region_ids() -> PackedStringArray:
+	var ids := PackedStringArray()
+	var dir := DirAccess.open(REGIONS_DIR)
+	if dir == null:
+		return ids
+	for sub: String in dir.get_directories():
+		if FileAccess.file_exists("%s/%s/region.json" % [REGIONS_DIR, sub]):
+			ids.append(sub)
+	ids.sort()
+	return ids
 
 ## Generates the stable line-key catalogue (§5): <file>.<node>.<index>. Text
 ## stays inline in v1; extracting it later is a script, not a rewrite. Written

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Mostly"
-run/main_scene="res://scenes/workshop.tscn"
+run/main_scene="res://regions/hold/areas/workshop.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 [autoload]
 
@@ -22,6 +22,7 @@ Inventory="*res://scripts/inventory.gd"
 DialogueManager="*res://scripts/dialogue_manager.gd"
 CutsceneManager="*res://scripts/cutscene_manager.gd"
 CutsceneSkip="*res://scripts/cutscene_skip.gd"
+SceneRouter="*res://scripts/scene_router.gd"
 
 [display]
 
