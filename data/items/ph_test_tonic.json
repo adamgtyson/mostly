@@ -1,0 +1,12 @@
+{
+  "_comment": "PH_ test fixture (§12) — not content. Exercises the on_use effect registry.",
+  "id": "ph_test_tonic",
+  "name": "PH Test Tonic",
+  "description": "Placeholder consumable. Not a real item.",
+  "type": "consumable",
+  "tags": ["ph_test_restorative"],
+  "stackable": true,
+  "max_stack": 10,
+  "weight": 0.5,
+  "on_use": "heal"
+}

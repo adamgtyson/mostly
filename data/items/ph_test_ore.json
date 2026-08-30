@@ -1,0 +1,11 @@
+{
+  "_comment": "PH_ test fixture (§12) — not content. Exists so the item loader, stacking and weight paths have something to run against.",
+  "id": "ph_test_ore",
+  "name": "PH Test Ore",
+  "description": "Placeholder resource. Not a real item.",
+  "type": "resource",
+  "tags": ["ph_test_material"],
+  "stackable": true,
+  "max_stack": 99,
+  "weight": 1.0
+}

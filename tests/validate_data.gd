@@ -12,6 +12,13 @@ const REGIONS_DIR := "res://regions"
 const SCHEMA_DIR := "res://data/schema"
 const CONFIG_PATH := "res://data/config.json"
 const FLAGS_PATH := "res://data/flags.json"
+const TAGS_PATH := "res://data/tags.json"
+const ITEMS_DIR := "res://data/items"
+
+## content directory -> schema. One line per JSON content type (§13).
+const SCHEMA_MAP: Dictionary = {
+	"res://data/items": "res://data/schema/item.schema.json",
+}
 
 const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]
 const VALID_FLAG_TIERS: Array[String] = ["critical", "normal"]
@@ -37,6 +44,8 @@ func _run() -> void:
 	_check("scenes load", _check_scenes_load)
 	_check("config", _check_config)
 	_check("flag registry", _check_flag_registry)
+	_check("schemas", _check_schemas)
+	_check("item tags", _check_item_tags)
 
 # ── category plumbing ────────────────────────────────────────────────────────
 
@@ -116,6 +125,55 @@ func _check_config() -> Dictionary:
 			errors.append("_placeholders names '%s', which is not a key in config.json" % entry)
 	var flagged: int = (placeholders as Array).size()
 	return {"errors": errors, "detail": "%d placeholder(s) flagged, all resolve" % flagged}
+
+## Every JSON content type validates against its schema in data/schema/ (§13).
+## One entry per content directory; adding a content type means adding a line.
+func _check_schemas() -> Dictionary:
+	var errors := PackedStringArray()
+	var checked: int = 0
+	for content_dir: String in SCHEMA_MAP:
+		var schema_path: String = SCHEMA_MAP[content_dir]
+		var schema_parsed: Dictionary = _read_json(schema_path)
+		if not schema_parsed["ok"]:
+			errors.append(schema_parsed["error"])
+			continue
+		if not (schema_parsed["data"] is Dictionary):
+			errors.append("%s: schema root is not an object" % schema_path)
+			continue
+		var schema: Dictionary = schema_parsed["data"]
+		for path: String in _walk(content_dir, ".json"):
+			var parsed: Dictionary = _read_json(path)
+			if not parsed["ok"]:
+				errors.append(parsed["error"])
+				continue
+			checked += 1
+			for problem: String in JsonSchema.validate(parsed["data"], schema, path.get_file()):
+				errors.append("%s: %s" % [path, problem])
+	return {"errors": errors, "detail": "%d file(s) against %d schema(s)" % [checked, SCHEMA_MAP.size()]}
+
+## Tag-based inputs drive recipe substitution (§9), so an item carrying a tag
+## that data/tags.json does not declare is a build failure, not a silent miss.
+func _check_item_tags() -> Dictionary:
+	var errors := PackedStringArray()
+	var tags_parsed: Dictionary = _read_json(TAGS_PATH)
+	if not tags_parsed["ok"]:
+		return {"errors": PackedStringArray([tags_parsed["error"]]), "detail": ""}
+	var tags_root: Variant = tags_parsed["data"]
+	if not (tags_root is Dictionary) or not (tags_root as Dictionary).has("tags"):
+		return {"errors": PackedStringArray(["tags.json has no 'tags' object"]), "detail": ""}
+	var declared: Dictionary = (tags_root as Dictionary)["tags"]
+
+	var used: Dictionary = {}
+	for path: String in _walk(ITEMS_DIR, ".json"):
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		for tag: Variant in (parsed["data"] as Dictionary).get("tags", []):
+			var tag_str: String = str(tag)
+			used[tag_str] = true
+			if not declared.has(tag_str):
+				errors.append("%s: tag '%s' is not declared in data/tags.json" % [path, tag_str])
+	return {"errors": errors, "detail": "%d declared, %d in use" % [declared.size(), used.size()]}
 
 ## data/flags.json is the mandatory registry (§2): every declaration needs a
 ## type, a tier, and a description, and every key must be a legal flag name.

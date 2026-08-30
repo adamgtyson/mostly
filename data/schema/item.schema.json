@@ -1,0 +1,33 @@
+{
+  "_comment": "Item definition schema (ENGINEERING_CONSTRAINTS.md §4). Validated by scripts/json_schema.gd. 'weight' is required on every item from Foundations even though v1 ignores it unless sys.realistic_weight is on (EC-4a). 'slot' applies to gear only.",
+  "title": "item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "description", "type", "tags", "stackable", "max_stack", "weight"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "type": { "type": "string", "enum": ["resource", "consumable", "gear", "gadget", "key"] },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "stackable": { "type": "boolean" },
+    "max_stack": { "type": "integer", "minimum": 1 },
+    "weight": { "type": "number", "minimum": 0 },
+    "slot": { "type": "string", "enum": ["weapon", "armor", "accessory", "attachment"] },
+    "modifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stat", "op", "value"],
+        "properties": {
+          "stat": { "type": "string", "minLength": 1 },
+          "op": { "type": "string", "enum": ["add", "mul", "set"] },
+          "value": { "type": "number" }
+        }
+      }
+    },
+    "charges": { "type": "integer", "minimum": 0 },
+    "on_use": { "type": "string" }
+  }
+}

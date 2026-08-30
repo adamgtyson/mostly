@@ -1,0 +1,15 @@
+{
+  "_comment": "PH_ test fixture (§12) — not content. Exercises gear instances, slots and modifiers.",
+  "id": "ph_test_sword",
+  "name": "PH Test Sword",
+  "description": "Placeholder gear. Not a real item.",
+  "type": "gear",
+  "tags": ["ph_test_edge"],
+  "stackable": false,
+  "max_stack": 1,
+  "weight": 3.0,
+  "slot": "weapon",
+  "modifiers": [
+    { "stat": "attack", "op": "add", "value": 2 }
+  ]
+}

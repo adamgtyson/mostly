@@ -1,0 +1,8 @@
+{
+  "_comment": "Item-tag taxonomy (ENGINEERING_CONSTRAINTS.md §9). Tag-based recipe inputs are how non-ideal substitution works [G9]; the validator rejects any tag not listed here. Populating this with the real taxonomy is a writing-track item (BUILD_PLAN §4.9) — everything below is a Foundations placeholder used only by the PH_ test fixtures.",
+  "tags": {
+    "ph_test_material": "Placeholder. Test-fixture raw material.",
+    "ph_test_edge": "Placeholder. Test-fixture bladed gear.",
+    "ph_test_restorative": "Placeholder. Test-fixture consumable."
+  }
+}
