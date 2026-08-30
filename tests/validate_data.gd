@@ -31,6 +31,8 @@ const SCHEMA_MAP: Dictionary = {
 ## single file -> schema, for registries that are one document rather than a tree.
 const FILE_SCHEMA_MAP: Dictionary = {
 	"res://data/characters.json": "res://data/schema/characters.schema.json",
+	"res://data/weirdness/curve.json": "res://data/schema/weirdness_curve.schema.json",
+	"res://data/weirdness/catalog.json": "res://data/schema/weirdness_catalog.schema.json",
 }
 
 const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]

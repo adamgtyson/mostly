@@ -1,0 +1,35 @@
+{
+  "_comment": "Schema for data/weirdness/curve.json (§10).",
+  "title": "weirdness_curve",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["base_intensity", "act_progress", "counters", "events"],
+  "properties": {
+    "base_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+    "act_progress": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["when", "intensity"],
+        "properties": {
+          "when": { "type": "string" },
+          "intensity": { "type": "number" }
+        }
+      }
+    },
+    "counters": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["per_unit", "max"],
+        "properties": {
+          "per_unit": { "type": "number" },
+          "max": { "type": "number" }
+        }
+      }
+    },
+    "events": { "type": "object", "valuesSchema": { "type": "number", "minimum": 0 } }
+  }
+}

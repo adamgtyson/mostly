@@ -1,0 +1,13 @@
+{
+  "_comment": "Flicker catalog (ENGINEERING_CONSTRAINTS.md §10). Contents are the BUILD_PLAN §5 weirdness spec; the single entry below is a PH_ placeholder whose handler is a no-op logger, present so the scheduler contract has something to select. No real flicker kinds are invented here.",
+  "kinds": {
+    "ph_placeholder_flicker": {
+      "min_intensity": 0.0,
+      "weight": 1.0,
+      "cooldown": 30.0,
+      "regions_excluded": [],
+      "handler": "log",
+      "v1": false
+    }
+  }
+}

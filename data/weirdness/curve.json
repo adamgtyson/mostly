@@ -1,0 +1,11 @@
+{
+  "_comment": "Weirdness curve (ENGINEERING_CONSTRAINTS.md §10). Intensity is DERIVED from these rules and never saved. Every number here is a flagged placeholder: the real curve is the BUILD_PLAN §5 weirdness spec, a separate design session. With base_intensity at 0 and no act_progress entries, intensity is 0 and nothing fires — which is the correct Foundations behaviour.",
+  "base_intensity": 0.0,
+  "act_progress": [],
+  "counters": {
+    "weird.misroutes": { "per_unit": 0.01, "max": 0.1 }
+  },
+  "events": {
+    "misroute": 0.0
+  }
+}

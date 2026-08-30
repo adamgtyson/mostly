@@ -1,0 +1,25 @@
+{
+  "_comment": "Schema for data/weirdness/catalog.json (§10).",
+  "title": "weirdness_catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kinds"],
+  "properties": {
+    "kinds": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["min_intensity", "weight", "cooldown", "regions_excluded", "handler", "v1"],
+        "properties": {
+          "min_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+          "weight": { "type": "number", "minimum": 0 },
+          "cooldown": { "type": "number", "minimum": 0 },
+          "regions_excluded": { "type": "array", "items": { "type": "string" } },
+          "handler": { "type": "string" },
+          "v1": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

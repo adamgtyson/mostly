@@ -23,6 +23,7 @@ DialogueManager="*res://scripts/dialogue_manager.gd"
 CutsceneManager="*res://scripts/cutscene_manager.gd"
 CutsceneSkip="*res://scripts/cutscene_skip.gd"
 SceneRouter="*res://scripts/scene_router.gd"
+Weirdness="*res://scripts/weirdness.gd"
 
 [display]
 
