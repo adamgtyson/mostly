@@ -1,8 +1,27 @@
 {
+  "entries": [
+    {
+      "start": "start",
+      "when": "true"
+    }
+  ],
   "id": "opening_voices",
-  "lines": [
-    { "speaker": "Voices From Outside", "portrait": "patch_default", "text": "The sixteenth!" },
-    { "speaker": "Voices From Outside", "portrait": "patch_default", "text": "Stonemonth sixteenth!" },
-    { "speaker": "Voices From Outside", "portrait": "patch_default", "text": "Same as yesterday, Patch!" }
-  ]
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "speaker": "voices_from_outside",
+          "text": "The sixteenth!"
+        },
+        {
+          "speaker": "voices_from_outside",
+          "text": "Stonemonth sixteenth!"
+        },
+        {
+          "speaker": "voices_from_outside",
+          "text": "Same as yesterday, Patch!"
+        }
+      ]
+    }
+  }
 }

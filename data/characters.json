@@ -1,0 +1,15 @@
+{
+  "_comment": "Character registry (ENGINEERING_CONSTRAINTS.md §5). A dialogue line's 'speaker' is an id resolved here to a display name, a default portrait and a gender. Seeded from the speakers in the eleven v1 dialogue files; new characters arrive with their content. 'gender' is one of male | female | player | none — 'player' means the character follows the player's choice of Patch's gender (sys.patch_gender), 'none' means pronouns never refer to them.",
+  "characters": {
+    "patch": {
+      "display_name": "Patch",
+      "default_portrait": "patch_default",
+      "gender": "player"
+    },
+    "voices_from_outside": {
+      "display_name": "Voices From Outside",
+      "default_portrait": "patch_default",
+      "gender": "none"
+    }
+  }
+}

@@ -1,30 +1,35 @@
 {
-  "id": "table_inspect",
-  "lines": [
+  "entries": [
     {
-      "speaker": "Patch",
-      "portrait": "patch_default",
-      "text": "Cup's on its side."
-    },
-    {
-      "speaker": "Patch",
-      "portrait": "patch_default",
-      "text": "Cat's sitting in it. Not sorry."
-    },
-    {
-      "speaker": "Patch",
-      "portrait": "patch_default",
-      "text": "That's the order form."
-    },
-    {
-      "speaker": "Patch",
-      "portrait": "patch_default",
-      "text": "Delivery address. Gone."
-    },
-    {
-      "speaker": "Patch",
-      "portrait": "patch_default",
-      "text": "HMF."
+      "start": "start",
+      "when": "true"
     }
-  ]
+  ],
+  "id": "table_inspect",
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "speaker": "patch",
+          "text": "Cup's on its side."
+        },
+        {
+          "speaker": "patch",
+          "text": "Cat's sitting in it. Not sorry."
+        },
+        {
+          "speaker": "patch",
+          "text": "That's the order form."
+        },
+        {
+          "speaker": "patch",
+          "text": "Delivery address. Gone."
+        },
+        {
+          "speaker": "patch",
+          "text": "HMF."
+        }
+      ]
+    }
+  }
 }

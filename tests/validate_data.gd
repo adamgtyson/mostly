@@ -14,10 +14,21 @@ const CONFIG_PATH := "res://data/config.json"
 const FLAGS_PATH := "res://data/flags.json"
 const TAGS_PATH := "res://data/tags.json"
 const ITEMS_DIR := "res://data/items"
+const CUTSCENES_DIR := "res://data/cutscenes"
+
+const DIALOGUE_DIR := "res://data/dialogue"
+const CHARACTERS_PATH := "res://data/characters.json"
+const I18N_KEYS_PATH := "res://data/i18n/keys.json"
 
 ## content directory -> schema. One line per JSON content type (§13).
 const SCHEMA_MAP: Dictionary = {
 	"res://data/items": "res://data/schema/item.schema.json",
+	"res://data/dialogue": "res://data/schema/dialogue.schema.json",
+}
+
+## single file -> schema, for registries that are one document rather than a tree.
+const FILE_SCHEMA_MAP: Dictionary = {
+	"res://data/characters.json": "res://data/schema/characters.schema.json",
 }
 
 const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]
@@ -46,6 +57,11 @@ func _run() -> void:
 	_check("flag registry", _check_flag_registry)
 	_check("schemas", _check_schemas)
 	_check("item tags", _check_item_tags)
+	_check("flag references", _check_flag_references)
+	_check("dialogue graph", _check_dialogue_graph)
+	_check("character ids", _check_character_ids)
+	_check("dialogue refs", _check_dialogue_references)
+	_check("i18n keys", _check_i18n_keys)
 
 # ── category plumbing ────────────────────────────────────────────────────────
 
@@ -149,7 +165,19 @@ func _check_schemas() -> Dictionary:
 			checked += 1
 			for problem: String in JsonSchema.validate(parsed["data"], schema, path.get_file()):
 				errors.append("%s: %s" % [path, problem])
-	return {"errors": errors, "detail": "%d file(s) against %d schema(s)" % [checked, SCHEMA_MAP.size()]}
+
+	for file_path: String in FILE_SCHEMA_MAP:
+		var single_schema: Dictionary = _read_json(FILE_SCHEMA_MAP[file_path])
+		var single_doc: Dictionary = _read_json(file_path)
+		if not single_schema["ok"] or not single_doc["ok"]:
+			errors.append("%s: schema or document unreadable" % file_path)
+			continue
+		checked += 1
+		for problem: String in JsonSchema.validate(single_doc["data"], single_schema["data"], file_path.get_file()):
+			errors.append("%s: %s" % [file_path, problem])
+
+	var schema_count: int = SCHEMA_MAP.size() + FILE_SCHEMA_MAP.size()
+	return {"errors": errors, "detail": "%d file(s) against %d schema(s)" % [checked, schema_count]}
 
 ## Tag-based inputs drive recipe substitution (§9), so an item carrying a tag
 ## that data/tags.json does not declare is a build failure, not a silent miss.
@@ -174,6 +202,236 @@ func _check_item_tags() -> Dictionary:
 			if not declared.has(tag_str):
 				errors.append("%s: tag '%s' is not declared in data/tags.json" % [path, tag_str])
 	return {"errors": errors, "detail": "%d declared, %d in use" % [declared.size(), used.size()]}
+
+## The other half of the §2 rule: every flag *referenced* anywhere in data/,
+## regions/ or scenes/ must be declared. A typo fails the build, not the playtest.
+func _check_flag_references() -> Dictionary:
+	var errors := PackedStringArray()
+	var declared: Dictionary = _declared_flags()
+	if declared.is_empty():
+		return {"errors": PackedStringArray(["flag registry is empty or unreadable"]), "detail": ""}
+
+	var references: Dictionary = _collect_flag_references()
+	for flag: String in references:
+		if not declared.has(flag):
+			errors.append("%s: flag '%s' is not declared in data/flags.json" % [references[flag], flag])
+	return {"errors": errors, "detail": "%d reference(s), all declared" % references.size()}
+
+## flag name -> where it was first seen. Reads dialogue conditions and set[]
+## entries, plus `when` on scene nodes; grows with each data type that can name
+## a flag.
+func _collect_flag_references() -> Dictionary:
+	var found: Dictionary = {}
+
+	for path: String in _walk(DIALOGUE_DIR, ".json"):
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		var document: Dictionary = parsed["data"]
+		for entry: Variant in document.get("entries", []):
+			if entry is Dictionary:
+				_note_condition_flags(str((entry as Dictionary).get("when", "")), path, found)
+		var nodes: Variant = document.get("nodes", {})
+		if not (nodes is Dictionary):
+			continue
+		for node_id: Variant in (nodes as Dictionary):
+			var node: Variant = (nodes as Dictionary)[node_id]
+			if not (node is Dictionary):
+				continue
+			for set_entry: Variant in (node as Dictionary).get("set", []):
+				if set_entry is Dictionary:
+					var key: String = str((set_entry as Dictionary).get("flag", ""))
+					if not key.is_empty() and not found.has(key):
+						found[key] = path
+			for choice: Variant in (node as Dictionary).get("choices", []):
+				if choice is Dictionary:
+					_note_condition_flags(str((choice as Dictionary).get("when", "")), path, found)
+
+	# Scene nodes carry conditions as exported `when` strings.
+	for path: String in _walk("res://scenes", ".tscn") + _walk(REGIONS_DIR, ".tscn"):
+		for expr: String in _extract_quoted(path, "when"):
+			_note_condition_flags(expr, path, found)
+
+	return found
+
+func _note_condition_flags(expr: String, path: String, found: Dictionary) -> void:
+	if expr.strip_edges().is_empty():
+		return
+	for flag: String in Condition.referenced_flags(expr):
+		if not found.has(flag):
+			found[flag] = path
+
+## Structural rules the schema cannot express: entries point at real nodes, the
+## last entry is the always-true fallback, next/choices target real nodes, and a
+## set[] entry carries exactly one of value or increment.
+func _check_dialogue_graph() -> Dictionary:
+	var errors := PackedStringArray()
+	var files: PackedStringArray = _walk(DIALOGUE_DIR, ".json")
+	for path: String in files:
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		var document: Dictionary = parsed["data"]
+		var name: String = path.get_file()
+		var nodes: Variant = document.get("nodes", {})
+		if not (nodes is Dictionary):
+			continue
+		var node_map: Dictionary = nodes
+
+		var entries: Variant = document.get("entries", [])
+		if entries is Array:
+			var list: Array = entries
+			if list.is_empty():
+				errors.append("%s: no entries" % name)
+			for i: int in list.size():
+				var entry: Dictionary = list[i]
+				var start: String = str(entry.get("start", ""))
+				if not node_map.has(start):
+					errors.append("%s: entry %d starts at unknown node '%s'" % [name, i, start])
+				var problem: String = Condition.syntax_error(str(entry.get("when", "")))
+				if not problem.is_empty():
+					errors.append("%s: entry %d condition: %s" % [name, i, problem])
+			if not list.is_empty():
+				var last_when: String = str((list[list.size() - 1] as Dictionary).get("when", "")).strip_edges().to_lower()
+				if last_when != "true":
+					errors.append("%s: the last entry must be \"when\": \"true\" (§5)" % name)
+
+		for node_id: Variant in node_map:
+			var node: Dictionary = node_map[node_id]
+			var next_id: String = str(node.get("next", ""))
+			if not next_id.is_empty() and not node_map.has(next_id):
+				errors.append("%s: node '%s' points next at unknown node '%s'" % [name, str(node_id), next_id])
+			for choice: Variant in node.get("choices", []):
+				var c: Dictionary = choice
+				var target: String = str(c.get("next", ""))
+				if not node_map.has(target):
+					errors.append("%s: node '%s' has a choice to unknown node '%s'" % [name, str(node_id), target])
+				var choice_problem: String = Condition.syntax_error(str(c.get("when", "")))
+				if not choice_problem.is_empty():
+					errors.append("%s: node '%s' choice condition: %s" % [name, str(node_id), choice_problem])
+			for set_entry: Variant in node.get("set", []):
+				var s: Dictionary = set_entry
+				if s.has("value") and s.has("increment"):
+					errors.append("%s: node '%s' set '%s' has both value and increment" % [name, str(node_id), str(s.get("flag", ""))])
+				if not s.has("value") and not s.has("increment"):
+					errors.append("%s: node '%s' set '%s' has neither value nor increment" % [name, str(node_id), str(s.get("flag", ""))])
+	return {"errors": errors, "detail": "%d file(s) checked" % files.size()}
+
+## Every character id a dialogue speaks as must exist in characters.json (§11).
+func _check_character_ids() -> Dictionary:
+	var errors := PackedStringArray()
+	var parsed: Dictionary = _read_json(CHARACTERS_PATH)
+	if not parsed["ok"] or not (parsed["data"] is Dictionary):
+		return {"errors": PackedStringArray(["characters.json unreadable"]), "detail": ""}
+	var registry: Variant = (parsed["data"] as Dictionary).get("characters", {})
+	if not (registry is Dictionary):
+		return {"errors": PackedStringArray(["characters.json has no 'characters' object"]), "detail": ""}
+	var known: Dictionary = registry
+
+	var used: Dictionary = {}
+	for path: String in _walk(DIALOGUE_DIR, ".json"):
+		var doc_parsed: Dictionary = _read_json(path)
+		if not doc_parsed["ok"] or not (doc_parsed["data"] is Dictionary):
+			continue
+		var nodes: Variant = (doc_parsed["data"] as Dictionary).get("nodes", {})
+		if not (nodes is Dictionary):
+			continue
+		for node_id: Variant in (nodes as Dictionary):
+			var node: Dictionary = (nodes as Dictionary)[node_id]
+			for line: Variant in node.get("lines", []):
+				var speaker: String = str((line as Dictionary).get("speaker", ""))
+				used[speaker] = true
+				if not known.has(speaker):
+					errors.append("%s: speaker '%s' is not in characters.json" % [path.get_file(), speaker])
+	return {"errors": errors, "detail": "%d known, %d in use" % [known.size(), used.size()]}
+
+## Every dialogue id a scene or cutscene names must have a file (§11).
+func _check_dialogue_references() -> Dictionary:
+	var errors := PackedStringArray()
+	var referenced: Dictionary = {}
+
+	for path: String in _walk("res://scenes", ".tscn") + _walk(REGIONS_DIR, ".tscn"):
+		for id: String in _extract_quoted(path, "dialogue_id"):
+			if not id.is_empty():
+				referenced[id] = path
+
+	for path: String in _walk(CUTSCENES_DIR, ".json"):
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		for beat: Variant in (parsed["data"] as Dictionary).get("beats", []):
+			if not (beat is Dictionary):
+				continue
+			var id: String = str((beat as Dictionary).get("dialogue_id", ""))
+			if not id.is_empty():
+				referenced[id] = path
+
+	for id: String in referenced:
+		if not FileAccess.file_exists("%s/%s.json" % [DIALOGUE_DIR, id]):
+			errors.append("%s: references dialogue '%s', which has no file" % [referenced[id], id])
+	return {"errors": errors, "detail": "%d reference(s) resolve" % referenced.size()}
+
+## Generates the stable line-key catalogue (§5): <file>.<node>.<index>. Text
+## stays inline in v1; extracting it later is a script, not a rewrite. Written
+## deterministically so a re-run leaves the working tree clean.
+func _check_i18n_keys() -> Dictionary:
+	var keys: Dictionary = {}
+	var paths: PackedStringArray = _walk(DIALOGUE_DIR, ".json")
+	for path: String in paths:
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			continue
+		var file_key: String = path.get_file().get_basename()
+		var nodes: Variant = (parsed["data"] as Dictionary).get("nodes", {})
+		if not (nodes is Dictionary):
+			continue
+		var node_ids: Array = (nodes as Dictionary).keys()
+		node_ids.sort()
+		for node_id: Variant in node_ids:
+			var node: Dictionary = (nodes as Dictionary)[node_id]
+			var lines: Variant = node.get("lines", [])
+			if not (lines is Array):
+				continue
+			for i: int in (lines as Array).size():
+				var line: Dictionary = (lines as Array)[i]
+				keys["%s.%s.%d" % [file_key, str(node_id), i]] = str(line.get("text", ""))
+
+	var sorted_keys: Array = keys.keys()
+	sorted_keys.sort()
+	var ordered: Dictionary = {}
+	for key: String in sorted_keys:
+		ordered[key] = keys[key]
+
+	var payload: Dictionary = {
+		"_comment": "Generated by tests/validate_data.gd (§5). Stable line keys <file>.<node>.<index>; text stays inline in the dialogue files for v1. Do not edit by hand.",
+		"keys": ordered,
+	}
+	DirAccess.make_dir_recursive_absolute(I18N_KEYS_PATH.get_base_dir())
+	var file := FileAccess.open(I18N_KEYS_PATH, FileAccess.WRITE)
+	if file == null:
+		return {"errors": PackedStringArray(["cannot write %s" % I18N_KEYS_PATH]), "detail": ""}
+	file.store_string(JSON.stringify(payload, "  ") + "\n")
+	file.close()
+	return {"errors": PackedStringArray(), "detail": "%d key(s) generated" % ordered.size()}
+
+func _declared_flags() -> Dictionary:
+	var parsed: Dictionary = _read_json(FLAGS_PATH)
+	if not parsed["ok"] or not (parsed["data"] is Dictionary):
+		return {}
+	var flags: Variant = (parsed["data"] as Dictionary).get("flags", {})
+	return flags if flags is Dictionary else {}
+
+## Pulls `<property> = "value"` out of a .tscn without parsing the whole scene.
+func _extract_quoted(path: String, property: String) -> PackedStringArray:
+	var out := PackedStringArray()
+	var text: String = FileAccess.get_file_as_string(path)
+	if text.is_empty():
+		return out
+	var regex := RegEx.new()
+	regex.compile("%s\\s*=\\s*\"([^\"]*)\"" % property)
+	for found: RegExMatch in regex.search_all(text):
+		out.append(found.get_string(1))
+	return out
 
 ## data/flags.json is the mandatory registry (§2): every declaration needs a
 ## type, a tier, and a description, and every key must be a legal flag name.

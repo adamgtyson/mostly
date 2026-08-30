@@ -1,0 +1,74 @@
+{
+  "_comment": "Dialogue schema v2 (ENGINEERING_CONSTRAINTS.md §5). 'entries' is evaluated top-down, first match wins, and the last entry must be \"when\": \"true\". A line's 'speaker' is a character id from data/characters.json. Gender tokens are inline in 'text'; 'text_f' is the escape hatch for lines tokens cannot carry.",
+  "title": "dialogue",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "entries", "nodes"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["when", "start"],
+        "properties": {
+          "when": { "type": "string" },
+          "start": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "nodes": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lines"],
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["speaker", "text"],
+              "properties": {
+                "speaker": { "type": "string", "minLength": 1 },
+                "text": { "type": "string" },
+                "text_f": { "type": "string" },
+                "portrait": { "type": "string" }
+              }
+            }
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text", "next"],
+              "properties": {
+                "text": { "type": "string", "minLength": 1 },
+                "text_f": { "type": "string" },
+                "when": { "type": "string" },
+                "next": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "set": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["flag"],
+              "properties": {
+                "flag": { "type": "string", "minLength": 1 },
+                "value": {},
+                "increment": { "type": "integer" }
+              }
+            }
+          },
+          "next": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

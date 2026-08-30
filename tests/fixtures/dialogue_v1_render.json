@@ -1,0 +1,131 @@
+{
+  "_comment": "Captured from the v1 flat dialogue files before the v2 migration (session 5, milestone 5). Ground truth for the parity test: the speaker and text the dialogue box rendered, in order, per dialogue id.",
+  "renders": {
+    "cat_interact": [
+      {
+        "speaker": "Patch",
+        "text": "hmf."
+      }
+    ],
+    "crate_inspect": [
+      {
+        "speaker": "Patch",
+        "text": "Thirty-two spheres. Sealed."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Six days of very careful, very irritating work."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Need to find out where these go."
+      }
+    ],
+    "opening_calendar": [
+      {
+        "speaker": "Patch",
+        "text": "HNNNNGGGGG."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Gears stopped. Don't know when."
+      }
+    ],
+    "opening_date_shout": [
+      {
+        "speaker": "Patch",
+        "text": "What's the date?!"
+      }
+    ],
+    "opening_depart": [
+      {
+        "speaker": "Patch",
+        "text": "Never missed a delivery in my career."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Not starting today."
+      }
+    ],
+    "opening_nine_days": [
+      {
+        "speaker": "Patch",
+        "text": "...sixteenth. Started on the seventh. That's nine days."
+      },
+      {
+        "speaker": "Patch",
+        "text": "I don't lose count of days."
+      },
+      {
+        "speaker": "Patch",
+        "text": "File that. Keep moving."
+      }
+    ],
+    "opening_table": [
+      {
+        "speaker": "Patch",
+        "text": "hmf."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Damn cat."
+      },
+      {
+        "speaker": "Patch",
+        "text": "HMF."
+      }
+    ],
+    "opening_voices": [
+      {
+        "speaker": "Voices From Outside",
+        "text": "The sixteenth!"
+      },
+      {
+        "speaker": "Voices From Outside",
+        "text": "Stonemonth sixteenth!"
+      },
+      {
+        "speaker": "Voices From Outside",
+        "text": "Same as yesterday, Patch!"
+      }
+    ],
+    "opening_workbench": [
+      {
+        "speaker": "Patch",
+        "text": "There."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Six days. Done."
+      }
+    ],
+    "table_inspect": [
+      {
+        "speaker": "Patch",
+        "text": "Cup's on its side."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Cat's sitting in it. Not sorry."
+      },
+      {
+        "speaker": "Patch",
+        "text": "That's the order form."
+      },
+      {
+        "speaker": "Patch",
+        "text": "Delivery address. Gone."
+      },
+      {
+        "speaker": "Patch",
+        "text": "HMF."
+      }
+    ],
+    "workbench_inspect": [
+      {
+        "speaker": "Patch",
+        "text": "Six days of work. Good. Done."
+      }
+    ]
+  }
+}

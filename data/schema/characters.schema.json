@@ -1,0 +1,22 @@
+{
+  "_comment": "Schema for data/characters.json (§5).",
+  "title": "characters",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["characters"],
+  "properties": {
+    "characters": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["display_name", "default_portrait", "gender"],
+        "properties": {
+          "display_name": { "type": "string", "minLength": 1 },
+          "default_portrait": { "type": "string" },
+          "gender": { "type": "string", "enum": ["male", "female", "player", "none"] }
+        }
+      }
+    }
+  }
+}

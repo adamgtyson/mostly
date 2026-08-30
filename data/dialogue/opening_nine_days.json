@@ -1,8 +1,27 @@
 {
+  "entries": [
+    {
+      "start": "start",
+      "when": "true"
+    }
+  ],
   "id": "opening_nine_days",
-  "lines": [
-    { "speaker": "Patch", "portrait": "patch_default", "text": "...sixteenth. Started on the seventh. That's nine days." },
-    { "speaker": "Patch", "portrait": "patch_default", "text": "I don't lose count of days." },
-    { "speaker": "Patch", "portrait": "patch_default", "text": "File that. Keep moving." }
-  ]
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "speaker": "patch",
+          "text": "...sixteenth. Started on the seventh. That's nine days."
+        },
+        {
+          "speaker": "patch",
+          "text": "I don't lose count of days."
+        },
+        {
+          "speaker": "patch",
+          "text": "File that. Keep moving."
+        }
+      ]
+    }
+  }
 }

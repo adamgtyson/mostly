@@ -25,6 +25,11 @@
       "type": "int",
       "tier": "normal",
       "description": "Times an exit has delivered Patch to the wrong destination. The only persisted trace of a misroute (EC-6a)."
+    },
+    "sys.patch_gender": {
+      "type": "string",
+      "tier": "normal",
+      "description": "Which gender Patch's authored pronouns resolve to, 'm' or 'f' [U2-7]. Written by the New Game screen (phase 3); unset falls back to masculine, an engineering default rather than a canon statement."
     }
   }
 }

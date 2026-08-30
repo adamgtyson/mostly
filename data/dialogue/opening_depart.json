@@ -1,7 +1,23 @@
 {
+  "entries": [
+    {
+      "start": "start",
+      "when": "true"
+    }
+  ],
   "id": "opening_depart",
-  "lines": [
-    { "speaker": "Patch", "portrait": "patch_default", "text": "Never missed a delivery in my career." },
-    { "speaker": "Patch", "portrait": "patch_default", "text": "Not starting today." }
-  ]
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "speaker": "patch",
+          "text": "Never missed a delivery in my career."
+        },
+        {
+          "speaker": "patch",
+          "text": "Not starting today."
+        }
+      ]
+    }
+  }
 }

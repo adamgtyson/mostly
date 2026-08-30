@@ -12,6 +12,8 @@ extends RefCounted
 ##   properties            {key: subschema}
 ##   additionalProperties  false to reject unlisted keys (default true)
 ##   items                 subschema applied to every array element
+##   valuesSchema          subschema applied to every value of an object whose
+##                         keys are data (dialogue nodes, tag tables)
 ##   enum                  [Variant, ...]       allowed exact values
 ##   minimum / maximum     numeric bounds, inclusive
 ##   minLength             minimum String length
@@ -62,6 +64,15 @@ static func _check_object(data: Dictionary, schema: Dictionary, path: String) ->
 		for key: Variant in schema["required"]:
 			if not data.has(str(key)):
 				errors.append("%s: missing required key '%s'" % [path, str(key)])
+
+	if schema.has("valuesSchema"):
+		var value_schema: Dictionary = schema["valuesSchema"]
+		for key: Variant in data:
+			var key_str: String = str(key)
+			if key_str.begins_with("_"):
+				continue
+			errors.append_array(validate(data[key], value_schema, "%s.%s" % [path, key_str]))
+		return errors
 
 	var properties: Dictionary = schema.get("properties", {})
 	for key: Variant in data:
