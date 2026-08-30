@@ -1,0 +1,150 @@
+{
+  "beats": [
+    {
+      "animation": "idle_down",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "animation": "walk_up",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "animation": "idle_up",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 1.0,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_workbench",
+      "type": "dialogue"
+    },
+    {
+      "animation": "walk_right",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "node": "Player",
+      "speed": 60.0,
+      "target": [
+        160.0,
+        96.0
+      ],
+      "type": "move"
+    },
+    {
+      "animation": "idle_down",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_table",
+      "type": "dialogue"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_calendar",
+      "type": "dialogue"
+    },
+    {
+      "animation": "walk_down",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "node": "Player",
+      "speed": 80.0,
+      "target": [
+        160.0,
+        210.0
+      ],
+      "type": "move"
+    },
+    {
+      "animation": "idle_down",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 0.3,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_date_shout",
+      "type": "dialogue"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_voices",
+      "type": "dialogue"
+    },
+    {
+      "duration": 0.8,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_nine_days",
+      "type": "dialogue"
+    },
+    {
+      "duration": 1.0,
+      "type": "wait"
+    },
+    {
+      "dialogue_id": "opening_depart",
+      "type": "dialogue"
+    },
+    {
+      "animation": "walk_up",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "node": "Player",
+      "speed": 60.0,
+      "target": [
+        160.0,
+        120.0
+      ],
+      "type": "move"
+    },
+    {
+      "animation": "idle_down",
+      "node": "Player/AnimatedSprite2D",
+      "type": "animation"
+    },
+    {
+      "duration": 0.5,
+      "type": "wait"
+    },
+    {
+      "type": "end"
+    }
+  ],
+  "id": "opening",
+  "once": false,
+  "skippable": true
+}

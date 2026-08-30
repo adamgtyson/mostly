@@ -1,0 +1,44 @@
+{
+  "_comment": "Cutscene schema (ENGINEERING_CONSTRAINTS.md §8). Beats are data; actors are node paths resolved at play time against the trigger's actor root. 'emit' fires a named signal a scene may hook — JSON never calls scripts.",
+  "title": "cutscene",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "skippable", "once", "beats"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "skippable": { "type": "boolean" },
+    "once": { "type": "boolean" },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["wait", "move", "animation", "dialogue", "end", "set_flag", "camera", "fade", "sfx", "spawn", "despawn", "choice", "emit"]
+          },
+          "duration": { "type": "number", "minimum": 0 },
+          "node": { "type": "string" },
+          "target": { "type": "array", "items": { "type": "number" } },
+          "position": { "type": "array", "items": { "type": "number" } },
+          "speed": { "type": "number", "minimum": 0 },
+          "animation": { "type": "string" },
+          "dialogue_id": { "type": "string" },
+          "flag": { "type": "string" },
+          "value": {},
+          "increment": { "type": "integer" },
+          "action": { "type": "string", "enum": ["pan", "shake"] },
+          "amplitude": { "type": "number", "minimum": 0 },
+          "to": { "type": "string", "enum": ["black", "clear"] },
+          "stream": { "type": "string" },
+          "scene": { "type": "string" },
+          "name": { "type": "string" },
+          "signal": { "type": "string" },
+          "args": { "type": "array" }
+        }
+      }
+    }
+  }
+}

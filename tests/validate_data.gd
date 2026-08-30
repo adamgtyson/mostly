@@ -24,6 +24,7 @@ const I18N_KEYS_PATH := "res://data/i18n/keys.json"
 const SCHEMA_MAP: Dictionary = {
 	"res://data/items": "res://data/schema/item.schema.json",
 	"res://data/dialogue": "res://data/schema/dialogue.schema.json",
+	"res://data/cutscenes": "res://data/schema/cutscene.schema.json",
 }
 
 ## single file -> schema, for registries that are one document rather than a tree.
