@@ -1,0 +1,26 @@
+{
+  "_comment": "Asset manifest (ENGINEERING_CONSTRAINTS.md §12). Every art file under assets/ must appear here; the validator fails the build on one that does not. Engine sidecars (*.import) and Godot resources (*.tres/*.res) are not art and are not listed. Every entry's status is 'placeholder' because these are free Mana Seed demo files, to be re-sourced at the vertical slice [A14], and because their terms are unverified — EC-12a is an OPEN pre-launch gate and until it closes none of these may be used as AI input or style reference. 'pack' values are taken from the filenames, not from any pack listing.",
+  "assets": [
+    {
+      "path": "assets/characters/char_a_p1_0bas_humn_v00.png",
+      "source": "mana_seed",
+      "pack": "character_base",
+      "license": "unverified — see Docs/LICENSES.md and ENGINEERING_CONSTRAINTS.md §12 (EC-12a)",
+      "status": "placeholder"
+    },
+    {
+      "path": "assets/tilesets/cozy_furnishings_sampler.png",
+      "source": "mana_seed",
+      "pack": "cozy_furnishings_sampler",
+      "license": "unverified — see Docs/LICENSES.md and ENGINEERING_CONSTRAINTS.md §12 (EC-12a)",
+      "status": "placeholder"
+    },
+    {
+      "path": "assets/tilesets/home_interiors_timber_roof.png",
+      "source": "mana_seed",
+      "pack": "home_interiors",
+      "license": "unverified — see Docs/LICENSES.md and ENGINEERING_CONSTRAINTS.md §12 (EC-12a)",
+      "status": "placeholder"
+    }
+  ]
+}

@@ -20,6 +20,16 @@ const DIALOGUE_DIR := "res://data/dialogue"
 const CHARACTERS_PATH := "res://data/characters.json"
 const I18N_KEYS_PATH := "res://data/i18n/keys.json"
 const REGION_SCHEMA := "res://data/schema/region.schema.json"
+const ASSETS_DIR := "res://assets"
+const ASSET_MANIFEST := "res://assets/manifest.json"
+
+## Extensions the manifest is responsible for. Engine sidecars (.import) and
+## Godot resources (.tres/.res) are not art and are deliberately excluded.
+const ART_EXTENSIONS: Array[String] = [
+	"png", "jpg", "jpeg", "webp", "svg",
+	"ogg", "wav", "mp3",
+	"ttf", "otf",
+]
 
 ## content directory -> schema. One line per JSON content type (§13).
 const SCHEMA_MAP: Dictionary = {
@@ -33,6 +43,7 @@ const FILE_SCHEMA_MAP: Dictionary = {
 	"res://data/characters.json": "res://data/schema/characters.schema.json",
 	"res://data/weirdness/curve.json": "res://data/schema/weirdness_curve.schema.json",
 	"res://data/weirdness/catalog.json": "res://data/schema/weirdness_catalog.schema.json",
+	"res://assets/manifest.json": "res://data/schema/asset_manifest.schema.json",
 }
 
 const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]
@@ -67,6 +78,7 @@ func _run() -> void:
 	_check("dialogue refs", _check_dialogue_references)
 	_check("regions", _check_regions)
 	_check("anchor tier rule", _check_anchor_tier_rule)
+	_check("asset manifest", _check_asset_manifest)
 	_check("i18n keys", _check_i18n_keys)
 
 # ── category plumbing ────────────────────────────────────────────────────────
@@ -499,6 +511,39 @@ func _region_ids() -> PackedStringArray:
 	ids.sort()
 	return ids
 
+## §12: every art file under assets/ must have a manifest entry, and every
+## manifest entry must name a file that exists.
+func _check_asset_manifest() -> Dictionary:
+	var errors := PackedStringArray()
+	var parsed: Dictionary = _read_json(ASSET_MANIFEST)
+	if not parsed["ok"] or not (parsed["data"] is Dictionary):
+		return {"errors": PackedStringArray(["%s unreadable" % ASSET_MANIFEST]), "detail": ""}
+
+	var listed: Dictionary = {}
+	var placeholders: int = 0
+	for entry: Variant in (parsed["data"] as Dictionary).get("assets", []):
+		if not (entry is Dictionary):
+			continue
+		var e: Dictionary = entry
+		var path: String = str(e.get("path", ""))
+		listed[path] = true
+		if str(e.get("status", "")) == "placeholder":
+			placeholders += 1
+		if not FileAccess.file_exists("res://%s" % path):
+			errors.append("manifest lists '%s', which does not exist" % path)
+
+	var art_count: int = 0
+	for path: String in _walk_all(ASSETS_DIR):
+		var extension: String = path.get_extension().to_lower()
+		if not ART_EXTENSIONS.has(extension):
+			continue
+		art_count += 1
+		var relative: String = path.trim_prefix("res://")
+		if not listed.has(relative):
+			errors.append("%s has no entry in assets/manifest.json (§12)" % relative)
+
+	return {"errors": errors, "detail": "%d art file(s), %d placeholder(s)" % [art_count, placeholders]}
+
 ## Generates the stable line-key catalogue (§5): <file>.<node>.<index>. Text
 ## stays inline in v1; extracting it later is a script, not a rewrite. Written
 ## deterministically so a re-run leaves the working tree clean.
@@ -652,6 +697,19 @@ func _read_json(path: String) -> Dictionary:
 	if json.parse(text) != OK:
 		return {"ok": false, "error": "%s:%d: %s" % [path, json.get_error_line(), json.get_error_message()], "data": null}
 	return {"ok": true, "error": "", "data": json.get_data()}
+
+## Every file under a directory tree, whatever its extension.
+func _walk_all(dir_path: String) -> PackedStringArray:
+	var found := PackedStringArray()
+	var dir := DirAccess.open(dir_path)
+	if dir == null:
+		return found
+	for f: String in dir.get_files():
+		found.append("%s/%s" % [dir_path, f])
+	for sub: String in dir.get_directories():
+		found.append_array(_walk_all("%s/%s" % [dir_path, sub]))
+	found.sort()
+	return found
 
 func _walk(dir_path: String, suffix: String) -> PackedStringArray:
 	var found := PackedStringArray()

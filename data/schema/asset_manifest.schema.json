@@ -1,0 +1,24 @@
+{
+  "_comment": "Schema for assets/manifest.json (ENGINEERING_CONSTRAINTS.md §12).",
+  "title": "asset_manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assets"],
+  "properties": {
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "source", "pack", "license", "status"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "enum": ["mana_seed", "original", "ai_generated", "placeholder"] },
+          "pack": { "type": "string" },
+          "license": { "type": "string" },
+          "status": { "type": "string", "enum": ["final", "placeholder"] }
+        }
+      }
+    }
+  }
+}
