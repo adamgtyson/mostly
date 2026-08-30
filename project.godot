@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 Boot="*res://scripts/boot.gd"
 GameState="*res://scripts/game_state.gd"
+SaveManager="*res://scripts/save_manager.gd"
 DialogueManager="*res://scripts/dialogue_manager.gd"
 CutsceneManager="*res://scripts/cutscene_manager.gd"
 CutsceneSkip="*res://scripts/cutscene_skip.gd"
