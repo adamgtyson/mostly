@@ -1,5 +1,6 @@
 ## Changelog
 
+- 2026-08-29: Session 4 — Added Docs/ENGINEERING_CONSTRAINTS.md (thirteen LOCKED engineering decisions for the Act One build; EC-12a Mana Seed EULA gate OPEN), appended ledger section K, created the Docs/LICENSES.md stub, marked BUILD_PLAN §8 phase 0 and §9 item 2 DONE, and added an Authoritative Documents section to Docs/00_QUICK_REFERENCE.md. Docs-only, no engine/scene changes.
 - 2026-08-28: Docs-sync — installed Docs/handoff/ (9 files) as the authoritative layer over Docs/00–06 via supersession notices, then corrected stale canon in Docs/00–06 per the enumerated 2026-08-28 rulings (status-tag downgrades, delivery-window and cart-build revisions, resolved names, cross-reference renumbering, decisions-table row). Docs-only, no engine/scene changes.
 - 2026-08-05: Narrative lock-in — Abbey renamed to The Abbey of the Hopefully Infinite Thrum (repo-wide), full delivery chain and five-beat Act One→Two bridge with verbatim summons letter locked in Docs/02, Brother Aldous and the Grinding/Thrum two-sounds irony added to Docs/05, Docs/06 decisions table and open questions updated. Docs-only, no engine/scene changes.
 - 2026-08-05: Repo infra — project put under git version control, .gitignore added (Godot 4+ baseline plus TexturePacks/testimages exclusion), pushed to https://github.com/adamgtyson/mostly.git (main branch) for Claude Project sync.
