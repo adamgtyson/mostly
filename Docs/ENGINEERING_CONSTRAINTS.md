@@ -34,6 +34,7 @@ Existing locked rulings this document depends on and does not reopen: precision 
 
 - **Manual slots + autosave.** Slot count is config (`save.slots`, default 3). Autosave to `slot_auto` on every scene transition.
 - One JSON file per slot: `user://saves/slot_<n>.json`. Contents: `schema_version` (int), `timestamp`, `playtime_s`, `game_state` (the whole `GameState` dictionary), `inventory`, `party`, `location` `{region, area, spawn, position}`.
+- Amendment (L3, 2026-10-08): the `party` section arrives with its owning system (Battle, phase 5); the loader tolerates its absence. SaveManager owns only the envelope; contributors own their sections.
 - **`SaveManager` autoload** concatenates `to_save_dict()` from every stateful autoload and restores via `from_save_dict()`. Adding a system never touches `SaveManager`. Every stateful autoload implements both plus `reset()`.
 - Save is refused during dialogue, cutscene, or battle — those are never serialized.
 - Loader refuses a newer `schema_version`; upgrades an older one through a migration function table (v1→v1 stub exists from day one).
@@ -67,6 +68,7 @@ Existing locked rulings this document depends on and does not reopen: precision 
 - **Connected scenes. No overworld map.** Roads are walked (required by the "road home doesn't go back the way it came" beat).
 - **A region is a package:** `regions/<id>/` containing `region.json` (§7), `areas/*.tscn`, `dialogue/`, `cutscenes/`, `items/`, `mobs/`, `quests/`, and optional `forges` data. Replacing the folder replaces the region.
 - **Area ids** are `<region>/<area>` strings everywhere (flags, saves, exits). The nine starting villages are nine area sets under `regions/hold/`, not nine regions. `scenes/workshop.tscn` relocates to `regions/hold/areas/<village>_workshop.tscn` in Foundations.
+- Amendment (L4): the relocated area is named `workshop` until village selection exists (phase 3), when the `<village>_workshop` pattern applies.
 - Every area scene has one root with an `Area` script exposing `spawns: Dictionary[String, Vector2]` and `used_rect() -> Rect2i`.
 - **`SceneRouter` autoload** is the single choke point for transitions: `Exit` Area2D nodes carry `target_region`, `target_area`, `target_spawn`; the router fades out, unloads, loads asynchronously, places the player, fades in, autosaves. It enforces the region lock (`region.<id>.unlocked` false → play the region's `locked_message` dialogue and bounce) and calls `Weirdness.set_region()` on region change.
 - Camera: one `Camera2D` on the player, limits from `used_rect()`, integer-snapped.
@@ -157,3 +159,5 @@ Added this session:
 ## Appendix B — Items this document deliberately does not decide
 
 Weirdness curve numbers and flicker catalog (BUILD_PLAN §5 session); mob roster, resource list, item-tag taxonomy, recipes (writing track §4.9); regional-lock reason and unlock event `[U2-2]`; companion timing in Act One (§3 TODO 4); crafting-intro forge location (§3 TODO 6); pronoun convention for authored text `[B9]` — the dialogue token system makes this a per-line authoring choice, but the prose convention is still undecided.
+
+- Act 2 consequence map (quest → world delta) — required before Act 2 content `[L1]`.
