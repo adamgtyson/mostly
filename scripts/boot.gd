@@ -1,6 +1,6 @@
 extends Node
 
-const NEW_GAME_SCENE := "res://scenes/new_game.tscn"
+const TITLE_SCENE := "res://scenes/title.tscn"
 
 func _ready() -> void:
 	# Scale the OS window to 4x the 320x180 viewport so the game is visible.
@@ -13,10 +13,11 @@ func _ready() -> void:
 	# current_scene is not knowable here.
 	call_deferred("_route_fresh_boot")
 
-## A fresh install boots into New Game instead of the bare workshop. Session 7,
-## phase-3 slice: there is no title screen yet, so the rule is minimal — no
-## save in any slot and no village chosen means this launch has never started
-## a run. A later title/continue flow replaces this, it does not extend it.
+## Every windowed boot opens on the title screen (session 8, Block A), which
+## owns the Continue/New Game decision — session 7's save-sniffing rule lived
+## here only while no title existed. The workshop stays the engine's main
+## scene; its opening trigger is gated on sys.village, so the one pre-route
+## frame starts nothing.
 func _route_fresh_boot() -> void:
 	var tree: SceneTree = get_tree()
 	# Script-driven SceneTrees (tests/run_tests.gd, tests/validate_data.gd)
@@ -25,16 +26,4 @@ func _route_fresh_boot() -> void:
 		return
 	if tree.current_scene == null:
 		return
-	if _a_run_exists():
-		return
-	tree.change_scene_to_file(NEW_GAME_SCENE)
-
-func _a_run_exists() -> bool:
-	var root_node: Node = get_tree().root
-	if root_node.has_node("SaveManager"):
-		if not (root_node.get_node("SaveManager").call("list_slots") as Array).is_empty():
-			return true
-	if root_node.has_node("GameState"):
-		if bool(root_node.get_node("GameState").call("has_flag", "sys.village")):
-			return true
-	return false
+	tree.change_scene_to_file(TITLE_SCENE)
