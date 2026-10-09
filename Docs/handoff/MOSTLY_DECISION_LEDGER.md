@@ -250,3 +250,18 @@
 | L3 | ENGINEERING_CONSTRAINTS §3 amendment: the `party` save section arrives with its owning system (Battle, phase 5), not before; the save loader tolerates its absence. SaveManager owns only the envelope (schema_version/timestamp/playtime_s); contributors own their sections. | LOCKED | user-confirmed (session 5 deviation reviewed and accepted, 2026-08-29) | Supersedes the §3 contents list reading as exhaustive-now. |
 | L4 | §6 area-naming deferral: the relocated workshop area is named `workshop` until village selection exists (phase 3), when the `<village>_workshop` pattern applies. | note | recorded session 5, accepted | |
 | L5 | Known issue: cat placeholder sprite not visible in workshop scene after session-5 relocation (likely cat_sprite.gd node path or _ready draw). Fix in the next build prompt. Phase 8 playtest checklist must include "every placeholder is visibly rendered" — invisible-but-loading passes all automated checks. | note / TODO | user-reported playtest observation, 2026-08-29 | |
+
+## M. Weirdness spec session (2026-10-08)
+
+Source document: Docs/WEIRDNESS_SPEC.md (rows copied from its §10).
+
+| # | Item | Status | Authority | Notes |
+|---|---|---|---|---|
+| M-1 | Six v1 flicker kinds as §1; `npc_line` is v1; four deferred kinds ship `v1:false`. Tuning numbers PROPOSED. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §1. |
+| M-2 | Interval bounds 300s/45s; ±10s uniform jitter per interval (Adam-authored); player-time clock paused without control; 8s arrival grace; 10s global floor; ladder values as §2.1 with PROPOSED flag ids. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §2, §2.1. |
+| M-3 | Scripted beats raise intensity; random catalog fills; no catalog kind may reproduce a scripted beat. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §3. |
+| M-4 | Region multipliers Hold 1.0 / Turning 1.5; Hobb's village 0 via area-level `weirdness_override` applied by SceneRouter (option B). Amends `[EC-7]`. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §4. |
+| M-5 | Stagger 1.2s baseline; Seven Chickens 0.3s/no anim on 80%; GSP tell = 6dB ambient duck + loop stop 2–4s before scripted overt beats and misroutes, never before random flickers; "world-break event" in Act One defined as scripted overt beat or misroute. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §5; re-grounds CANON §4.8. |
+| M-6 | Deniability rules 1–7 as §6. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §6. |
+| M-7 | Replay: nothing mechanical. Fixed first flicker REJECTED. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §7. |
+| M-8 | 19-line `npc_line` pool as §9; tagline excluded; pool is pronoun-free toward Patch. | LOCKED | user ruling (Adam 2026-10-08) | WEIRDNESS_SPEC §9. |
