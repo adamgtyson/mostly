@@ -132,6 +132,8 @@ Existing locked rulings this document depends on and does not reopen: precision 
 
 Restated from CLAUDE.md and `[A13]`: GDScript only, no C#; nearest-neighbor filtering on all sprites; viewport 320×180, stretch mode `canvas_items`, window 1280×720 via `Boot`; Mana Seed 16×16; do not invent names, places, or mechanics not in the docs — stop and ask. Build on Windows (the-rig), never the Ubuntu server `[I1]`. Design docs are edited only through docs-only prompts `[I4]`.
 
+UI scenes lay out in 320×180 canvas coordinates using the shared UI theme (`ui/ui_theme.tres`); containers, not absolute positions; a test enforces every visible Control's global rect ⊂ 320×180. (Session 10; unnumbered — Adam numbers constraints.)
+
 Added this session:
 
 - **Autoload roster is closed:** `Boot`, `GameState`, `SaveManager`, `Inventory`, `DialogueManager`, `CutsceneManager`, `CutsceneSkip`, `SceneRouter`, `Weirdness`, `Battle`. Adding one requires a change to this document first.
