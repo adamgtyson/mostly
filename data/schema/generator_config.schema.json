@@ -1,0 +1,37 @@
+{
+  "_comment": "Schema for data/generator/config.json (session 8 spike). Keys beginning with _ are documentation and are not validated. Every tunable is a [G4] placeholder; the schema checks shape, never values.",
+  "title": "generator_config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "biomes", "touchpoint_types", "regions", "chain_link_count", "village_route_variation"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "biomes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "touchpoint_types": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["min_distance", "max_distance"],
+        "properties": {
+          "min_distance": { "type": "integer", "minimum": 0 },
+          "max_distance": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "regions": {
+      "type": "object",
+      "valuesSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["biome_pool", "biome_bleed_to_hold"],
+        "properties": {
+          "biome_pool": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "biome_bleed_to_hold": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "chain_link_count": { "type": "integer", "minimum": 1 },
+    "village_route_variation": { "type": "object" }
+  }
+}

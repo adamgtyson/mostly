@@ -47,6 +47,7 @@ const FILE_SCHEMA_MAP: Dictionary = {
 	"res://data/weirdness/curve.json": "res://data/schema/weirdness_curve.schema.json",
 	"res://data/weirdness/catalog.json": "res://data/schema/weirdness_catalog.schema.json",
 	"res://data/weirdness/lines.json": "res://data/schema/weirdness_lines.schema.json",
+	"res://data/generator/config.json": "res://data/schema/generator_config.schema.json",
 	"res://assets/manifest.json": "res://data/schema/asset_manifest.schema.json",
 }
 

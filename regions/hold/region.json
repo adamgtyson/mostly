@@ -32,5 +32,16 @@
       "spawn_pool": []
     }
   ],
-  "edges": []
+  "edges": [
+    {
+      "_comment": "Direct link (session 8): both anchors exist, and inventing a road area between them is phase-3/4 content work. When the road is built it becomes a fill slot and this edge gains via_slot.",
+      "from": "workshop",
+      "to": "hobbs_village"
+    },
+    {
+      "_comment": "The dev area hangs off the workshop, which is where its Exit leads. An endpoint that is a slot id materialises as a single terminal fill node (generator spike); this also keeps the slot from being an orphan.",
+      "from": "workshop",
+      "to": "dev_weirdness_test"
+    }
+  ]
 }

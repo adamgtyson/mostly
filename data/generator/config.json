@@ -1,0 +1,55 @@
+{
+  "_comment": "Anchor-and-fill generator config (session 8 spike; [G3] architecture, Docs/04 'Map Generation'). External config by [G3]'s own rule: every number here is a [G4] placeholder and none is a design ruling. The generator reads touchpoint_types and regions; chain_link_count and village_route_variation are config surface for later phases and nothing consumes them yet.",
+  "version": 1,
+  "biomes": [
+    "Plains",
+    "Savanna",
+    "Mountain",
+    "Cold",
+    "Desert",
+    "Wetlands/Marsh",
+    "Dense Forest",
+    "Badlands",
+    "Coastal",
+    "Volcanic"
+  ],
+  "touchpoint_types": {
+    "default": {
+      "_comment": "PLACEHOLDER [G4]. Applied to every via_slot chain: nothing in the EC-7 region.json shape names a touchpoint type yet - that wiring is an open question in Docs/GENERATOR_SPIKE.md.",
+      "min_distance": 1,
+      "max_distance": 8
+    },
+    "delivery_route": {
+      "_comment": "PLACEHOLDER [G4]. Docs/04 'Delivery Route anchors'. Present as config surface; not yet reachable from region.json.",
+      "min_distance": 2,
+      "max_distance": 6
+    },
+    "fluid_chain": {
+      "_comment": "PLACEHOLDER [G4]. Docs/04 'Spooky Fluid Chain anchors'. Present as config surface; not yet reachable from region.json.",
+      "min_distance": 1,
+      "max_distance": 4
+    },
+    "forge_path": {
+      "_comment": "PLACEHOLDER [G4]. Docs/04 'Path to The Forge anchors'. Present as config surface; not yet reachable from region.json.",
+      "min_distance": 2,
+      "max_distance": 8
+    }
+  },
+  "regions": {
+    "hold": {
+      "_comment": "PLACEHOLDER [G4]: which biomes belong to which region is OPEN, so both pools carry all ten [F19] biomes rather than inventing a mapping. biome_bleed_to_hold is not built this session.",
+      "biome_pool": ["Plains", "Savanna", "Mountain", "Cold", "Desert", "Wetlands/Marsh", "Dense Forest", "Badlands", "Coastal", "Volcanic"],
+      "biome_bleed_to_hold": []
+    },
+    "turning": {
+      "_comment": "PLACEHOLDER [G4]: see hold.",
+      "biome_pool": ["Plains", "Savanna", "Mountain", "Cold", "Desert", "Wetlands/Marsh", "Dense Forest", "Badlands", "Coastal", "Volcanic"],
+      "biome_bleed_to_hold": []
+    }
+  },
+  "chain_link_count": 5,
+  "_chain_link_count_comment": "PLACEHOLDER [G4] said 4; CANON's delivery chain has five human links (Brindle, Wren, Hobb, Sedge, Brack), so 5 - cited, not ruled. Nothing consumes this yet.",
+  "village_route_variation": {
+    "_comment": "OPEN [G4]. Village-specific route variation is undesigned; this object stays empty until it is."
+  }
+}
