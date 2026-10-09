@@ -87,7 +87,7 @@ func clear_calls() -> void:
 ## never take a playtest down with it.
 func dispatch(kind: String, spot: Node, params: Dictionary) -> void:
 	var handler_name: String = str(params.get("handler", kind))
-	_calls.append({"kind": kind, "handler": handler_name, "spot": spot.name if is_instance_valid(spot) else ""})
+	_calls.append({"kind": kind, "handler": handler_name, "spot": str(spot.name) if is_instance_valid(spot) else ""})
 	if not _handlers.has(handler_name):
 		push_warning("FlickerHandlers: no handler '%s' for kind '%s'" % [handler_name, kind])
 		return
