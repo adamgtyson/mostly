@@ -84,24 +84,37 @@ func start_new_game(depart: bool = true) -> String:
 		get_tree().change_scene_to_file(NEW_GAME_SCENE)
 	return NEW_GAME_SCENE
 
-# ── UI (programmatic; placeholder theme only) ───────────────────────────────
+# ── UI (session 10: 320x180 canvas space, containers own all placement) ────
 
+## Everything lives inside Rect2(0, 0, 320, 180): a full-rect CenterContainer
+## keeps the menu centred continuously — the session-9 layout used a one-shot
+## PRESET_CENTER before the children existed, which is why "Mostly" drifted to
+## a corner once the buttons resized the box. No absolute positions anywhere;
+## fonts and styles come from ui/ui_theme.tres on the scene root.
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
+	var center := CenterContainer.new()
+	center.name = "Center"
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(center)
+
 	var column := VBoxContainer.new()
 	column.name = "Menu"
-	column.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	add_child(column)
+	column.alignment = BoxContainer.ALIGNMENT_CENTER
+	column.add_theme_constant_override("separation", 6)
+	center.add_child(column)
 
 	var title := Label.new()
 	title.name = "GameTitle"
 	title.text = "Mostly"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(title)
 
 	var tagline := Label.new()
 	tagline.name = "Tagline"
 	tagline.text = "It's mostly fine."
+	tagline.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(tagline)
 
 	_continue_button = Button.new()

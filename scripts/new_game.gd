@@ -34,8 +34,8 @@ const VILLAGE_ORDER: Array[String] = [
 var _villages: Dictionary = {}
 var _selected_village: String = ""
 
-var _gender_step: VBoxContainer = null
-var _village_step: HBoxContainer = null
+var _gender_step: CenterContainer = null
+var _village_step: MarginContainer = null
 var _village_buttons: VBoxContainer = null
 var _detail_label: RichTextLabel = null
 var _confirm_button: Button = null
@@ -157,40 +157,72 @@ func confirm_village(id_value: String, depart: bool = true) -> Dictionary:
 		router.call("go_to", destination["region"], destination["area"], destination["spawn"])
 	return destination
 
-# ── UI (programmatic; placeholder theme only) ───────────────────────────────
+# ── UI (session 10: 320x180 canvas space, containers own all placement) ────
 
+## Everything lives inside Rect2(0, 0, 320, 180); fonts and styles come from
+## ui/ui_theme.tres on the scene root, sized like the dialogue box (font 8).
+## Nine village names plus a detail panel do not fit 180px with room to spare,
+## so the list is a ScrollContainer with follow_focus: arrowing through the
+## buttons scrolls the list itself, which keeps the whole flow
+## keyboard/gamepad-only with zero custom input code. No absolute positions —
+## a container owns every placement.
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	_gender_step = VBoxContainer.new()
+	_gender_step = CenterContainer.new()
 	_gender_step.name = "GenderStep"
-	_gender_step.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_gender_step.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_gender_step)
 
+	var options := VBoxContainer.new()
+	options.name = "Options"
+	options.alignment = BoxContainer.ALIGNMENT_CENTER
+	options.add_theme_constant_override("separation", 6)
+	_gender_step.add_child(options)
+
 	var title := Label.new()
+	title.name = "Heading"
 	title.text = "New Game"
-	_gender_step.add_child(title)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	options.add_child(title)
 
 	var prompt := Label.new()
+	prompt.name = "Prompt"
 	prompt.text = "Patch is…"
-	_gender_step.add_child(prompt)
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	options.add_child(prompt)
 
 	for option: Array in [["Masculine", "m"], ["Feminine", "f"]]:
 		var button := Button.new()
 		button.text = str(option[0])
 		button.name = "Gender_%s" % str(option[1])
 		button.pressed.connect(choose_gender.bind(str(option[1])))
-		_gender_step.add_child(button)
+		options.add_child(button)
 
-	_village_step = HBoxContainer.new()
+	_village_step = MarginContainer.new()
 	_village_step.name = "VillageStep"
 	_village_step.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side: String in ["left", "top", "right", "bottom"]:
+		_village_step.add_theme_constant_override("margin_%s" % side, 4)
 	_village_step.visible = false
 	add_child(_village_step)
 
+	var layout := HBoxContainer.new()
+	layout.name = "Layout"
+	layout.add_theme_constant_override("separation", 4)
+	_village_step.add_child(layout)
+
+	var scroll := ScrollContainer.new()
+	scroll.name = "VillageScroll"
+	scroll.custom_minimum_size = Vector2(120, 0)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
+	layout.add_child(scroll)
+
 	_village_buttons = VBoxContainer.new()
 	_village_buttons.name = "VillageButtons"
-	_village_step.add_child(_village_buttons)
+	_village_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(_village_buttons)
 
 	for id_value: String in village_ids_in_order():
 		var village: Dictionary = _villages[id_value]
@@ -204,13 +236,22 @@ func _build_ui() -> void:
 	var right := VBoxContainer.new()
 	right.name = "Detail"
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_village_step.add_child(right)
+	right.add_theme_constant_override("separation", 4)
+	layout.add_child(right)
+
+	var panel := PanelContainer.new()
+	panel.name = "DetailPanel"
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right.add_child(panel)
 
 	_detail_label = RichTextLabel.new()
+	_detail_label.name = "DetailText"
 	_detail_label.bbcode_enabled = true
-	_detail_label.fit_content = true
-	_detail_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right.add_child(_detail_label)
+	# Long pro/con text scrolls inside the panel rather than growing the panel
+	# past 180px — the dialogue box's approach, not fit_content.
+	_detail_label.fit_content = false
+	_detail_label.scroll_active = true
+	panel.add_child(_detail_label)
 
 	_confirm_button = Button.new()
 	_confirm_button.name = "Confirm"
@@ -224,7 +265,7 @@ func _show_gender_step() -> void:
 		return
 	_gender_step.visible = true
 	_village_step.visible = false
-	var first: Node = _gender_step.get_node_or_null("Gender_m")
+	var first: Node = _gender_step.get_node_or_null("Options/Gender_m")
 	if first is Button:
 		(first as Button).grab_focus()
 
