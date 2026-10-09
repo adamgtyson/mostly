@@ -1,0 +1,16 @@
+{
+  "_comment": "Config for the synthetic fixture. The 'fixture' region pool deliberately excludes Volcanic so slot_mismatch's pool has an empty intersection and must win with a warning.",
+  "version": 1,
+  "biomes": ["Plains", "Mountain", "Volcanic"],
+  "touchpoint_types": {
+    "default": { "min_distance": 1, "max_distance": 3 }
+  },
+  "regions": {
+    "fixture": {
+      "biome_pool": ["Plains", "Mountain"],
+      "biome_bleed_to_hold": []
+    }
+  },
+  "chain_link_count": 5,
+  "village_route_variation": {}
+}

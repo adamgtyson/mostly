@@ -1,0 +1,56 @@
+{
+  "_comment": "Synthetic generator fixture (session 8). NOT a real region: built to trip each validator rule exactly once. Expected errors: slot_orphan is an orphan; anchor 'lost' is unreachable from the entry; the graph is disconnected. Expected warning: slot_mismatch's biome_pool has no intersection with the fixture region pool (see fixture_config.json), so the slot pool wins.",
+  "id": "fixture",
+  "display_name": "Fixture Region",
+  "biome_tags": [],
+  "weirdness": 1.0,
+  "locked_message": "",
+  "entry_points": ["start_area"],
+  "anchors": [
+    {
+      "id": "start",
+      "area": "start_area",
+      "biome_tags": [],
+      "required_exits": []
+    },
+    {
+      "id": "middle",
+      "area": "middle_area",
+      "biome_tags": [],
+      "required_exits": []
+    },
+    {
+      "id": "lost",
+      "area": "lost_area",
+      "biome_tags": [],
+      "required_exits": []
+    }
+  ],
+  "fill_slots": [
+    {
+      "id": "slot_good",
+      "biome_pool": ["Plains", "Mountain"],
+      "length_hint": 2,
+      "default_area": "fill_area",
+      "spawn_pool": ["wanderer"]
+    },
+    {
+      "id": "slot_mismatch",
+      "biome_pool": ["Volcanic"],
+      "length_hint": 1,
+      "default_area": "fill_area",
+      "spawn_pool": []
+    },
+    {
+      "id": "slot_orphan",
+      "biome_pool": ["Plains"],
+      "length_hint": 1,
+      "default_area": "fill_area",
+      "spawn_pool": []
+    }
+  ],
+  "edges": [
+    { "from": "start", "to": "middle", "via_slot": "slot_good" },
+    { "from": "start", "to": "middle", "via_slot": "slot_mismatch" }
+  ]
+}
