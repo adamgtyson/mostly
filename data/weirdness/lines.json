@@ -1,0 +1,24 @@
+{
+  "_comment": "npc_line pool (Docs/WEIRDNESS_SPEC.md §9, ledger M-8). Nineteen lines, LOCKED. Deadpan; sayable as mundane; nothing supernatural in the wording; pronoun-free toward Patch, so [U2-7] gender variants are not required here. The tagline \"It's mostly fine.\" is deliberately excluded. The NPC says one of these in an idle bubble — never the dialogue box — and returns to normal idle. Never logged, never repeated in a run.",
+  "lines": [
+    { "id": "step", "text": "Mind the step.", "note": "there is no step" },
+    { "id": "yesterday", "text": "Same as yesterday, then." },
+    { "id": "just_here", "text": "You were just here." },
+    { "id": "wind", "text": "Wind's from the wrong way again." },
+    { "id": "hear_that", "text": "Did you hear that? No. Neither did I." },
+    { "id": "second_time", "text": "Second time today I've said that." },
+    { "id": "dark_soon", "text": "It'll be dark soon.", "note": "at noon" },
+    { "id": "well", "text": "That's not where the well is." },
+    { "id": "six", "text": "Felt like six, didn't it.", "min_intensity": 0.5, "note": "echoes the nine days" },
+    { "id": "bells", "text": "The bells are early.", "note": "nowhere with a bell" },
+    { "id": "road", "text": "Road's longer than I remember." },
+    { "id": "you_again", "text": "You again.", "note": "first meeting" },
+    { "id": "thought_left", "text": "Oh. I thought you'd left." },
+    { "id": "mill", "text": "We don't talk about the mill.", "note": "no mill here" },
+    { "id": "mind_him", "text": "Don't mind him.", "note": "no one else present" },
+    { "id": "which_one", "text": "Which one are you?" },
+    { "id": "someone_else", "text": "Sorry — thought you were someone else. You're not, are you." },
+    { "id": "still_here", "text": "Still here? Good. Good." },
+    { "id": "fences", "text": "Someone's been moving the fences." }
+  ]
+}

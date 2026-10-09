@@ -55,8 +55,15 @@ func reset() -> void:
 
 # ── save contract (§3, §13) ──────────────────────────────────────────────────
 
+## Transient flags are left out: a declaration carrying "persist": false is
+## runtime state, not progress (sys.player_has_control), and restoring one from
+## a save could resurrect a lock whose owner is long gone.
 func to_save_dict() -> Dictionary:
-	return _flags.duplicate(true)
+	var out: Dictionary = {}
+	for key: Variant in _flags:
+		if is_persistent(str(key)):
+			out[key] = _flags[key]
+	return out.duplicate(true)
 
 func from_save_dict(data: Dictionary) -> void:
 	_flags = data.duplicate(true)
@@ -74,6 +81,12 @@ func declaration(key: String) -> Dictionary:
 
 func declared_keys() -> Array:
 	return _registry.keys()
+
+## Whether a flag belongs in a save. The registry is the authority: a
+## declaration with "persist": false is transient and never serialised. An
+## undeclared key persists, so a bare unit-test tree behaves as before.
+func is_persistent(key: String) -> bool:
+	return bool((_registry.get(key, {}) as Dictionary).get("persist", true))
 
 ## Flags whose tier is "critical" — the ones the Act One walkthrough asserts on.
 ## Only anchor areas may set these (§7); the validator enforces that rule.

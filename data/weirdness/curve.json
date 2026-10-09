@@ -1,11 +1,20 @@
 {
-  "_comment": "Weirdness curve (ENGINEERING_CONSTRAINTS.md §10). Intensity is DERIVED from these rules and never saved. Every number here is a flagged placeholder: the real curve is the BUILD_PLAN §5 weirdness spec, a separate design session. With base_intensity at 0 and no act_progress entries, intensity is 0 and nothing fires — which is the correct Foundations behaviour.",
+  "_comment": "Weirdness curve (ENGINEERING_CONSTRAINTS.md §10; values from Docs/WEIRDNESS_SPEC.md §2.1, ledger M-2). Intensity is DERIVED from these rules and never saved. The eight act_progress rungs are cumulative and total exactly 1.0 at act1.abbey.departed. The `when` flag ids are PROPOSED: each build phase owns the real id for its beat and reconciles this table with data/flags.json. events.misroute is PROPOSED tuning; the mechanic itself is EC-6a.",
   "base_intensity": 0.0,
-  "act_progress": [],
+  "act_progress": [
+    { "when": "act1.nine_days_noted", "intensity": 0.05 },
+    { "when": "act1.last_post.road_seen", "intensity": 0.1 },
+    { "when": "act1.mill_fixed", "intensity": 0.1 },
+    { "when": "act1.wren.map_received", "intensity": 0.1 },
+    { "when": "act1.turning.entered", "intensity": 0.15 },
+    { "when": "act1.abbey.arrived", "intensity": 0.15 },
+    { "when": "act1.forge_seen", "intensity": 0.1 },
+    { "when": "act1.abbey.departed", "intensity": 0.25 }
+  ],
   "counters": {
     "weird.misroutes": { "per_unit": 0.01, "max": 0.1 }
   },
   "events": {
-    "misroute": 0.0
+    "misroute": 0.04
   }
 }

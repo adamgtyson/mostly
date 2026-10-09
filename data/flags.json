@@ -1,10 +1,26 @@
 {
-  "_comment": "Flag registry (ENGINEERING_CONSTRAINTS.md §2). Every key GameState touches must be declared here; the validator fails the build on an undeclared reference. tier 'critical' means the Act One walkthrough asserts on it, and only anchor areas may set it (§7). Foundations seeds only the keys the engine layer itself needs; story flags arrive with their content.",
+  "_comment": "Flag registry (ENGINEERING_CONSTRAINTS.md §2). Every key GameState touches must be declared here; the validator fails the build on an undeclared reference. tier 'critical' means the Act One walkthrough asserts on it, and only anchor areas may set it (§7). A declaration may carry \"persist\": false, which keeps the flag out of GameState's save section — runtime state rather than progress. The act1.* ladder ids are PROPOSED (WEIRDNESS_SPEC §2.1): the phase that builds each beat owns the real id and reconciles this registry with data/weirdness/curve.json.",
   "flags": {
     "sys.realistic_weight": {
       "type": "bool",
       "tier": "normal",
       "description": "Per-run choice made at New Game: super-realistic carry limits, which unlock extra content as enticement (EC-4a)."
+    },
+    "sys.patch_gender": {
+      "type": "string",
+      "tier": "normal",
+      "description": "Which gender Patch's authored pronouns resolve to, 'm' or 'f' [U2-7]. Written by the New Game screen (phase 3); unset falls back to masculine, an engineering default rather than a canon statement."
+    },
+    "sys.village": {
+      "type": "string",
+      "tier": "normal",
+      "description": "Id of the starting village chosen at New Game, one of the nine in data/villages/. Read by the tell hook and the stagger beat (WEIRDNESS_SPEC §5); every other pro/con effect is deferred."
+    },
+    "sys.player_has_control": {
+      "type": "bool",
+      "tier": "normal",
+      "persist": false,
+      "description": "True when nothing holds input — no dialogue, cutscene, battle or menu. The weirdness scheduler ticks player-time only (WEIRDNESS_SPEC §2). Transient: persist false keeps it out of every save, so a save can never restore a mid-dialogue lock."
     },
     "region.hold.unlocked": {
       "type": "bool",
@@ -26,10 +42,45 @@
       "tier": "normal",
       "description": "Times an exit has delivered Patch to the wrong destination. The only persisted trace of a misroute (EC-6a)."
     },
-    "sys.patch_gender": {
-      "type": "string",
+    "act1.nine_days_noted": {
+      "type": "bool",
       "tier": "normal",
-      "description": "Which gender Patch's authored pronouns resolve to, 'm' or 'f' [U2-7]. Written by the New Game screen (phase 3); unset falls back to masculine, an engineering default rather than a canon statement."
+      "description": "Opening cutscene complete — Patch has registered the nine days. First rung of the weirdness ladder, +0.05 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.last_post.road_seen": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "The road home at Last Post does not go back the way it came. Ladder rung +0.10 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.mill_fixed": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "The backward mill beat is resolved. Ladder rung +0.10 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.wren.map_received": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "Wren has handed over the map. Ladder rung +0.10 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.turning.entered": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "Patch has crossed into The Turning. Ladder rung +0.15 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.abbey.arrived": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "Patch has reached the Abbey of the Hopefully Infinite Thrum. Ladder rung +0.15 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.forge_seen": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "Patch has seen The Forge. Ladder rung +0.10 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.abbey.departed": {
+      "type": "bool",
+      "tier": "normal",
+      "description": "The return trip has begun; the ladder reaches 1.0 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
     }
   }
 }

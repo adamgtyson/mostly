@@ -111,7 +111,7 @@ Existing locked rulings this document depends on and does not reopen: precision 
 - Scripted beats (nine days, road home, the mill, the river, the bell tower) are cutscenes and flags, not this autoload.
 - Debug ring buffer of fired flickers is readable from the test harness, not persisted. The only persisted weirdness state is the `weird.*` counters the design explicitly wants.
 - The curve numbers, catalog contents, and flicker one-liners are the §5 weirdness spec — a separate design session. Fable ships the contract with placeholder values flagged in config.
-- Curve values, catalog, and line pool are specified in Docs/WEIRDNESS_SPEC.md (session 7); build phases 3–4 implement §8 of that doc.
+- Curve values, catalog, and line pool are specified in Docs/WEIRDNESS_SPEC.md (session 7); §8 of that doc is implemented in session 7 Block B.
 
 ## 11. Test harness — LOCKED `[EC-11]`
 

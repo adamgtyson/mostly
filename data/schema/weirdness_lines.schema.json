@@ -1,0 +1,23 @@
+{
+  "_comment": "Schema for data/weirdness/lines.json (§10; Docs/WEIRDNESS_SPEC.md §9). One entry per npc_line; `note` is authoring context for why the line reads as weird, never shown to the player.",
+  "title": "weirdness_lines",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lines"],
+  "properties": {
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "text": { "type": "string", "minLength": 1 },
+          "min_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

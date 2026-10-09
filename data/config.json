@@ -1,9 +1,7 @@
 {
-  "_comment": "Tunables for Mostly (ENGINEERING_CONSTRAINTS.md §13). Nothing here may be duplicated as a literal in a script. Keys named in _placeholders are open design values carrying a provisional default; they must be reviewed before v1.",
+  "_comment": "Tunables for Mostly (ENGINEERING_CONSTRAINTS.md §13). Nothing here may be duplicated as a literal in a script. Keys named in _placeholders are open design values carrying a provisional default; they must be reviewed before v1. The weirdness, stagger and tell values are no longer placeholders: they come from Docs/WEIRDNESS_SPEC.md §2/§5 (ledger M-2, M-5).",
   "_placeholders": [
-    "inventory.realistic_weight_max",
-    "weirdness.flicker_interval_min_s",
-    "weirdness.flicker_interval_max_s"
+    "inventory.realistic_weight_max"
   ],
   "combat": {
     "auto_battle_available": true
@@ -16,8 +14,22 @@
     "realistic_weight_max": 40.0
   },
   "weirdness": {
-    "flicker_interval_min_s": 20.0,
-    "flicker_interval_max_s": 90.0
+    "flicker_interval_min_s": 45.0,
+    "flicker_interval_max_s": 300.0,
+    "flicker_jitter_s": 10.0,
+    "arrival_grace_s": 8.0,
+    "global_floor_s": 10.0
+  },
+  "stagger": {
+    "duration_s": 1.2,
+    "seven_chickens_duration_s": 0.3,
+    "seven_chickens_skip_chance": 0.8
+  },
+  "tell": {
+    "lead_min_s": 2.0,
+    "lead_max_s": 4.0,
+    "duck_db": -6.0,
+    "duration_s": 1.5
   },
   "scene": {
     "fade_duration_s": 0.25,

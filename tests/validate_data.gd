@@ -20,6 +20,8 @@ const DIALOGUE_DIR := "res://data/dialogue"
 const CHARACTERS_PATH := "res://data/characters.json"
 const I18N_KEYS_PATH := "res://data/i18n/keys.json"
 const REGION_SCHEMA := "res://data/schema/region.schema.json"
+const WEIRDNESS_CURVE_PATH := "res://data/weirdness/curve.json"
+const WEIRDNESS_LINES_PATH := "res://data/weirdness/lines.json"
 const ASSETS_DIR := "res://assets"
 const ASSET_MANIFEST := "res://assets/manifest.json"
 
@@ -43,8 +45,20 @@ const FILE_SCHEMA_MAP: Dictionary = {
 	"res://data/characters.json": "res://data/schema/characters.schema.json",
 	"res://data/weirdness/curve.json": "res://data/schema/weirdness_curve.schema.json",
 	"res://data/weirdness/catalog.json": "res://data/schema/weirdness_catalog.schema.json",
+	"res://data/weirdness/lines.json": "res://data/schema/weirdness_lines.schema.json",
 	"res://assets/manifest.json": "res://data/schema/asset_manifest.schema.json",
 }
+
+## The six v1 flicker kinds Docs/WEIRDNESS_SPEC.md §1 locks (ledger M-1). A
+## seventh marked v1 would be an invented mechanic, which §1 does not permit.
+const SPEC_V1_KINDS: Array[String] = [
+	"sprite_edge",
+	"tile_blink",
+	"npc_wrong_frame",
+	"sound_offstage",
+	"light_skip",
+	"npc_line",
+]
 
 const VALID_FLAG_TYPES: Array[String] = ["bool", "int", "float", "string"]
 const VALID_FLAG_TIERS: Array[String] = ["critical", "normal"]
@@ -76,6 +90,7 @@ func _run() -> void:
 	_check("dialogue graph", _check_dialogue_graph)
 	_check("character ids", _check_character_ids)
 	_check("dialogue refs", _check_dialogue_references)
+	_check("weirdness spec", _check_weirdness_spec)
 	_check("regions", _check_regions)
 	_check("anchor tier rule", _check_anchor_tier_rule)
 	_check("asset manifest", _check_asset_manifest)
@@ -270,6 +285,21 @@ func _collect_flag_references() -> Dictionary:
 		for expr: String in _extract_quoted(path, "when"):
 			_note_condition_flags(expr, path, found)
 
+	# The weirdness ladder names a flag per rung (WEIRDNESS_SPEC §2.1), and its
+	# counters are flags too — a renamed beat flag must fail the build here
+	# rather than silently stop raising intensity.
+	var curve: Dictionary = _read_json(WEIRDNESS_CURVE_PATH)
+	if curve["ok"] and curve["data"] is Dictionary:
+		var document: Dictionary = curve["data"]
+		for entry: Variant in document.get("act_progress", []):
+			if entry is Dictionary:
+				_note_condition_flags(str((entry as Dictionary).get("when", "")), WEIRDNESS_CURVE_PATH, found)
+		var counters: Variant = document.get("counters", {})
+		if counters is Dictionary:
+			for flag: Variant in (counters as Dictionary):
+				if not found.has(str(flag)):
+					found[str(flag)] = WEIRDNESS_CURVE_PATH
+
 	return found
 
 func _note_condition_flags(expr: String, path: String, found: Dictionary) -> void:
@@ -388,6 +418,70 @@ func _check_dialogue_references() -> Dictionary:
 		if not FileAccess.file_exists("%s/%s.json" % [DIALOGUE_DIR, id]):
 			errors.append("%s: references dialogue '%s', which has no file" % [referenced[id], id])
 	return {"errors": errors, "detail": "%d reference(s) resolve" % referenced.size()}
+
+## The rules Docs/WEIRDNESS_SPEC.md states that no schema can: the ladder is
+## cumulative to exactly 1.0 (§2.1), line ids are unique, and the six v1 kinds
+## are the ones §1 locks. Tuning numbers are PROPOSED and deliberately unchecked.
+func _check_weirdness_spec() -> Dictionary:
+	var errors := PackedStringArray()
+
+	var curve_parsed: Dictionary = _read_json(WEIRDNESS_CURVE_PATH)
+	var rungs: int = 0
+	if not curve_parsed["ok"] or not (curve_parsed["data"] is Dictionary):
+		errors.append("%s unreadable" % WEIRDNESS_CURVE_PATH)
+	else:
+		var total: float = 0.0
+		var seen_when: Dictionary = {}
+		for entry: Variant in (curve_parsed["data"] as Dictionary).get("act_progress", []):
+			if not (entry is Dictionary):
+				continue
+			rungs += 1
+			total += float((entry as Dictionary).get("intensity", 0.0))
+			var when_expr: String = str((entry as Dictionary).get("when", ""))
+			if seen_when.has(when_expr):
+				errors.append("curve.json: act_progress names '%s' twice" % when_expr)
+			seen_when[when_expr] = true
+		if not is_equal_approx(snappedf(total, 0.001), 1.0):
+			errors.append("curve.json: the act_progress ladder totals %.3f, not 1.0 (WEIRDNESS_SPEC §2.1)" % total)
+
+	var catalog_parsed: Dictionary = _read_json("res://data/weirdness/catalog.json")
+	var v1_kinds: int = 0
+	if not catalog_parsed["ok"] or not (catalog_parsed["data"] is Dictionary):
+		errors.append("catalog.json unreadable")
+	else:
+		var kinds: Variant = (catalog_parsed["data"] as Dictionary).get("kinds", {})
+		if kinds is Dictionary:
+			for kind: Variant in (kinds as Dictionary):
+				var entry: Dictionary = (kinds as Dictionary)[kind]
+				if bool(entry.get("v1", false)):
+					v1_kinds += 1
+					if not SPEC_V1_KINDS.has(str(kind)):
+						errors.append("catalog.json: '%s' is marked v1 but is not one of the six §1 kinds" % str(kind))
+			for expected: String in SPEC_V1_KINDS:
+				if not (kinds as Dictionary).has(expected):
+					errors.append("catalog.json: §1 locks kind '%s', which is missing" % expected)
+
+	var lines_parsed: Dictionary = _read_json(WEIRDNESS_LINES_PATH)
+	var line_count: int = 0
+	if not lines_parsed["ok"] or not (lines_parsed["data"] is Dictionary):
+		errors.append("%s unreadable" % WEIRDNESS_LINES_PATH)
+	else:
+		var ids: Dictionary = {}
+		for entry: Variant in (lines_parsed["data"] as Dictionary).get("lines", []):
+			if not (entry is Dictionary):
+				continue
+			line_count += 1
+			var id_value: String = str((entry as Dictionary).get("id", ""))
+			if ids.has(id_value):
+				errors.append("lines.json: duplicate line id '%s'" % id_value)
+			ids[id_value] = true
+			if str((entry as Dictionary).get("text", "")).find("mostly fine") != -1:
+				errors.append("lines.json: '%s' uses the tagline, which §9 excludes" % id_value)
+
+	return {
+		"errors": errors,
+		"detail": "%d ladder rung(s), %d v1 kind(s), %d line(s)" % [rungs, v1_kinds, line_count],
+	}
 
 ## Every regions/<id>/region.json validates against the §7 shape, its anchors
 ## point at scenes that exist, and its edges join things it declares.
@@ -642,6 +736,12 @@ func _check_flag_registry() -> Dictionary:
 			critical += 1
 		if str(d.get("description", "")).strip_edges().is_empty():
 			errors.append("%s: description is empty" % key_str)
+		# Optional, and only ever false: a flag is persisted unless its
+		# declaration opts out, so "persist": true is noise rather than policy.
+		if d.has("persist") and not (d["persist"] is bool):
+			errors.append("%s: persist must be a boolean" % key_str)
+		if d.has("persist") and d["persist"] is bool and bool(d["persist"]):
+			errors.append("%s: persist is only ever false; omit it to persist" % key_str)
 	var detail := "%d declared (%d critical)" % [declared.size(), critical]
 	return {"errors": errors, "detail": detail}
 

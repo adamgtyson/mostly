@@ -1,10 +1,92 @@
 {
-  "_comment": "Flicker catalog (ENGINEERING_CONSTRAINTS.md §10). Contents are the BUILD_PLAN §5 weirdness spec; the single entry below is a PH_ placeholder whose handler is a no-op logger, present so the scheduler contract has something to select. No real flicker kinds are invented here.",
+  "_comment": "Flicker catalog (ENGINEERING_CONSTRAINTS.md §10; kinds from Docs/WEIRDNESS_SPEC.md §1, ledger M-1). The six v1 kinds are LOCKED; their min_intensity / weight / cooldown are PROPOSED starting values. The four v1:false kinds exercise the deferred-kind contract and carry conservative placeholder numbers with handler 'log' — they fire nothing until the phase that owns them lands a real handler. No kind may reproduce a scripted beat (§3).",
   "kinds": {
-    "ph_placeholder_flicker": {
-      "min_intensity": 0.0,
+    "sprite_edge": {
+      "_comment": "A figure at the viewport edge for ~6 frames. Gone if the camera moves toward it.",
+      "min_intensity": 0.05,
+      "weight": 3.0,
+      "cooldown": 120.0,
+      "regions_excluded": [],
+      "handler": "sprite_edge",
+      "v1": true
+    },
+    "tile_blink": {
+      "_comment": "One tile swaps to a wrong-but-plausible neighbour for 2 frames, then restores.",
+      "min_intensity": 0.1,
+      "weight": 3.0,
+      "cooldown": 90.0,
+      "regions_excluded": [],
+      "handler": "tile_blink",
+      "v1": true
+    },
+    "npc_wrong_frame": {
+      "_comment": "An idle NPC shows one frame from a different animation, or faces the wrong way, for 1 frame.",
+      "min_intensity": 0.15,
+      "weight": 2.0,
+      "cooldown": 90.0,
+      "regions_excluded": [],
+      "handler": "npc_wrong_frame",
+      "v1": true
+    },
+    "sound_offstage": {
+      "_comment": "A non-positional one-shot: a bell where there is no bell, a single hammer strike, one chicken.",
+      "min_intensity": 0.15,
+      "weight": 2.0,
+      "cooldown": 60.0,
+      "regions_excluded": [],
+      "handler": "sound_offstage",
+      "v1": true
+    },
+    "light_skip": {
+      "_comment": "Ambient modulate dips 3% for 1 frame, or a cast shadow with no caster for 3 frames.",
+      "min_intensity": 0.25,
+      "weight": 2.0,
+      "cooldown": 60.0,
+      "regions_excluded": [],
+      "handler": "light_skip",
+      "v1": true
+    },
+    "npc_line": {
+      "_comment": "An NPC's idle bubble (not the dialogue box) shows one line from data/weirdness/lines.json. Never logged, never repeated in-run.",
+      "min_intensity": 0.35,
       "weight": 1.0,
-      "cooldown": 30.0,
+      "cooldown": 180.0,
+      "regions_excluded": [],
+      "handler": "npc_line",
+      "v1": true
+    },
+    "cat_elsewhere": {
+      "_comment": "DEFERRED (v1 false). The workshop cat somewhere it cannot be — reserved for the return home. Numbers are conservative placeholders, not spec values.",
+      "min_intensity": 0.5,
+      "weight": 1.0,
+      "cooldown": 600.0,
+      "regions_excluded": [],
+      "handler": "log",
+      "v1": false
+    },
+    "reflection_lag": {
+      "_comment": "DEFERRED (v1 false). Numbers are conservative placeholders, not spec values.",
+      "min_intensity": 0.5,
+      "weight": 1.0,
+      "cooldown": 600.0,
+      "regions_excluded": [],
+      "handler": "log",
+      "v1": false
+    },
+    "clock_wrong": {
+      "_comment": "DEFERRED (v1 false). Numbers are conservative placeholders, not spec values.",
+      "min_intensity": 0.5,
+      "weight": 1.0,
+      "cooldown": 600.0,
+      "regions_excluded": [],
+      "handler": "log",
+      "v1": false
+    },
+    "double_npc": {
+      "_comment": "DEFERRED (v1 false). Numbers are conservative placeholders, not spec values.",
+      "min_intensity": 0.5,
+      "weight": 1.0,
+      "cooldown": 600.0,
       "regions_excluded": [],
       "handler": "log",
       "v1": false
