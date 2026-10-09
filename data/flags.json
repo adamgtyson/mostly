@@ -27,6 +27,36 @@
       "tier": "critical",
       "description": "The Hold is reachable. Region locks are exactly region.<id>.unlocked and nothing else represents them."
     },
+    "region.turning.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Turning is reachable — the one region Act One opens beyond The Hold. The unlock reason and event are [U2-2], still OPEN; until that is designed, only the critical-path walkthrough sets this."
+    },
+    "region.measure.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Measure is reachable. Locked for all of Act One; what unlocks the outer regions after the letter is [U2-2], OPEN."
+    },
+    "region.distance.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Distance is reachable. Locked for all of Act One; what unlocks the outer regions after the letter is [U2-2], OPEN."
+    },
+    "region.quiet.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Quiet is reachable. Locked for all of Act One; what unlocks the outer regions after the letter is [U2-2], OPEN."
+    },
+    "region.flow.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Flow is reachable. Locked for all of Act One; what unlocks the outer regions after the letter is [U2-2], OPEN."
+    },
+    "region.balance.unlocked": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The Balance is reachable. Locked for all of Act One; what unlocks the outer regions after the letter is [U2-2], OPEN."
+    },
     "region.hold.crossing_attempts": {
       "type": "int",
       "tier": "normal",
@@ -81,6 +111,11 @@
       "type": "bool",
       "tier": "normal",
       "description": "The return trip has begun; the ladder reaches 1.0 (WEIRDNESS_SPEC §2.1). PROPOSED id: the phase that builds the beat may rename it."
+    },
+    "act1.letter_received": {
+      "type": "bool",
+      "tier": "critical",
+      "description": "The summons letter is in Patch's hands — Act One's final beat. PROPOSED id: the phase that builds the letter beat may rename it. What this does to the outer region locks is [U2-2], still OPEN; the walkthrough's post-letter assertion stays pending until that is designed."
     }
   }
 }
