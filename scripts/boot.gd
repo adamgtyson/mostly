@@ -1,51 +1,29 @@
 extends Node
 
-## Boot (§13): window setup, the one route into the title screen, and the
-## real-boot smoke mode (session 9) — the only harness that runs the actual
-## autoload/main-scene/scene-swap path instead of instantiating scenes by hand.
-
-const TITLE_SCENE := "res://scenes/title.tscn"
+## Boot (§13): window setup and the real-boot smoke mode (session 9) — the
+## only harness that runs the actual autoload/main-scene path instead of
+## instantiating scenes by hand. The title IS the main scene; Boot swaps
+## nothing, so no deferred play() can ever run on a freed pre-route scene.
 
 const SMOKE_DEFAULT_FRAMES := 180
 ## A hard internal deadline so a parked await still produces a report.
 const SMOKE_DEADLINE_MS := 25000
 
-## What _route_fresh_boot decided, for debug_summary and the smoke report.
-var _route_result: String = "not run"
-
 func _ready() -> void:
 	# Scale the OS window to 4x the 320x180 viewport so the game is visible.
 	# canvas_items stretch keeps pixel art crisp at any window size.
 	DisplayServer.window_set_size(Vector2i(1280, 720))
+	# Integer division is the intent: window centring is in whole pixels, and
+	# a half-pixel offset would blur the nearest-neighbour art.
+	@warning_ignore("integer_division")
 	DisplayServer.window_set_position(
 		DisplayServer.screen_get_position() + DisplayServer.screen_get_size() / 2 - Vector2i(640, 360)
 	)
-	# Routing waits a tick: autoloads ready before the main scene exists, so
-	# current_scene is not knowable here.
-	call_deferred("_route_fresh_boot")
 	if smoke_requested(OS.get_cmdline_user_args()):
 		call_deferred("_run_smoke")
 
-## Every windowed boot opens on the title screen (session 8), which owns the
-## Continue/New Game decision.
-func _route_fresh_boot() -> void:
-	var tree: SceneTree = get_tree()
-	# Script-driven SceneTrees (tests/run_tests.gd, tests/validate_data.gd)
-	# must never have their scene swapped out from under them.
-	if tree.get_script() != null:
-		_route_result = "skipped: scripted SceneTree"
-		return
-	if tree.current_scene == null:
-		_route_result = "skipped: no current_scene"
-		return
-	if tree.current_scene.scene_file_path == TITLE_SCENE:
-		_route_result = "already on title"
-		return
-	var err: int = tree.change_scene_to_file(TITLE_SCENE)
-	_route_result = "changed to title (err=%d)" % err
-
 func debug_summary() -> String:
-	return "route: %s" % _route_result
+	return "no routing: the title is the main scene (session 9); areas are reached only through SceneRouter"
 
 # ── smoke mode (session 9, Block A) ─────────────────────────────────────────
 ## Activated ONLY by the user arg --smoke (after `--` on the command line),
