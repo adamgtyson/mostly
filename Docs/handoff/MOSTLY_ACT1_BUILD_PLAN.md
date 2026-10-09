@@ -33,7 +33,7 @@
 4. **Decide whether the companion (Fletch/Brace) joins in Act One** at the Abbey, or only on the return in Act Two. The bell-tower observation is theirs; timing matters for the party system's scope in v1.
 5. **Decide the combat model** (see §6 agenda) — real-time action (Secret of Mana lineage) vs. turn-based (Chrono Trigger lineage). Nothing in the record chooses.
 6. **Define the Act One crafting intro** in The Turning — which forge (a blacksmith forge in North Office? a monastery forge unlocked by the odd jobs?), what Patch first crafts, and how "repair" is introduced without the cart.
-7. **Weirdness system decisions** (§5).
+7. **Weirdness system decisions** (§5). **RESOLVED — Docs/WEIRDNESS_SPEC.md**
 8. **The Act One map**: rough positions of Patch's village, Last Post, Near Enough, Wren's trading post, Hobb's village, the Turning border crossing, North Office, Still Point, Stable Frequency / Nominal / Acceptable Variance / Within Tolerance, the Abbey. Note: Wren's post is "halfway between Near Enough and the northwestern border of The Hold" but The Turning is north in the July 7 layout — reconcile during the territory review.
 9. **Mob roster for The Turning** — none exists anywhere. Must follow the institution rule (creatures as Forge side-effects, not generic monsters) and the tone rule.
 10. **Resource list** for The Turning gathering.
@@ -108,11 +108,13 @@ Status: **exists** = in repo or locked verbatim; **partial** = concept locked, t
 
 ### 4.12 System text
 - Item names/descriptions (gear from Latch's reward, resources, crafted items, Bell's soup). **none**
-- Weirdness flicker lines (NPCs "behaving very strangely" — a pool of 10–20 one-liners). **none**
+- Weirdness flicker lines (NPCs "behaving very strangely" — a pool of 10–20 one-liners). **exists** (Docs/WEIRDNESS_SPEC.md §9, 19 lines)
 - Quest-log/List-style entries for Act One tasks (if the UI uses the List's register before The List exists). **none**
 - Pause/menu/settings copy. **none**
 
 ## 5. The weirdness system — a documented need
+
+*Specified 2026-10-08 — see Docs/WEIRDNESS_SPEC.md. The items below are retained as the questions that doc answers.*
 
 **Why it's blocking:** it's the through-line of Act One and the thing that makes replay land, and nothing about it is specified beyond "deniable at first, undeniable by the end."
 

@@ -9,6 +9,7 @@
 
 - Docs/handoff/ — canon, story state, decision ledger, open questions, build plan; wins over Docs/00–06.
 - Docs/ENGINEERING_CONSTRAINTS.md — locked engineering decisions (2026-08-29); Claude Code designs within these, never chooses them.
+- Docs/WEIRDNESS_SPEC.md — the Act One weirdness system (2026-10-08): flicker catalog, intensity ladder, deniability rules, and the `npc_line` pool; ledger §M.
 
 *Single-page canonical summary. For full detail see numbered documents.*
 

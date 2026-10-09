@@ -157,7 +157,7 @@ Adam, 2026-08-28: the settlements per territory, "and probably the territories t
 
 ### 4.8 The nine starting villages — LOCKED `[G5–G7]`
 
-Again, Revised, Temporary, Good Soil (Probably), Seven Chickens, One More Mile, Fine Now, Hay, Mostly, New Again. Epigraphs and pro/con text: Docs/03 is authoritative. Seven Chickens' pro is obfuscated on the selection screen. Village surroundings reflect the pro/con; a safer route always exists. **⚠** Several pro/con mechanics still reference "world-break events" / "no stagger on breaks" from the cut repair loop — need re-grounding once Act Two's event vocabulary exists.
+Again, Revised, Temporary, Good Soil (Probably), Seven Chickens, One More Mile, Fine Now, Hay, Mostly, New Again. Epigraphs and pro/con text: Docs/03 is authoritative. Seven Chickens' pro is obfuscated on the selection screen. Village surroundings reflect the pro/con; a safer route always exists. **⚠** Several pro/con mechanics still reference "world-break events" / "no stagger on breaks" from the cut repair loop — need re-grounding once Act Two's event vocabulary exists. Act One definition (M-5): a world-break event is a scripted overt beat or a misroute. See Docs/WEIRDNESS_SPEC.md §5.
 
 ### 4.9 Biomes — LOCKED `[F19]`
 

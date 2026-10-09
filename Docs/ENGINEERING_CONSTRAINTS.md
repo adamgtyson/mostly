@@ -81,6 +81,7 @@ Existing locked rulings this document depends on and does not reopen: precision 
   - **`anchors[]`**: plot-bearing areas that must exist with fixed content — `{ id, area, biome_tags[], required_exits[] }`. Act One anchors: Patch's village, Last Post, Near Enough, Wren's post, Hobb's village, the Turning crossing, North Office, Still Point, the Abbey.
   - **`fill_slots[]`**: `{ id, biome_pool[], length_hint, default_area, spawn_pool[] }`. v1 fills every slot by hand via `default_area`.
   - **`edges[]`**: `{ from, to, via_slot? }`.
+  - **Amendment (M-4)**: anchor entries may carry `weirdness_override: float`, applied by `SceneRouter` on area change; Hobb's village anchor is 0.
 - **Only anchors may set `critical`-tier flags** (§2). Fills may set any other flag — side quests, encounter counters, wandering things are all fine. The validator enforces the tier rule.
 - **Quests travel with entities, not areas:** a quest-bearing mob or NPC is defined in `data/mobs/` or `data/characters.json` with its own flags and is spawned through a fill slot's `spawn_pool`. A mod region can ship a wandering quest-giver with zero engine changes.
 - The July 10 anchor-and-fill spec `[G3]` is superseded in *format* by `region.json`; it remains the design reference for the future generator's validator (1000 seeds, every anchor reachable, no orphan slots).
@@ -110,6 +111,7 @@ Existing locked rulings this document depends on and does not reopen: precision 
 - Scripted beats (nine days, road home, the mill, the river, the bell tower) are cutscenes and flags, not this autoload.
 - Debug ring buffer of fired flickers is readable from the test harness, not persisted. The only persisted weirdness state is the `weird.*` counters the design explicitly wants.
 - The curve numbers, catalog contents, and flicker one-liners are the §5 weirdness spec — a separate design session. Fable ships the contract with placeholder values flagged in config.
+- Curve values, catalog, and line pool are specified in Docs/WEIRDNESS_SPEC.md (session 7); build phases 3–4 implement §8 of that doc.
 
 ## 11. Test harness — LOCKED `[EC-11]`
 
