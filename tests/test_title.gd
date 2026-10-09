@@ -59,9 +59,9 @@ func test_without_a_save_continue_is_hidden(t: TestContext) -> void:
 	if screen == null:
 		return
 	t.assert_false(screen.has_any_save(), "the scratch saves dir is empty")
-	t.assert_false((screen.get_node("Menu/Continue") as Button).visible,
+	t.assert_false((screen.get_node("Center/Menu/Continue") as Button).visible,
 		"Continue is hidden with nothing to continue")
-	t.assert_true((screen.get_node("Menu/NewGame") as Button).visible, "New Game is always offered")
+	t.assert_true((screen.get_node("Center/Menu/NewGame") as Button).visible, "New Game is always offered")
 	t.assert_eq(screen.continue_game(false), {}, "and a Continue with no save applies nothing")
 	_free_screen(screen)
 	_cleanup(sm)
@@ -78,7 +78,7 @@ func test_with_a_save_continue_is_visible_and_loads(t: TestContext) -> void:
 		_cleanup(sm)
 		return
 	t.assert_true(screen.has_any_save(), "the fixture save is seen")
-	t.assert_true((screen.get_node("Menu/Continue") as Button).visible, "Continue is visible with a save")
+	t.assert_true((screen.get_node("Center/Menu/Continue") as Button).visible, "Continue is visible with a save")
 	t.assert_eq(screen.most_recent_slot(), "1", "and resumes the fixture slot")
 
 	var destination: Dictionary = screen.continue_game(false)
@@ -101,3 +101,77 @@ func test_new_game_hands_over_to_the_selection_screen(t: TestContext) -> void:
 		"New Game opens the session-7 selection screen")
 	_free_screen(screen)
 	_cleanup(sm)
+
+# ── 320x180 canvas discipline (session 10) ──────────────────────────────────
+## The windowed bug this guards against: Controls laid out in window
+## coordinates with the default 16px font inside the 320x180 canvas — the
+## title in a corner, text 4x too large. The screen is instantiated in an
+## actual 320x180 SubViewport and every visible content Control must land
+## fully inside it, at the dialogue box's font size or smaller, with a
+## Container owning its placement (hand-set positions are what containers
+## exist to forbid).
+
+const CANVAS := Rect2(0, 0, 320, 180)
+const MAX_FONT := 8
+
+func test_title_lays_out_inside_the_canvas(t: TestContext) -> void:
+	var sm: Node = _sm(t)
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(320, 180)
+	t.tree.root.add_child(viewport)
+	var packed: PackedScene = load(SCENE)
+	var screen: Control = packed.instantiate()
+	viewport.add_child(screen)
+	await t.tree.process_frame
+	await t.tree.process_frame
+
+	var checked: int = _assert_canvas_discipline(t, screen, "title")
+	t.assert_true(checked >= 3, "the sweep saw the title, tagline and New Game (%d content controls)" % checked)
+
+	viewport.queue_free()
+	await t.tree.process_frame
+	_cleanup(sm)
+
+## Shared sweep: rect ⊂ canvas (clip-aware for ScrollContainers), font ≤ the
+## dialogue box's 8, and a Container parent for every content Control.
+func _assert_canvas_discipline(t: TestContext, root: Control, label: String) -> int:
+	var checked: int = 0
+	for control: Control in _content_controls(root):
+		checked += 1
+		var where: String = "%s: %s" % [label, control.name]
+		var rect: Rect2 = _clipped_rect(control)
+		t.assert_true(CANVAS.grow(0.5).encloses(rect),
+			"%s — global rect %s lies inside 320x180" % [where, rect])
+		if control is Label or control is Button:
+			t.assert_true(control.get_theme_font_size("font_size") <= MAX_FONT,
+				"%s — font size %d is at most the dialogue box's %d" % [where, control.get_theme_font_size("font_size"), MAX_FONT])
+		elif control is RichTextLabel:
+			t.assert_true(control.get_theme_font_size("normal_font_size") <= MAX_FONT,
+				"%s — rich text font is at most %d" % [where, MAX_FONT])
+		t.assert_true(control.get_parent() is Container,
+			"%s — a Container owns its placement; no hand-set positions" % where)
+	return checked
+
+## Visible Controls that actually draw something: text, or a panel's StyleBox.
+func _content_controls(node: Node) -> Array:
+	var out: Array = []
+	if node is Control and (node as Control).is_visible_in_tree():
+		if (node is Label and not str(node.get("text")).is_empty()) \
+				or (node is Button and not str(node.get("text")).is_empty()) \
+				or node is RichTextLabel or node is PanelContainer:
+			out.append(node)
+	for child: Node in node.get_children():
+		out.append_array(_content_controls(child))
+	return out
+
+## Global rect intersected with every clipping ancestor (a ScrollContainer
+## clips its children), so a legitimately scrolled-away row does not fail the
+## bounds rule while a mislaid control still does.
+func _clipped_rect(control: Control) -> Rect2:
+	var rect: Rect2 = control.get_global_rect()
+	var ancestor: Node = control.get_parent()
+	while ancestor != null:
+		if ancestor is ScrollContainer or (ancestor is Control and (ancestor as Control).clip_contents):
+			rect = rect.intersection((ancestor as Control).get_global_rect())
+		ancestor = ancestor.get_parent()
+	return rect
