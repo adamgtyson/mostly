@@ -14,6 +14,15 @@
       "required_exits": []
     }
   ],
-  "fill_slots": [],
+  "fill_slots": [
+    {
+      "_comment": "DEV SCENE, not content. regions/hold/areas/weirdness_test.tscn carries one FlickerSpot per v1 flicker kind so the handlers can be driven headlessly (WEIRDNESS_SPEC §8). The region.json shape has no 'dev' field, so this comment is the marker; the area is a fill slot rather than an anchor because it is not plot-bearing and may never set a critical flag (§7).",
+      "id": "dev_weirdness_test",
+      "biome_pool": [],
+      "length_hint": 0,
+      "default_area": "weirdness_test",
+      "spawn_pool": []
+    }
+  ],
   "edges": []
 }

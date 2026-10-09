@@ -27,7 +27,11 @@ func test_hold_region_manifest_loads(t: TestContext) -> void:
 	t.assert_eq(region.get("id"), "hold", "the Hold manifest loads")
 	t.assert_eq(region.get("display_name"), "The Hold", "with its display name")
 	t.assert_true(region.has("fill_slots"), "and the generator-shaped fields (§7)")
-	t.assert_eq(region.get("fill_slots"), [], "empty fill_slots are valid in v1")
+	# v1 fills every slot by hand; the one declared slot is the weirdness dev
+	# scene, which is deliberately not an anchor (it is not plot-bearing).
+	var slots: Array = region.get("fill_slots", [])
+	t.assert_eq(slots.size(), 1, "one fill slot in v1")
+	t.assert_eq((slots[0] as Dictionary).get("default_area"), "weirdness_test", "and it is the dev area")
 
 func test_workshop_is_the_hold_anchor(t: TestContext) -> void:
 	var router: Node = _router(t)

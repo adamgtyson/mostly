@@ -1,0 +1,131 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/area.gd" id="1_area"]
+[ext_resource type="Script" path="res://scripts/flicker_spot.gd" id="2_spot"]
+[ext_resource type="Script" path="res://scripts/exit.gd" id="3_exit"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="4_player"]
+[ext_resource type="TileSet" uid="uid://tbqpi3nw11r5" path="res://assets/tilesets/workshop_tileset.tres" id="5_tileset"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_npc"]
+size = Vector2(16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_npc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_npc")
+}, {
+"duration": 1.0,
+"texture": SubResource("PlaceholderTexture2D_npc")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(12, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_probe"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(16, 16)
+
+[node name="WeirdnessTest" type="Node2D"]
+script = ExtResource("1_area")
+region_id = "hold"
+area_id = "weirdness_test"
+area_rect = Rect2i(0, 0, 320, 180)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="Spawns"]
+position = Vector2(48, 96)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("5_tileset")
+
+[node name="Npc" type="Node2D" parent="."]
+position = Vector2(160, 96)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Npc" groups=["placeholder"]]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_npc")
+animation = &"idle"
+
+[node name="Spots" type="Node2D" parent="."]
+
+[node name="SpriteEdgeSpot" type="Marker2D" parent="Spots"]
+position = Vector2(300, 96)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["sprite_edge"])
+
+[node name="TileBlinkSpot" type="Marker2D" parent="Spots"]
+position = Vector2(96, 64)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["tile_blink"])
+params = {
+"atlas_coords": Vector2i(0, 0),
+"cell": Vector2i(2, 2),
+"layer_path": "TileMapLayer",
+"source_id": 0
+}
+
+[node name="WrongFrameSpot" type="Marker2D" parent="Spots"]
+position = Vector2(160, 96)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["npc_wrong_frame"])
+params = {
+"npc_path": "Npc/AnimatedSprite2D"
+}
+
+[node name="SoundOffstageSpot" type="Marker2D" parent="Spots"]
+position = Vector2(200, 120)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["sound_offstage"])
+
+[node name="LightSkipSpot" type="Marker2D" parent="Spots"]
+position = Vector2(64, 140)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["light_skip"])
+
+[node name="NpcLineSpot" type="Marker2D" parent="Spots"]
+position = Vector2(160, 80)
+script = ExtResource("2_spot")
+allowed_kinds = Array[String](["npc_line"])
+params = {
+"npc_path": "Npc"
+}
+
+[node name="ExitToWorkshop" type="Area2D" parent="."]
+position = Vector2(16, 96)
+script = ExtResource("3_exit")
+target_region = "hold"
+target_area = "workshop"
+target_spawn = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitToWorkshop"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(48, 96)
+script = ExtResource("4_player")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 18)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="InteractionArea" type="Area2D" parent="Player"]
+position = Vector2(0, 12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/InteractionArea"]
+shape = SubResource("RectangleShape2D_probe")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 320
+limit_bottom = 180
