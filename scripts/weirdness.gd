@@ -54,6 +54,9 @@ var intensity: float = 0.0
 var _curve: Dictionary = {}
 var _catalog: Dictionary = {}
 var _lines: Array = []
+## What a flicker actually draws (§8). Weirdness decides whether and where; the
+## registry decides what. Not an autoload — the roster is closed (§13).
+var _handlers: FlickerHandlers = null
 var _region_multiplier: float = 1.0
 var _current_region: String = ""
 var _current_area: String = ""
@@ -84,6 +87,8 @@ func _ready() -> void:
 	_load_lines()
 	recompute()
 	_reschedule()
+	_handlers = FlickerHandlers.new()
+	flicker_requested.connect(_handlers.dispatch)
 	tell_requested.connect(_on_tell_requested)
 	var root_node: Node = get_tree().root
 	if root_node.has_node("GameState"):
@@ -501,6 +506,9 @@ func reset() -> void:
 	_reschedule()
 
 # ── loading ──────────────────────────────────────────────────────────────────
+
+func handlers() -> FlickerHandlers:
+	return _handlers
 
 func catalog() -> Dictionary:
 	return _catalog

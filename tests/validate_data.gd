@@ -460,6 +460,14 @@ func _check_weirdness_spec() -> Dictionary:
 			for expected: String in SPEC_V1_KINDS:
 				if not (kinds as Dictionary).has(expected):
 					errors.append("catalog.json: §1 locks kind '%s', which is missing" % expected)
+			# A catalog naming a handler the registry does not have would fire
+			# into nothing at runtime, which looks exactly like a missing kind.
+			var known: PackedStringArray = FlickerHandlers.known_handlers()
+			for kind: Variant in (kinds as Dictionary):
+				var handler: String = str(((kinds as Dictionary)[kind] as Dictionary).get("handler", ""))
+				if not known.has(handler):
+					errors.append("catalog.json: '%s' names handler '%s', which FlickerHandlers does not register"
+						% [str(kind), handler])
 
 	var lines_parsed: Dictionary = _read_json(WEIRDNESS_LINES_PATH)
 	var line_count: int = 0
