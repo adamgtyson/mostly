@@ -163,7 +163,7 @@
 |---|---|---|---|---|---|---|
 | G1 | Anchor-and-fill generation — architecture | LOCKED | F | R | user-authored concept | |
 | G2 | Procedural generation / anchor-and-fill is a HARD requirement for replayability | LOCKED | U9 | U9 | user ruling | |
-| G3 | Anchor-and-fill build spec (graph, RefCounted, 1000-seed validator, external config, MapGraph JSON) | PROVISIONAL spec, **not built** | J10 | A5b (claimed built — unverified) | assistant-drafted, user-approved as prompt | Absent from R. U9: "I don't think it ran." |
+| G3 | Anchor-and-fill build spec (graph, RefCounted, 1000-seed validator, external config, MapGraph JSON) | PROVISIONAL spec, **not built** | J10 | A5b (claimed built — unverified) | assistant-drafted, user-approved as prompt | Absent from R. U9: "I don't think it ran." BUILT as spike (session 8) — scene driving not built. |
 | G4 | Placeholders: biome pools per region; distance constraints; chain link count (default 4 — but chain is now 5 human links); village-specific route variation | OPEN | J10 | A5b | — | |
 | G5 | Nine starting villages with pro/con | LOCKED | F | R | user-confirmed | Mechanics reference cut "world-break" loop — needs re-grounding. |
 | G6 | Seven Chickens pro obfuscated | LOCKED | F | R | user-confirmed | |
