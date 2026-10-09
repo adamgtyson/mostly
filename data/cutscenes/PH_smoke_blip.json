@@ -1,0 +1,9 @@
+{
+  "_comment": "PH_ harness fixture (session 9): the smallest startable cutscene, so tests can prove a CutsceneTrigger actually starts something without playing the 30-beat opening into the suite. Never referenced by any scene; not content.",
+  "id": "PH_smoke_blip",
+  "skippable": true,
+  "once": false,
+  "beats": [
+    { "type": "end" }
+  ]
+}

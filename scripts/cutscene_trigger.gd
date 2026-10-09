@@ -30,6 +30,11 @@ func _ready() -> void:
 		call_deferred("play")
 
 func play() -> bool:
+	# A deferred play can outlive its scene: the engine frees a swapped-out
+	# scene before the deferred queue drains (session 9's boot crash). Off the
+	# tree there is nothing to play into — return quietly, never an error.
+	if not is_inside_tree():
+		return false
 	if cutscene_id.is_empty():
 		push_error("CutsceneTrigger: no cutscene_id set on %s" % name)
 		return false
@@ -49,12 +54,11 @@ func play() -> bool:
 		return false
 	return true
 
+## Conditions resolve flags, not nodes (§5), so this never walks the tree:
+## GameState is an autoload singleton and reachable even when this node is not
+## inside a tree — the exact state a deferred play() can find itself in.
 func _condition_holds() -> bool:
-	var root_node: Node = get_tree().root
-	if not root_node.has_node("GameState"):
-		return Condition.evaluate(when, func(_flag: String) -> Variant: return null)
-	var state: Node = root_node.get_node("GameState")
-	return Condition.evaluate(when, func(flag: String) -> Variant: return state.call("get_flag", flag, null))
+	return Condition.evaluate(when, func(flag: String) -> Variant: return GameState.get_flag(flag, null))
 
 func _actor_root() -> Node:
 	if not actor_root_path.is_empty():
