@@ -4,9 +4,9 @@ extends Control
 ## by design: Continue when any save exists, New Game always. Continue loads
 ## the most recent slot through SaveManager — contributors restore themselves
 ## generically (§3) — then departs through SceneRouter, the single choke point
-## (§6), to the saved area's default spawn. Routing through the choke point
-## means the EC-6a misroute hook technically applies to a Continue; flagged in
-## the session report rather than special-cased here.
+## (§6), to the saved area's default spawn — with misroute_eligible false:
+## loading is not walking through an Exit, so a Continue never misroutes
+## (session 9 assumed ruling).
 ##
 ## All copy is functional placeholder text pending BUILD_PLAN §4.12. The
 ## tagline is canon (Docs/00).
@@ -73,7 +73,9 @@ func continue_game(depart: bool = true) -> Dictionary:
 		push_error("Title: save in slot '%s' restored no location" % slot)
 		return {}
 	if depart:
-		router.call("go_to", destination["region"], destination["area"], destination["spawn"])
+		# Loading is not walking through an Exit: never misroute a Continue
+		# (session 9 assumed ruling).
+		router.call("go_to", destination["region"], destination["area"], destination["spawn"], false)
 	return destination
 
 ## New Game hands over to the selection screen. Returns the scene it opens.

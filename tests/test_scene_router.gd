@@ -169,6 +169,50 @@ func test_a_misroute_picks_only_visited_areas(t: TestContext) -> void:
 	t.assert_eq(destination.get("region"), "hold", "a misroute stays inside the current region")
 	t.assert_eq(destination.get("area"), "yard", "and lands only on somewhere already visited")
 
+## Session 9 (assumed ruling): a misroute is a property of walking through an
+## Exit, not of loading or starting — loads and new-game departures never
+## consult the roll at all. These are real travels through the choke point:
+## sys.village stays unset so the workshop's opening trigger is gated off,
+## autosaves land in a scratch saves dir, and the arrived scene is freed.
+func test_loads_and_new_game_never_consult_the_misroute_roll(t: TestContext) -> void:
+	var router: Node = _router(t)
+	var gs: Node = _gs(t)
+	var w: Node = t.tree.root.get_node("Weirdness")
+	var sm: Node = t.tree.root.get_node("SaveManager")
+	sm.saves_dir = "user://saves/test_misroute"
+
+	gs.set_flag("region.hold.unlocked", true)
+	# Maximum pressure: full intensity and a certain misroute chance, so an
+	# eligible transition would definitely consult (and win) the roll.
+	w._curve = {"base_intensity": 1.0, "act_progress": [], "counters": {}, "events": {"misroute": 1.0}}
+	w.recompute()
+
+	# The Continue path: misroute_eligible false.
+	await router.go_to("hold", "workshop", "default", false)
+	t.assert_eq(w.roll_count("misroute"), 0, "a load never consults the roll")
+	t.assert_eq(router.current_id(), "hold/workshop", "and arrives exactly where the save said")
+
+	# The New Game departure: eligible by signature, exempted by new_game().
+	router.new_game()
+	await router.go_to("hold", "hobbs_village")
+	t.assert_eq(w.roll_count("misroute"), 0, "the first transition after new_game() never consults it")
+
+	# An ordinary walk through an Exit still does.
+	await router.go_to("hold", "workshop")
+	t.assert_true(w.roll_count("misroute") >= 1, "a normal transition still rolls (EC-6a lives)")
+
+	# Leave the tree the way it was found.
+	if t.tree.current_scene != null:
+		t.tree.current_scene.queue_free()
+		t.tree.current_scene = null
+	await t.tree.process_frame
+	w._load_curve()
+	for slot: String in sm.all_slot_names():
+		if FileAccess.file_exists(sm.slot_path(slot)):
+			DirAccess.remove_absolute(sm.slot_path(slot))
+	if DirAccess.dir_exists_absolute("user://saves/test_misroute"):
+		DirAccess.remove_absolute("user://saves/test_misroute")
+
 func test_a_misroute_increments_the_only_persisted_trace(t: TestContext) -> void:
 	var router: Node = _router(t)
 	var gs: Node = _gs(t)

@@ -25,6 +25,8 @@ var current_area: String = ""
 var _region_cache: Dictionary = {}
 var _visited: Dictionary = {}
 var _transitioning: bool = false
+## Armed by new_game(); the next transition skips the EC-6a roll entirely.
+var _misroute_exempt_once: bool = false
 var _fade_rect: ColorRect = null
 
 # ── registration ─────────────────────────────────────────────────────────────
@@ -62,7 +64,11 @@ func debug_summary() -> String:
 
 ## Moves the player to <region>/<area>, arriving at the named spawn.
 ## Returns false if the move was refused; a misroute still returns true.
-func go_to(region: String, area: String, spawn: String = "default") -> bool:
+##
+## misroute_eligible (session 9, assumed ruling): a misroute is a property of
+## walking through an Exit, not of loading — the Continue path passes false,
+## and the first transition after new_game() is exempted below. Adam may veto.
+func go_to(region: String, area: String, spawn: String = "default", misroute_eligible: bool = true) -> bool:
 	if _transitioning:
 		push_warning("SceneRouter: already mid-transition, ignoring go_to")
 		return false
@@ -77,8 +83,8 @@ func go_to(region: String, area: String, spawn: String = "default") -> bool:
 	# EC-6a: extremely rarely, an exit delivers Patch somewhere else. The chance
 	# lives in the weirdness curve, not here, and a misroute can only land on an
 	# unlocked area he has already visited, so it can never break the region
-	# lock or the critical path.
-	if _roll_misroute():
+	# lock or the critical path. Loads and new-game starts never roll at all.
+	if _consume_misroute_eligibility(misroute_eligible) and _roll_misroute():
 		var alternative: Dictionary = _misroute_destination(region, area)
 		if not alternative.is_empty():
 			destination = alternative
@@ -105,6 +111,17 @@ func new_game() -> void:
 	if state == null:
 		return
 	state.call("set_flag", "region.%s.unlocked" % starting_region(), true)
+	# The start of a run is not a walk through an Exit: the next transition —
+	# New Game's departure to the starting area — never misroutes (session 9).
+	_misroute_exempt_once = true
+
+## True when this transition may roll at all; consumes the one-shot exemption
+## new_game() arms, so the New Game screen needs no SceneRouter knowledge.
+func _consume_misroute_eligibility(misroute_eligible: bool) -> bool:
+	if _misroute_exempt_once:
+		_misroute_exempt_once = false
+		return false
+	return misroute_eligible
 
 func starting_region() -> String:
 	return str(GameConfig.get_value("scene.starting_region", "hold"))
@@ -362,6 +379,7 @@ func reset() -> void:
 	_visited.clear()
 	_region_cache.clear()
 	_transitioning = false
+	_misroute_exempt_once = false
 
 func _game_state() -> Node:
 	var root_node: Node = get_tree().root
