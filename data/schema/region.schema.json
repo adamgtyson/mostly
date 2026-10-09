@@ -1,5 +1,5 @@
 {
-  "_comment": "Region package manifest schema (ENGINEERING_CONSTRAINTS.md §7). Handcrafted regions expose the generator's output shape now so it can drive the same scenes later [U2-4]. Empty fill_slots and edges are valid: v1 fills every slot by hand.",
+  "_comment": "Region package manifest schema (ENGINEERING_CONSTRAINTS.md §7). Handcrafted regions expose the generator's output shape now so it can drive the same scenes later [U2-4]. Empty fill_slots and edges are valid: v1 fills every slot by hand. An anchor may carry weirdness_override (amendment M-4), which replaces the region multiplier for that one area — Hobb's village is 0 inside a region that is not.",
   "title": "region",
   "type": "object",
   "additionalProperties": false,
@@ -22,7 +22,8 @@
           "id": { "type": "string", "minLength": 1 },
           "area": { "type": "string", "minLength": 1 },
           "biome_tags": { "type": "array", "items": { "type": "string" } },
-          "required_exits": { "type": "array", "items": { "type": "string" } }
+          "required_exits": { "type": "array", "items": { "type": "string" } },
+          "weirdness_override": { "type": "number", "minimum": 0, "maximum": 1 }
         }
       }
     },

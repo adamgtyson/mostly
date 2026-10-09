@@ -10,8 +10,10 @@ extends Node
 ## that has the named nodes.
 ##
 ## Beat vocabulary: wait, move, animation, dialogue, end (v1), plus set_flag,
-## camera, fade, sfx, spawn, despawn, choice and emit. `emit` fires
+## camera, fade, sfx, spawn, despawn, choice, emit and stagger. `emit` fires
 ## beat_emitted() for a scene to hook — JSON never calls a script directly.
+## `stagger` is the world-break reaction (WEIRDNESS_SPEC §5): a beat tagged
+## `overt` also triggers Good Soil (Probably)'s tell before it plays.
 
 signal cutscene_started(cutscene_id: String)
 signal cutscene_ended
@@ -20,6 +22,9 @@ signal cutscene_ended
 signal beat_emitted(signal_name: String, args: Array)
 
 const CUTSCENE_DIR := "res://data/cutscenes"
+
+## The village whose stagger is shorter and usually unanimated (§5, M-5).
+const SEVEN_CHICKENS := "seven_chickens"
 
 var cutscene_active: bool = false
 
@@ -69,6 +74,7 @@ func play_cutscene(beats: Array, cutscene_id: String = "", actor_root: Node = nu
 	cutscene_active = true
 	_skipping = false
 	_actor_root = actor_root
+	_set_player_has_control(false)
 	cutscene_started.emit(cutscene_id)
 
 	for beat: Variant in beats:
@@ -132,6 +138,8 @@ func _execute_beat(beat: Dictionary) -> void:
 			_beat_despawn(beat)
 		"emit":
 			_beat_emit(beat)
+		"stagger":
+			await _beat_stagger(beat)
 		"end":
 			pass
 		_:
@@ -290,6 +298,49 @@ func _beat_despawn(beat: Dictionary) -> void:
 		return
 	node.queue_free()
 
+## Patch loses control for a moment on first contact with a scripted overt beat
+## — the mill, the river, Still Point, the Forge, each return beat
+## (WEIRDNESS_SPEC §5, ledger M-5). Never on a random flicker: those are
+## deniable by definition, so Patch does not react to them.
+##
+## Village variations are config, not code: Seven Chickens usually takes a
+## shorter stagger with no animation, and Good Soil (Probably) gets the tell
+## *before* the beat, which is why the wait happens here rather than after.
+func _beat_stagger(beat: Dictionary) -> void:
+	if bool(beat.get("overt", false)):
+		await _await_tell()
+
+	var duration: float = GameConfig.get_float("stagger.duration_s", 1.2)
+	var animation: String = str(beat.get("animation", "huh"))
+	if _village() == SEVEN_CHICKENS:
+		if randf() < GameConfig.get_float("stagger.seven_chickens_skip_chance", 0.8):
+			duration = GameConfig.get_float("stagger.seven_chickens_duration_s", 0.3)
+			animation = ""
+
+	if not animation.is_empty():
+		var sprite: AnimatedSprite2D = _resolve_node(beat.get("node", "Player/AnimatedSprite2D")) as AnimatedSprite2D
+		if is_instance_valid(sprite) and sprite.sprite_frames != null:
+			if sprite.sprite_frames.has_animation(animation):
+				sprite.play(animation)
+	await _beat_wait(duration)
+
+## Asks Weirdness for the tell and waits it out. Returns immediately on any run
+## that does not get one, so the beat is identical for the other eight villages.
+func _await_tell() -> void:
+	var root_node: Node = get_tree().root
+	if not root_node.has_node("Weirdness"):
+		return
+	var lead: float = float(root_node.get_node("Weirdness").call("request_tell"))
+	if lead <= 0.0:
+		return
+	await _beat_wait(lead)
+
+func _village() -> String:
+	var state: Node = _game_state()
+	if state == null:
+		return ""
+	return str(state.call("get_flag", "sys.village", ""))
+
 func _beat_emit(beat: Dictionary) -> void:
 	var signal_name: String = str(beat.get("signal", ""))
 	if signal_name.is_empty():
@@ -355,4 +406,17 @@ func _finish() -> void:
 	_current_tween = null
 	_actor_root = null
 	_document = {}
+	_set_player_has_control(true)
 	cutscene_ended.emit()
+
+## A cutscene holds input, so the weirdness scheduler's player-time clock stops
+## for its duration (WEIRDNESS_SPEC §2). Control only comes back if no dialogue
+## is still up; the flag is transient and never reaches a save.
+func _set_player_has_control(value: bool) -> void:
+	var root_node: Node = get_tree().root
+	if not root_node.has_node("GameState"):
+		return
+	if value and root_node.has_node("DialogueManager"):
+		if bool(root_node.get_node("DialogueManager").get("dialogue_active")):
+			return
+	root_node.get_node("GameState").call("set_flag", "sys.player_has_control", value)

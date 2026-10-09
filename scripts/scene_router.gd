@@ -45,6 +45,9 @@ func register_area(area: Node) -> void:
 	if region_changed_now:
 		_apply_region_weirdness(region)
 		region_changed.emit(region)
+	# Booting straight into a scene arrives here and nowhere else, so the
+	# area-level weirdness rules are applied here as well as after a transition.
+	_enter_area_weirdness()
 
 func current_id() -> String:
 	if current_region.is_empty():
@@ -77,6 +80,9 @@ func go_to(region: String, area: String, spawn: String = "default") -> bool:
 			destination = alternative
 			increment_misroute_count()
 			misrouted.emit(intended_id, "%s/%s" % [destination["region"], destination["area"]])
+			# Good Soil (Probably) is warned a few seconds before a misroute
+			# (WEIRDNESS_SPEC §5). Every other village just arrives somewhere else.
+			await _await_tell()
 
 	await _travel(destination["region"], destination["area"], str(destination["spawn"]), intended_id)
 	return true
@@ -141,6 +147,7 @@ func _travel(region: String, area: String, spawn: String, intended_id: String) -
 
 	# register_area() has already run in the new scene's _ready by this point.
 	place_player(instance, spawn)
+	_enter_area_weirdness()
 
 	await fade(false)
 	_transitioning = false
@@ -250,6 +257,43 @@ func _apply_region_weirdness(region: String) -> void:
 	var root_node: Node = get_tree().root
 	if root_node.has_node("Weirdness"):
 		root_node.get_node("Weirdness").call("set_region", region)
+
+## Everything the weirdness system needs on arriving in an area: the arrival
+## grace restarts, and the area's own multiplier override — if its anchor
+## declares one (amendment M-4) — replaces the region's. An area with no
+## override clears the previous area's rather than inheriting it.
+func _enter_area_weirdness() -> void:
+	var root_node: Node = get_tree().root
+	if not root_node.has_node("Weirdness"):
+		return
+	var weirdness: Node = root_node.get_node("Weirdness")
+	weirdness.call("on_area_entered", current_id())
+	weirdness.call("set_area_weirdness", area_weirdness_override(current_region, current_area))
+
+## The weirdness_override on the anchor for this area, or null when the anchor
+## declares none or the area is not an anchor at all.
+func area_weirdness_override(region: String, area: String) -> Variant:
+	for anchor: Variant in region_anchors(region):
+		if not (anchor is Dictionary):
+			continue
+		var entry: Dictionary = anchor
+		if str(entry.get("area", "")) != area:
+			continue
+		if entry.has("weirdness_override"):
+			return float(entry["weirdness_override"])
+		return null
+	return null
+
+## The tell before a misroute (§5): Weirdness decides whether this run has one
+## and how long the lead is; the router only waits it out.
+func _await_tell() -> void:
+	var root_node: Node = get_tree().root
+	if not root_node.has_node("Weirdness"):
+		return
+	var lead: float = float(root_node.get_node("Weirdness").call("request_tell"))
+	if lead <= 0.0:
+		return
+	await get_tree().create_timer(lead).timeout
 
 # ── fade ─────────────────────────────────────────────────────────────────────
 

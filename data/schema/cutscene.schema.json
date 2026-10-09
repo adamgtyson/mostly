@@ -1,5 +1,5 @@
 {
-  "_comment": "Cutscene schema (ENGINEERING_CONSTRAINTS.md §8). Beats are data; actors are node paths resolved at play time against the trigger's actor root. 'emit' fires a named signal a scene may hook — JSON never calls scripts.",
+  "_comment": "Cutscene schema (ENGINEERING_CONSTRAINTS.md §8). Beats are data; actors are node paths resolved at play time against the trigger's actor root. 'emit' fires a named signal a scene may hook — JSON never calls scripts. 'stagger' is the world-break reaction (Docs/WEIRDNESS_SPEC.md §5, ledger M-5); `overt: true` on it also fires Good Soil (Probably)'s tell before the beat.",
   "title": "cutscene",
   "type": "object",
   "additionalProperties": false,
@@ -17,8 +17,9 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["wait", "move", "animation", "dialogue", "end", "set_flag", "camera", "fade", "sfx", "spawn", "despawn", "choice", "emit"]
+            "enum": ["wait", "move", "animation", "dialogue", "end", "set_flag", "camera", "fade", "sfx", "spawn", "despawn", "choice", "emit", "stagger"]
           },
+          "overt": { "type": "boolean" },
           "duration": { "type": "number", "minimum": 0 },
           "node": { "type": "string" },
           "target": { "type": "array", "items": { "type": "number" } },

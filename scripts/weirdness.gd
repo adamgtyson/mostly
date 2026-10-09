@@ -1,6 +1,7 @@
 extends Node
 
-## Weirdness (ENGINEERING_CONSTRAINTS.md §10) — the skeleton, not the system.
+## Weirdness (ENGINEERING_CONSTRAINTS.md §10), built out to the rulings in
+## Docs/WEIRDNESS_SPEC.md (ledger §M).
 ##
 ## Owns one scalar `intensity` (0.0-1.0) that is **derived and never saved**:
 ## it is recomputed from flags via data/weirdness/curve.json, so a loaded save
@@ -12,15 +13,36 @@ extends Node
 ## FlickerSpot allows. A short history ring stops the same kind firing at the
 ## same spot twice in a row.
 ##
-## The curve numbers, catalog contents and flicker one-liners are the BUILD_PLAN
-## §5 weirdness spec — a separate design session. Everything here ships with
-## placeholder values flagged in config, and no handler beyond a no-op logger.
+## The scheduler runs on player-time only: it is paused whenever something holds
+## input, waits out an arrival grace after every transition, keeps a global floor
+## between firings, and jitters every interval so it never reads as a metronome
+## (§2). An area may override its region's multiplier, which is how Hobb's
+## village is silent inside a region that is not (§4).
+##
+## Flickers are texture; scripted beats are plot. Nothing here ever touches the
+## plot: handlers set no flag, write nothing to a save, and cannot block,
+## redirect, collide or damage (§3, §6). The one exception the design asks for
+## is the weird.* counters.
 
 signal flicker_requested(kind: String, spot: Node, params: Dictionary)
 signal intensity_changed(intensity: float)
 
+## Good Soil (Probably)'s tell (WEIRDNESS_SPEC §5, ledger M-5): the ambient bus
+## ducks and the loops stop a few seconds before a scripted overt beat or a
+## misroute. Never before a random flicker — a warning would make a deniable
+## event undeniable, which inverts the system.
+signal tell_requested
+
 const CURVE_PATH := "res://data/weirdness/curve.json"
 const CATALOG_PATH := "res://data/weirdness/catalog.json"
+const LINES_PATH := "res://data/weirdness/lines.json"
+
+## The village whose pro is the tell. Any other village gets no warning.
+const TELL_VILLAGE := "good_soil_probably"
+## Audio bus the tell ducks; created at runtime if the project has no layout.
+const AMBIENT_BUS := "Ambient"
+## Scene group whose AudioStreamPlayers the tell silences.
+const AMBIENT_LOOP_GROUP := "ambient_loop"
 
 ## How many recent firings the anti-repeat ring remembers.
 const HISTORY_SIZE := 8
@@ -31,33 +53,70 @@ var intensity: float = 0.0
 
 var _curve: Dictionary = {}
 var _catalog: Dictionary = {}
+var _lines: Array = []
 var _region_multiplier: float = 1.0
 var _current_region: String = ""
+var _current_area: String = ""
+
+## An area-level override of the region multiplier (WEIRDNESS_SPEC §4, M-4).
+## null means "no override, use the region"; 0.0 silences one area (Hobb's
+## village) without silencing its region.
+var _area_override: Variant = null
 
 var _spots: Array[Node] = []
 var _history: Array[String] = []
 var _debug_log: Array[Dictionary] = []
+## npc_line ids already used this run. In memory only: never saved, so a reload
+## may repeat one, which §6 rule 3 accepts.
+var _lines_shown: Dictionary = {}
 
 var _time_to_next: float = 0.0
+## Counts down the arrival grace after entering an area (§2): nothing fires
+## while the player is still working out where they are.
+var _grace_remaining: float = 0.0
+## Player-time since the last firing, for the global floor (§2).
+var _since_last_fire: float = 0.0
 var _scheduler_enabled: bool = true
 
 func _ready() -> void:
 	_load_curve()
 	_load_catalog()
+	_load_lines()
 	recompute()
 	_reschedule()
+	tell_requested.connect(_on_tell_requested)
 	var root_node: Node = get_tree().root
 	if root_node.has_node("GameState"):
 		root_node.get_node("GameState").connect("flag_changed", _on_flag_changed)
 
+## The clock is player-time (§2): it only runs while the player has control in
+## an explorable area, so dialogue, cutscenes, battles and menus do not age the
+## countdown. Grace and the global floor are checked here rather than folded
+## into the interval, so both stay inspectable from a test.
 func _process(delta: float) -> void:
-	if not _scheduler_enabled or intensity <= 0.0 or _spots.is_empty():
+	if not _scheduler_enabled or not player_has_control():
+		return
+	if _grace_remaining > 0.0:
+		_grace_remaining = maxf(0.0, _grace_remaining - delta)
+		return
+	_since_last_fire += delta
+	if intensity <= 0.0 or _spots.is_empty():
 		return
 	_time_to_next -= delta
 	if _time_to_next > 0.0:
 		return
+	if _since_last_fire < global_floor_s():
+		return
 	_reschedule()
 	fire_one()
+
+## True unless something holds input. The flag is written by DialogueManager and
+## CutsceneManager; unset means the player is walking around (§2).
+func player_has_control() -> bool:
+	var state: Node = _game_state()
+	if state == null:
+		return true
+	return bool(state.call("get_flag", "sys.player_has_control", true))
 
 # ── intensity (§10) ──────────────────────────────────────────────────────────
 
@@ -68,7 +127,7 @@ func recompute() -> float:
 	var value: float = float(_curve.get("base_intensity", 0.0))
 	value += _act_contribution()
 	value += _counter_contribution()
-	intensity = clampf(value * _region_multiplier, 0.0, 1.0)
+	intensity = clampf(value * effective_multiplier(), 0.0, 1.0)
 	if not is_equal_approx(previous, intensity):
 		intensity_changed.emit(intensity)
 	return intensity
@@ -105,11 +164,13 @@ func _counter_contribution() -> float:
 		total += minf(contribution, float(rule.get("max", 1.0)))
 	return total
 
-## A region's multiplier scales everything; 0 means nothing fires there at all
-## (Hobb's village).
+## A region's multiplier scales everything (The Hold 1.0, The Turning 1.5 —
+## WEIRDNESS_SPEC §4). A region change also drops any area override: the router
+## re-applies one for the area being entered if it has one.
 func set_region(region_id: String) -> void:
 	_current_region = region_id
 	_region_multiplier = 1.0
+	_area_override = null
 	var root_node: Node = get_tree().root
 	if root_node.has_node("SceneRouter"):
 		var data: Dictionary = root_node.get_node("SceneRouter").call("region_data", region_id)
@@ -117,11 +178,46 @@ func set_region(region_id: String) -> void:
 			_region_multiplier = float(data["weirdness"])
 	recompute()
 
+## An anchor may carry weirdness_override (§4, M-4), which replaces the region
+## multiplier for that one area: Hobb's village is 0 inside a region that is 1.0.
+## Pass null to clear it. The router calls this after every transition, so an
+## area without an override explicitly clears the previous area's.
+func set_area_weirdness(value: Variant) -> void:
+	if value == null:
+		_area_override = null
+	else:
+		_area_override = clampf(float(value), 0.0, 1.0)
+	recompute()
+
+func area_override() -> Variant:
+	return _area_override
+
+## What recompute() actually scales by: the area override when one is present,
+## the region multiplier otherwise.
+func effective_multiplier() -> float:
+	if _area_override == null:
+		return _region_multiplier
+	return float(_area_override)
+
+## Called by SceneRouter after every transition and by an area registering on
+## boot. Resets the arrival grace and the countdown; intensity is derived from
+## flags and so is deliberately untouched (§2).
+func on_area_entered(area_id: String) -> void:
+	_current_area = area_id
+	_grace_remaining = arrival_grace_s()
+	_reschedule()
+
 func region_multiplier() -> float:
 	return _region_multiplier
 
 func current_region() -> String:
 	return _current_region
+
+func current_area() -> String:
+	return _current_area
+
+func grace_remaining() -> float:
+	return _grace_remaining
 
 # ── the general-purpose hook (§10) ───────────────────────────────────────────
 
@@ -153,14 +249,33 @@ func spot_count() -> int:
 func set_scheduler_enabled(enabled: bool) -> void:
 	_scheduler_enabled = enabled
 
-## Intervals shorten as intensity rises. Bounds are config placeholders (§13).
-func next_interval() -> float:
-	var longest: float = GameConfig.get_float("weirdness.flicker_interval_max_s", 90.0)
-	var shortest: float = GameConfig.get_float("weirdness.flicker_interval_min_s", 20.0)
+## Intervals shorten as intensity rises: 300s calm down to 45s at full
+## intensity (WEIRDNESS_SPEC §2). The shape stays lerp(max, min, intensity) —
+## the feel comes from the ladder being non-linear, not from the code.
+##
+## Jitter is Adam's rule (M-2): a uniform offset in ±flicker_jitter_s, floored
+## at global_floor_s. Never a metronome.
+func base_interval() -> float:
+	var longest: float = GameConfig.get_float("weirdness.flicker_interval_max_s", 300.0)
+	var shortest: float = GameConfig.get_float("weirdness.flicker_interval_min_s", 45.0)
 	return lerpf(longest, shortest, clampf(intensity, 0.0, 1.0))
 
+func next_interval() -> float:
+	var jitter: float = jitter_s()
+	var offset: float = randf_range(-jitter, jitter)
+	return maxf(base_interval() + offset, global_floor_s())
+
+func jitter_s() -> float:
+	return GameConfig.get_float("weirdness.flicker_jitter_s", 10.0)
+
+func arrival_grace_s() -> float:
+	return GameConfig.get_float("weirdness.arrival_grace_s", 8.0)
+
+func global_floor_s() -> float:
+	return GameConfig.get_float("weirdness.global_floor_s", 10.0)
+
 func _reschedule() -> void:
-	_time_to_next = next_interval()
+	_time_to_next = maxf(next_interval(), global_floor_s())
 
 ## Picks one kind/spot pair and announces it. Returns false if nothing was
 ## eligible. Public so a test can drive the scheduler without waiting on time.
@@ -175,8 +290,23 @@ func fire_one() -> bool:
 	var spot: Node = chosen["spot"]
 	_remember("%s@%s" % [kind, spot.name])
 	_log_debug(kind, spot)
-	flicker_requested.emit(kind, spot, _catalog.get(kind, {}))
+	_since_last_fire = 0.0
+	flicker_requested.emit(kind, spot, params_for(kind, spot))
 	return true
+
+## What a handler receives: the kind's catalog entry (handler name, timings)
+## merged with the spot's own params (tile coords, NPC path), the spot winning a
+## clash so one scene can specialise a kind without a second catalog entry.
+func params_for(kind: String, spot: Node) -> Dictionary:
+	var entry: Variant = _catalog.get(kind, {})
+	var params: Dictionary = (entry as Dictionary).duplicate(true) if entry is Dictionary else {}
+	if is_instance_valid(spot):
+		var spot_params: Variant = spot.get("params")
+		if spot_params is Dictionary:
+			for key: Variant in (spot_params as Dictionary):
+				params[key] = (spot_params as Dictionary)[key]
+	params["kind"] = kind
+	return params
 
 ## Every kind/spot pair allowed right now: the kind is v1, its min_intensity is
 ## met, its region is not excluded, the spot allows it, and the pair is not a
@@ -225,6 +355,102 @@ func _weighted_pick(candidates: Array) -> Dictionary:
 			return candidate
 	return candidates[candidates.size() - 1]
 
+# ── the tell (§5, M-5) ───────────────────────────────────────────────────────
+
+## Whether this run gets the tell at all: Good Soil (Probably) only.
+func tell_is_available() -> bool:
+	var state: Node = _game_state()
+	if state == null:
+		return false
+	return str(state.call("get_flag", "sys.village", "")) == TELL_VILLAGE
+
+## How long before the beat the tell lands — uniform in [lead_min, lead_max].
+func tell_lead_s() -> float:
+	var low: float = GameConfig.get_float("tell.lead_min_s", 2.0)
+	var high: float = GameConfig.get_float("tell.lead_max_s", 4.0)
+	return randf_range(minf(low, high), maxf(low, high))
+
+## Asks for the tell. Returns how long the caller should wait before the beat,
+## or 0.0 when this run has no tell, so a caller can always await the result.
+## Callers are CutsceneManager (before an `overt` beat) and SceneRouter (before
+## a misroute) — never the flicker scheduler.
+func request_tell() -> float:
+	if not tell_is_available():
+		return 0.0
+	tell_requested.emit()
+	return tell_lead_s()
+
+## The tell itself: the ambient bus ducks and the loops stop. Nothing visual —
+## the player learns the silence.
+func _on_tell_requested() -> void:
+	var duck_db: float = GameConfig.get_float("tell.duck_db", -6.0)
+	var duration: float = GameConfig.get_float("tell.duration_s", 1.5)
+	var bus: int = _ensure_ambient_bus()
+	var restore_to: float = 0.0
+	if bus >= 0:
+		restore_to = AudioServer.get_bus_volume_db(bus)
+		AudioServer.set_bus_volume_db(bus, restore_to + duck_db)
+
+	var paused: Array[AudioStreamPlayer] = []
+	var tree: SceneTree = get_tree()
+	if tree != null:
+		for node: Node in tree.get_nodes_in_group(AMBIENT_LOOP_GROUP):
+			if node is AudioStreamPlayer and (node as AudioStreamPlayer).playing:
+				(node as AudioStreamPlayer).stream_paused = true
+				paused.append(node)
+
+	if tree != null:
+		await tree.create_timer(duration).timeout
+
+	if bus >= 0:
+		AudioServer.set_bus_volume_db(bus, restore_to)
+	for player: AudioStreamPlayer in paused:
+		if is_instance_valid(player):
+			player.stream_paused = false
+
+## The Ambient bus, created at runtime when the project ships no bus layout.
+## Returns -1 if the audio server has no buses at all (a headless oddity).
+func _ensure_ambient_bus() -> int:
+	var count: int = AudioServer.bus_count
+	if count <= 0:
+		return -1
+	for i: int in count:
+		if AudioServer.get_bus_name(i) == AMBIENT_BUS:
+			return i
+	AudioServer.add_bus()
+	var index: int = AudioServer.bus_count - 1
+	AudioServer.set_bus_name(index, AMBIENT_BUS)
+	return index
+
+# ── the npc_line pool (§9, M-8) ──────────────────────────────────────────────
+
+func lines() -> Array:
+	return _lines.duplicate(true)
+
+## One line the current intensity allows and this run has not used. Returns an
+## empty Dictionary when the pool is exhausted — the handler then does nothing,
+## which is preferable to repeating a line the player has already heard.
+func take_line() -> Dictionary:
+	var candidates: Array = []
+	for entry: Variant in _lines:
+		if not (entry is Dictionary):
+			continue
+		var line: Dictionary = entry
+		var id_value: String = str(line.get("id", ""))
+		if id_value.is_empty() or _lines_shown.has(id_value):
+			continue
+		if intensity < float(line.get("min_intensity", 0.0)):
+			continue
+		candidates.append(line)
+	if candidates.is_empty():
+		return {}
+	var chosen: Dictionary = candidates[randi() % candidates.size()]
+	_lines_shown[str(chosen.get("id", ""))] = true
+	return chosen
+
+func lines_shown() -> Array:
+	return _lines_shown.keys()
+
 func _remember(key: String) -> void:
 	_history.append(key)
 	while _history.size() > HISTORY_SIZE:
@@ -263,8 +489,13 @@ func reset() -> void:
 	_spots.clear()
 	_history.clear()
 	_debug_log.clear()
+	_lines_shown.clear()
 	_region_multiplier = 1.0
+	_area_override = null
 	_current_region = ""
+	_current_area = ""
+	_grace_remaining = 0.0
+	_since_last_fire = 0.0
 	_scheduler_enabled = true
 	recompute()
 	_reschedule()
@@ -294,6 +525,15 @@ func _load_catalog() -> void:
 	var kinds: Variant = (data as Dictionary).get("kinds", {})
 	if kinds is Dictionary:
 		_catalog = kinds
+
+func _load_lines() -> void:
+	_lines = []
+	var data: Variant = _read_json(LINES_PATH)
+	if not (data is Dictionary):
+		return
+	var pool: Variant = (data as Dictionary).get("lines", [])
+	if pool is Array:
+		_lines = pool
 
 func _read_json(path: String) -> Variant:
 	if not FileAccess.file_exists(path):

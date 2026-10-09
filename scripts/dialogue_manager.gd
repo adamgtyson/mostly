@@ -114,6 +114,7 @@ func start_document(document: Dictionary) -> void:
 	_choices = []
 	_awaiting_choice = false
 	dialogue_active = true
+	_set_player_has_control(false)
 	_enter_node(start_node)
 	if not dialogue_active:
 		# The whole dialogue resolved to nothing; never announce it.
@@ -303,7 +304,22 @@ func _end() -> void:
 	_choices = []
 	_awaiting_choice = false
 	if was_active:
+		_set_player_has_control(true)
 		dialogue_ended.emit()
+
+## Dialogue holds input, so the weirdness scheduler must not age while it runs
+## (WEIRDNESS_SPEC §2). Handing control back is conditional: a dialogue played
+## as a cutscene beat ends inside a cutscene that still holds input, and the
+## cutscene releases it when it finishes. The flag is transient, so no save can
+## restore a lock.
+func _set_player_has_control(value: bool) -> void:
+	var root_node: Node = get_tree().root
+	if not root_node.has_node("GameState"):
+		return
+	if value and root_node.has_node("CutsceneManager"):
+		if bool(root_node.get_node("CutsceneManager").get("cutscene_active")):
+			return
+	root_node.get_node("GameState").call("set_flag", "sys.player_has_control", value)
 
 func reset() -> void:
 	dialogue_active = false
