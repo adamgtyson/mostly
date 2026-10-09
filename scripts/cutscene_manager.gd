@@ -28,6 +28,10 @@ const SEVEN_CHICKENS := "seven_chickens"
 
 var cutscene_active: bool = false
 
+## One line for the boot smoke report (session 9).
+func debug_summary() -> String:
+	return "active=%s id='%s'" % [cutscene_active, str(_document.get("id", ""))]
+
 var _skipping: bool = false
 var _current_tween: Tween = null
 var _actor_root: Node = null

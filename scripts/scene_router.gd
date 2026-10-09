@@ -54,6 +54,10 @@ func current_id() -> String:
 		return ""
 	return "%s/%s" % [current_region, current_area]
 
+## One line for the boot smoke report (session 9).
+func debug_summary() -> String:
+	return "at='%s' transitioning=%s visited_regions=%d" % [current_id(), _transitioning, _visited.size()]
+
 # ── travel ───────────────────────────────────────────────────────────────────
 
 ## Moves the player to <region>/<area>, arriving at the named spawn.

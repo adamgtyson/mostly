@@ -69,6 +69,7 @@ var _area_override: Variant = null
 var _spots: Array[Node] = []
 var _history: Array[String] = []
 var _debug_log: Array[Dictionary] = []
+var _roll_counts: Dictionary = {}
 ## npc_line ids already used this run. In memory only: never saved, so a reload
 ## may repeat one, which §6 rule 3 accepts.
 var _lines_shown: Dictionary = {}
@@ -212,6 +213,11 @@ func on_area_entered(area_id: String) -> void:
 	_grace_remaining = arrival_grace_s()
 	_reschedule()
 
+## One line for the boot smoke report (session 9).
+func debug_summary() -> String:
+	return "intensity=%.2f scheduler=%s control=%s spots=%d grace=%.1fs region='%s'" % [
+		intensity, _scheduler_enabled, player_has_control(), _spots.size(), _grace_remaining, _current_region]
+
 func region_multiplier() -> float:
 	return _region_multiplier
 
@@ -230,7 +236,13 @@ func grace_remaining() -> float:
 ## current intensity, so an event gets likelier as the world deteriorates.
 ## `misroute` (§6) is the first consumer.
 func roll(event_name: String) -> bool:
+	_roll_counts[event_name] = int(_roll_counts.get(event_name, 0)) + 1
 	return randf() < chance_for(event_name)
+
+## How often roll() has been consulted per event this run. Debug state for
+## the harness, like the ring buffer - never persisted, cleared by reset().
+func roll_count(event_name: String) -> int:
+	return int(_roll_counts.get(event_name, 0))
 
 func chance_for(event_name: String) -> float:
 	var events: Variant = _curve.get("events", {})
@@ -494,6 +506,7 @@ func reset() -> void:
 	_spots.clear()
 	_history.clear()
 	_debug_log.clear()
+	_roll_counts.clear()
 	_lines_shown.clear()
 	_region_multiplier = 1.0
 	_area_override = null

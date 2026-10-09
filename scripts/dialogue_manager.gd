@@ -41,6 +41,10 @@ const MAX_NODE_HOPS := 64
 
 var dialogue_active: bool = false
 
+## One line for the boot smoke report (session 9).
+func debug_summary() -> String:
+	return "active=%s node='%s'" % [dialogue_active, _node_id]
+
 var _characters: Dictionary = {}
 var _document: Dictionary = {}
 var _node_id: String = ""
