@@ -171,7 +171,7 @@ shape = SubResource("RectangleShape2D_cat")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Cat/StaticBody2D" unique_id=912345681]
 shape = SubResource("RectangleShape2D_cat")
 
-[node name="CatSprite" type="Sprite2D" parent="Interactables/Cat" unique_id=912345682]
+[node name="CatSprite" type="Sprite2D" parent="Interactables/Cat" groups=["placeholder"] unique_id=912345682]
 script = ExtResource("5_catsprite")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=710011502]
