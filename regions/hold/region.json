@@ -12,6 +12,14 @@
       "area": "workshop",
       "biome_tags": [],
       "required_exits": []
+    },
+    {
+      "_comment": "Perfectly normal village (name TBD, BUILD_PLAN §4.6). weirdness_override 0.0 is WEIRDNESS_SPEC §4 / ledger M-4: this one area is silent inside a region that is not — no flickers, no misroute rolls on its exits. The scene is a placeholder until phase 4 builds the area.",
+      "id": "hobbs_village",
+      "area": "hobbs_village",
+      "biome_tags": [],
+      "required_exits": [],
+      "weirdness_override": 0.0
     }
   ],
   "fill_slots": [

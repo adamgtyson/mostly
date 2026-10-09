@@ -36,8 +36,17 @@ func test_hold_region_manifest_loads(t: TestContext) -> void:
 func test_workshop_is_the_hold_anchor(t: TestContext) -> void:
 	var router: Node = _router(t)
 	var anchors: Array = router.region_anchors("hold")
-	t.assert_eq(anchors.size(), 1, "the Hold declares one anchor in Foundations")
-	t.assert_eq((anchors[0] as Dictionary).get("area"), "workshop", "and it is the workshop")
+	# Session 7 Block F: Hobb's village joined the workshop so the M-4
+	# weirdness_override has a real anchor to live on.
+	t.assert_eq(anchors.size(), 2, "the Hold declares two anchors after session 7")
+	t.assert_eq((anchors[0] as Dictionary).get("area"), "workshop", "the workshop first")
+	t.assert_eq((anchors[1] as Dictionary).get("area"), "hobbs_village", "then Hobb's village")
+	t.assert_eq((anchors[1] as Dictionary).get("weirdness_override"), 0.0,
+		"which carries the §4 override: silent inside a region that is not")
+	t.assert_eq(router.area_weirdness_override("hold", "hobbs_village"), 0.0,
+		"and the router reads it back for the area")
+	t.assert_eq(router.area_weirdness_override("hold", "workshop"), null,
+		"while an anchor without one yields null, clearing any previous override")
 
 func test_area_scene_path_follows_the_package_layout(t: TestContext) -> void:
 	var router: Node = _router(t)
@@ -53,6 +62,24 @@ func test_the_workshop_scene_moved_into_the_region(t: TestContext) -> void:
 	t.assert_false(
 		FileAccess.file_exists("res://scenes/workshop.tscn"),
 		"and no longer at its old path")
+
+func test_the_turning_package_loads_locked(t: TestContext) -> void:
+	var router: Node = _router(t)
+	var region: Dictionary = router.region_data("turning")
+	t.assert_eq(region.get("id"), "turning", "The Turning's manifest loads")
+	t.assert_eq(region.get("display_name"), "The Turning", "with its canonical name")
+	t.assert_eq(region.get("weirdness"), 1.5, "and the §4 multiplier (M-4)")
+	t.assert_eq(region.get("locked_message"), "PH_turning_locked",
+		"locked behind a PH_ line — the reason is [U2-2], OPEN")
+	t.assert_false(router.is_region_unlocked("turning"), "and it starts locked")
+
+	var packed: PackedScene = load("res://regions/turning/areas/turning_crossing.tscn")
+	t.assert_true(packed != null, "turning/turning_crossing loads")
+	if packed == null:
+		return
+	var scene: Node = packed.instantiate()
+	t.assert_eq(scene.call("full_id"), "turning/turning_crossing", "as a §6 area")
+	scene.free()
 
 # ── the Area root (§6) ───────────────────────────────────────────────────────
 

@@ -70,7 +70,13 @@ func test_all_dialogue_files_are_v2_now(t: TestContext) -> void:
 		file.close()
 		var data: Variant = json.get_data()
 		t.assert_true((data as Dictionary).has("nodes"), "%s is v2" % file_name)
-	t.assert_eq(count, 11, "all eleven files are present")
+	# Session 7: new dialogue (PH_turning_locked) joins the migrated eleven, so
+	# the guarantee is "none of the eleven was lost", not a frozen total — the
+	# fixture names them.
+	for migrated: String in _fixture():
+		t.assert_true(FileAccess.file_exists("res://data/dialogue/%s.json" % migrated),
+			"migrated file '%s' is still present" % migrated)
+	t.assert_true(count >= 11, "at least the eleven migrated files exist, found %d" % count)
 
 func test_v1_flat_shape_is_still_accepted(t: TestContext) -> void:
 	# The loader keeps reading v1 so nothing breaks mid-transition (§5).

@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/area.gd" id="1_area"]
+[ext_resource type="Script" path="res://scripts/exit.gd" id="2_exit"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(16, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(12, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_probe"]
+size = Vector2(14, 14)
+
+[node name="TurningCrossing" type="Node2D"]
+script = ExtResource("1_area")
+region_id = "turning"
+area_id = "turning_crossing"
+area_rect = Rect2i(0, 0, 320, 180)
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="Spawns"]
+position = Vector2(48, 90)
+
+[node name="ExitToHold" type="Area2D" parent="."]
+position = Vector2(8, 90)
+script = ExtResource("2_exit")
+target_region = "hold"
+target_area = "workshop"
+target_spawn = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitToHold"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(48, 90)
+script = ExtResource("3_player")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(0, 18)
+shape = SubResource("RectangleShape2D_player")
+
+[node name="InteractionArea" type="Area2D" parent="Player"]
+position = Vector2(0, 12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/InteractionArea"]
+shape = SubResource("RectangleShape2D_probe")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 320
+limit_bottom = 180

@@ -1,0 +1,20 @@
+{
+  "_comment": "PH_ placeholder (session 7, Block F). The Turning's locked_message, played by SceneRouter when travel into the locked region is refused (§6). The lock REASON is [U2-2], OPEN — this line is scaffolding, not canon, and the phase that closes [U2-2] replaces it.",
+  "entries": [
+    {
+      "start": "start",
+      "when": "true"
+    }
+  ],
+  "id": "PH_turning_locked",
+  "nodes": {
+    "start": {
+      "lines": [
+        {
+          "speaker": "patch",
+          "text": "This way is closed. PH_ — reason is [U2-2] OPEN."
+        }
+      ]
+    }
+  }
+}
