@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/area.gd" id="1_area"]
+[ext_resource type="Script" path="res://scripts/exit.gd" id="2_exit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(16, 48)
+
+[node name="Abbey" type="Node2D" groups=["placeholder"]]
+script = ExtResource("1_area")
+region_id = "turning"
+area_id = "abbey"
+area_rect = Rect2i(0, 0, 320, 180)
+
+[node name="Spawns" type="Node2D" parent="." groups=["placeholder"]]
+
+[node name="default" type="Marker2D" parent="Spawns" groups=["placeholder"]]
+position = Vector2(160, 90)
+
+[node name="ExitToCrossing" type="Area2D" parent="." groups=["placeholder"]]
+position = Vector2(8, 90)
+script = ExtResource("2_exit")
+target_region = "turning"
+target_area = "turning_crossing"
+target_spawn = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitToCrossing" groups=["placeholder"]]
+shape = SubResource("RectangleShape2D_exit")

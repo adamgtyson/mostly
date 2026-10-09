@@ -1,5 +1,5 @@
 {
-  "_comment": "The Turning — region package skeleton (session 7, Block F; §7 shape). Locked until region.turning.unlocked; the lock REASON and unlock event are [U2-2], OPEN, so locked_message is a PH_ line. weirdness 1.5 is WEIRDNESS_SPEC §4 (ledger M-4). Only the turning_crossing anchor is declared now because the validator requires every anchor's scene to exist and shipping three more empty stand-ins would be content-free churn; the remaining Act One anchors — north_office, still_point, abbey (EC §7) — are declared by phases 4-5 when their areas are built. biome_tags are [G4], OPEN.",
+  "_comment": "The Turning — region package skeleton (sessions 7-8; §7 shape). Locked until region.turning.unlocked; the lock REASON and unlock event are [U2-2], OPEN, so locked_message is a PH_ line. weirdness 1.5 is WEIRDNESS_SPEC §4 (ledger M-4). All four Act One anchors (EC §7) are declared with placeholder areas so the anchor-and-fill generator has the real graph to work on; phases 4-5 replace the placeholder scenes with content. biome_tags are [G4], OPEN.",
   "id": "turning",
   "display_name": "The Turning",
   "biome_tags": [],
@@ -12,8 +12,30 @@
       "area": "turning_crossing",
       "biome_tags": [],
       "required_exits": []
+    },
+    {
+      "id": "north_office",
+      "area": "north_office",
+      "biome_tags": [],
+      "required_exits": []
+    },
+    {
+      "id": "still_point",
+      "area": "still_point",
+      "biome_tags": [],
+      "required_exits": []
+    },
+    {
+      "id": "abbey",
+      "area": "abbey",
+      "biome_tags": [],
+      "required_exits": []
     }
   ],
   "fill_slots": [],
-  "edges": []
+  "edges": [
+    { "from": "turning_crossing", "to": "north_office" },
+    { "from": "north_office", "to": "still_point" },
+    { "from": "still_point", "to": "abbey" }
+  ]
 }
