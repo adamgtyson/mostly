@@ -38,6 +38,7 @@ const SCHEMA_MAP: Dictionary = {
 	"res://data/items": "res://data/schema/item.schema.json",
 	"res://data/dialogue": "res://data/schema/dialogue.schema.json",
 	"res://data/cutscenes": "res://data/schema/cutscene.schema.json",
+	"res://data/villages": "res://data/schema/village.schema.json",
 }
 
 ## single file -> schema, for registries that are one document rather than a tree.
@@ -91,6 +92,7 @@ func _run() -> void:
 	_check("character ids", _check_character_ids)
 	_check("dialogue refs", _check_dialogue_references)
 	_check("weirdness spec", _check_weirdness_spec)
+	_check("villages", _check_villages)
 	_check("regions", _check_regions)
 	_check("anchor tier rule", _check_anchor_tier_rule)
 	_check("asset manifest", _check_asset_manifest)
@@ -418,6 +420,63 @@ func _check_dialogue_references() -> Dictionary:
 		if not FileAccess.file_exists("%s/%s.json" % [DIALOGUE_DIR, id]):
 			errors.append("%s: references dialogue '%s', which has no file" % [referenced[id], id])
 	return {"errors": errors, "detail": "%d reference(s) resolve" % referenced.size()}
+
+## The village canon, mirrored from Docs/00's table so a typo in a data file
+## cannot quietly rename a village. One file per id, ids match filenames,
+## display names are the canonical spellings (the comma in "Hay, Mostly" and
+## the (Probably) are load-bearing), and every starting flag is declared.
+const CANONICAL_VILLAGES: Dictionary = {
+	"again": "Again",
+	"revised": "Revised",
+	"temporary": "Temporary",
+	"good_soil_probably": "Good Soil (Probably)",
+	"seven_chickens": "Seven Chickens",
+	"one_more_mile": "One More Mile",
+	"fine_now": "Fine Now",
+	"hay_mostly": "Hay, Mostly",
+	"new_again": "New Again",
+}
+
+func _check_villages() -> Dictionary:
+	var errors := PackedStringArray()
+	var declared: Dictionary = _declared_flags()
+	var seen: Dictionary = {}
+
+	var files: PackedStringArray = _walk("res://data/villages", ".json")
+	for path: String in files:
+		var parsed: Dictionary = _read_json(path)
+		if not parsed["ok"] or not (parsed["data"] is Dictionary):
+			errors.append("%s: unreadable" % path)
+			continue
+		var village: Dictionary = parsed["data"]
+		var id_value: String = str(village.get("id", ""))
+		var file_id: String = path.get_file().get_basename()
+
+		if id_value != file_id:
+			errors.append("%s: id '%s' does not match its filename" % [path, id_value])
+		if seen.has(id_value):
+			errors.append("%s: duplicate village id '%s'" % [path, id_value])
+		seen[id_value] = true
+
+		if not CANONICAL_VILLAGES.has(id_value):
+			errors.append("%s: '%s' is not one of the nine canonical villages" % [path, id_value])
+		elif str(village.get("display_name", "")) != str(CANONICAL_VILLAGES[id_value]):
+			errors.append("%s: display_name '%s' should be '%s' (Docs/00)"
+				% [path, str(village.get("display_name", "")), str(CANONICAL_VILLAGES[id_value])])
+
+		var starting_flags: Variant = village.get("starting_flags", {})
+		if starting_flags is Dictionary:
+			for flag: Variant in (starting_flags as Dictionary):
+				if not declared.has(str(flag)):
+					errors.append("%s: starting flag '%s' is not declared in data/flags.json" % [path, str(flag)])
+			if str((starting_flags as Dictionary).get("sys.village", "")) != id_value:
+				errors.append("%s: starting_flags must set sys.village to its own id" % path)
+
+	for canonical: String in CANONICAL_VILLAGES:
+		if not seen.has(canonical):
+			errors.append("data/villages: canonical village '%s' has no file" % canonical)
+
+	return {"errors": errors, "detail": "%d village(s), all canonical" % files.size()}
 
 ## The rules Docs/WEIRDNESS_SPEC.md states that no schema can: the ladder is
 ## cumulative to exactly 1.0 (§2.1), line ids are unique, and the six v1 kinds

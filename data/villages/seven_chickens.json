@@ -1,0 +1,14 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "seven_chickens",
+  "display_name": "Seven Chickens",
+  "epigraph": "Unsure if this is a census or a warning.",
+  "pro_text": "Patch has always been comfortable with things that don’t make sense. This has never caused him any problems.",
+  "con_text": "Patch occasionally misses contextual warnings — NPC fear expressions, audio cues, environmental danger signals. The game assumes he noticed. He didn’t always.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "seven_chickens"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system. pro_text is the Docs/03 obfuscated selection-screen wording (spoiler protection); pro_text_hidden is the real pro and is never shown on the selection screen. Docs/03 balance note: Pro has RNG component (doesn’t always trigger cleanly) AND Patch occasionally misreads hostile NPCs as neutral. High risk / high reward starting village. Exception: the shortened stagger is built (session 7, WEIRDNESS_SPEC §5/M-5); the missed-warning con belongs to combat (phase 5).",
+  "pro_text_hidden": "Patch skips paralysis on first contact with overt world-break events. No stagger animation, faster return to player control. Compounds significantly in late game."
+}

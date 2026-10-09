@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "again",
+  "display_name": "Again",
+  "epigraph": "Rebuilt six times. Residents are deeply committed.",
+  "pro_text": "Starts with hidden emergency crafting cache. First time a crafted item fails, resources are not consumed.",
+  "con_text": "Reduced effectiveness of NPC assistance early game. Again residents are too self-reliant to ask for or offer help naturally.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "again"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system."
+}

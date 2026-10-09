@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "good_soil_probably",
+  "display_name": "Good Soil (Probably)",
+  "epigraph": "The (Probably) is on every official map.",
+  "pro_text": "Early warning system. Patch gets a subtle environmental tell slightly before world-break events. Longer reaction window.",
+  "con_text": "Some NPCs respond poorly to hedged language. Certain persuasion interactions require extra steps.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "good_soil_probably"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system. Exception: the tell itself is built (session 7, WEIRDNESS_SPEC §5/M-5) - Weirdness.request_tell fires for this village before scripted overt beats and misroutes. The persuasion con is deferred."
+}

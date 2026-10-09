@@ -200,3 +200,4 @@ limit_bottom = 240
 [node name="OpeningCutscene" type="Node2D" parent="." unique_id=987654321]
 script = ExtResource("6_opening")
 cutscene_id = "opening"
+when = "sys.village"

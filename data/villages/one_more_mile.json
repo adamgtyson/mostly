@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "one_more_mile",
+  "display_name": "One More Mile",
+  "epigraph": "Founded by settlers who were too exhausted to continue.",
+  "pro_text": "Inventory improvisation — higher success rate substituting non-ideal materials in crafting and repair. Wrong materials still work. Not perfectly. But enough.",
+  "con_text": "Starting inventory is smaller than other village starts. Packed for the errand expected, not the one actually happening.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "one_more_mile"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system."
+}

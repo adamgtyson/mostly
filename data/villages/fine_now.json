@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "fine_now",
+  "display_name": "Fine Now",
+  "epigraph": "No further context provided by any official record.",
+  "pro_text": "Fastest recovery from setbacks of any village start. Failed crafts, lost resources, damaged gear — the penalty window is shorter.",
+  "con_text": "Blind spot for unresolved problems that haven’t announced themselves. Won’t notice a slow structural failure, a brewing NPC conflict, or a piece of gear with a hidden flaw until it becomes acute.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "fine_now"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system."
+}

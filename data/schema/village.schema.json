@@ -1,0 +1,18 @@
+{
+  "_comment": "Schema for data/villages/<id>.json (BUILD_PLAN §8 phase 3; Docs/03_MECHANICS.md is the text's source). pro_text is what the selection screen shows; pro_text_hidden exists only where Docs/03 obfuscates the real pro (Seven Chickens). starting_items stays empty until the Act One writing list lands; no pro/con mechanic is implemented by this data.",
+  "title": "village",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "display_name", "epigraph", "pro_text", "con_text", "starting_items", "starting_flags", "mechanics_note"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "display_name": { "type": "string", "minLength": 1 },
+    "epigraph": { "type": "string", "minLength": 1 },
+    "pro_text": { "type": "string", "minLength": 1 },
+    "con_text": { "type": "string", "minLength": 1 },
+    "pro_text_hidden": { "type": "string", "minLength": 1 },
+    "starting_items": { "type": "array", "items": { "type": "string" } },
+    "starting_flags": { "type": "object" },
+    "mechanics_note": { "type": "string", "minLength": 1 }
+  }
+}

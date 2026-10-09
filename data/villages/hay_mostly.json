@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "hay_mostly",
+  "display_name": "Hay, Mostly",
+  "epigraph": "The comma is on every official map. The cartographer who added it was never identified.",
+  "pro_text": "Registers NPC subtext, hesitation, and subject changes as data. Gets more out of conversations than other village starts.",
+  "con_text": "Gives other characters incomplete information, assuming they’ll fill in the rest. Certain quest triggers and trade interactions require clarification steps.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "hay_mostly"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system."
+}

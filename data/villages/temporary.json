@@ -1,0 +1,13 @@
+{
+  "_comment": "Starting village (BUILD_PLAN §8 phase 3; text verbatim from Docs/03_MECHANICS.md). starting_items is writing-gated and empty until the Act One writing list lands.",
+  "id": "temporary",
+  "display_name": "Temporary",
+  "epigraph": "Founded as a temporary logging camp. Nine hundred years later it has a cathedral.",
+  "pro_text": "Repair and maintenance cost fewer resources. In-progress crafting and repair projects retain progress if abandoned and returned to.",
+  "con_text": "Self-imposed objectives have a timer penalty. Patch takes longer to self-motivate. The game will occasionally note he hasn’t finished something.",
+  "starting_items": [],
+  "starting_flags": {
+    "sys.village": "temporary"
+  },
+  "mechanics_note": "No pro/con mechanic is implemented - this file is selection-screen text and starting state only. The effects described are design commitments from Docs/03_MECHANICS.md, each owned by the phase that builds its system."
+}
